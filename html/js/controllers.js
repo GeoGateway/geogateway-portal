@@ -1,6 +1,6 @@
 'use strict'; 
 
-var UserProjectApp=angular.module('UserProjectApp',['ngRoute','ngCookies']);
+var UserProjectApp=angular.module('UserProjectApp',['ngRoute','ngCookies','GeoGatewayServices']);
 
 UserProjectApp.config(['$routeProvider', function ($routeProvider) {
         
@@ -70,10 +70,11 @@ UserProjectApp.service('ClearCredentials',['$rootScope','$cookieStore',function(
 }]);
         
 
-UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','ClearCredentials','DoLogin','SetCredentials',function($scope,$rootScope,$location,$cookieStore,ClearCredentials,DoLogin,SetCredentials) {
+UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices','DoLogin','SetCredentials',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices,DoLogin,SetCredentials) {
     $scope.login=function(){
         console.log("Doing the login thing");
-        ClearCredentials.clearCredentials();
+//        ClearCredentials.clearCredentials();
+        AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
         DoLogin.doLogin($scope.username, $scope.password, function(response){
             console.log("Login response is "+JSON.stringify(response));

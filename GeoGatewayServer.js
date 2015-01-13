@@ -33,7 +33,7 @@ MongoClient.connect(url, function(err, db) {
 
 app.set('port',process.env.PORT || 3000);
 //We'll put HTML documents in the local "public" directory
-app.use(express.static(__dirname+'/public'));
+app.use(express.static(__dirname+'/html'));
 app.use(bodyParser.json());
 
 /**

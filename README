@@ -1,5 +1,28 @@
-These are some simple test scripts that use mongoDB and node.js. They require installing MongoDB and the MongoDB JavaScript driver.
+This is the GeoGateway project.  To install, you need to install the NPM package manager, Node, Git, and MongoDB.
 
-I found several tutorials helpful and have taken some of their codes here.  
+INSTALLATION
+Next, run the following commands:
 
-* http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app
+* cd $INSTALL_PATH
+   - You don't need this environment variable set, but we will use it for clarity.
+
+* git clone https://marpierc_iu@bitbucket.org/marpierc_iu/geogateway.git
+
+* cd $INSTALL_PATH/geogateway
+
+* npm install
+   - This will install the packages listed in packages.json.
+
+* cd $INSTALL_PATH/geogateway/html
+
+* bower install
+
+RUNNING THE SERVICE
+Run the following commands
+
+* mongod
+   - This starts MongoDB and can be run from anywhere.
+
+* cd $INSTALL_PATH/geogateway
+
+* node GeoGatewayServer.js
