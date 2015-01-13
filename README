@@ -1,0 +1,5 @@
+These are some simple test scripts that use mongoDB and node.js. They require installing MongoDB and the MongoDB JavaScript driver.
+
+I found several tutorials helpful and have taken some of their codes here.  
+
+* http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app

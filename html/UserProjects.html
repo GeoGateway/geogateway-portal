@@ -1,0 +1,32 @@
+    AngularJS is {{'working'+'!'}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2">
+          Search: <input ng-model="query">
+          <select ng-model="orderProp">
+            <option value="-projectName">Project Name</option>
+            <option value="_id">Project Id</option>
+            <option value="creationTime">Creation Time</option>
+          </select>
+        </div>
+        <div class="col-md-10">
+          <div class="table-responsive">
+            <table class="table table-bordered table-bordered">
+              <thead>
+                <tr>
+                  <th>Project Name</th>
+                  <th>Project ID</th>
+                  <th>Creation Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="project in projects | filter:query|orderBy:orderProp">
+                  <td>{{project.projectName}}</td>
+                  <td>{{project._id}}</td>
+                  <td>{{project.creationTime}}</td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  
