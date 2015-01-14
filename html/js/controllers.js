@@ -21,12 +21,14 @@ UserProjectApp.config(['$routeProvider', function ($routeProvider) {
 
 UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($rootScope, $location, $cookieStore, $http) {
     // keep user logged in after page refresh
+    console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
     $rootScope.globals = $cookieStore.get('globals') || {};
     if ($rootScope.globals.currentUser) {
         //        $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
     }
     
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
         // redirect to login page if not logged in
         if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
             $location.path('/login');
@@ -95,7 +97,6 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
 
 UserProjectApp.controller('UserProjectController', function($scope,$http) {
     $http.get('projects/meptest').success(function(data){
-        console.log(data);
         $scope.projects=data;
     });
     $scope.orderProp='_id';
@@ -160,6 +161,13 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','fileUpload
     $rootScope.$broadcast('upload','done');
 }]);
 
+UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
+    $scope.logout=function() {
+        console.log("form action");
+        AuthenticationServices.clearCredentials2();
+        $location.path('/login');    
+    };
+}]);
 
                          
                        
