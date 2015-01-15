@@ -36,54 +36,19 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     });
 }]);
 
-
-UserProjectApp.service('DoLogin',['$timeout', function($timeout) {
-    this.doLogin=function(username,password, callback) {
-        console.log("Calling login");
-        $timeout(function(){
-            var response={};
-            response.success=true;
-            response.message="Authentication successful";
-            callback(response);
-        }, 10);
-    }
-}]);
-
-UserProjectApp.service('SetCredentials', ['$rootScope','$cookieStore', function($rootScope,$cookieStore) { 
-    //            var authdata = Base64.encode(username + ':' + password);
-    this.setCredentials=function(username,password) {
-        console.log("Setting new credentials");
-        $rootScope.globals = {
-            currentUser: {
-                username: username,
-                password: password
-            }
-        };
-        $cookieStore.put('globals', $rootScope.globals);
-    }
-}]);
-                                           
-UserProjectApp.service('ClearCredentials',['$rootScope','$cookieStore',function($rootScope,$cookieStore){
-    this.clearCredentials=function(){
-        console.log("Clearing old credentials");
-        $rootScope.globals = {};
-        $cookieStore.remove('globals');
-    }
-}]);
-        
-
-UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices','DoLogin','SetCredentials',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices,DoLogin,SetCredentials) {
+UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices,DoLogin,SetCredentials) {
+    console.log("LoginController called");
     $scope.login=function(){
         console.log("Doing the login thing");
 //        ClearCredentials.clearCredentials();
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
-        DoLogin.doLogin($scope.username, $scope.password, function(response){
+        AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
             console.log("Login response is "+JSON.stringify(response));
             console.log(response.success);
             if(response.success) {
                 console.log("Authentication successful");
-                SetCredentials.setCredentials($scope.username, $scope.password);
+                AuthenticationServices.setCredentials2($scope.username, $scope.password);
                 $location.path('/');
             } else {
                 console.error("Authentication error");
@@ -96,6 +61,7 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
                   
 
 UserProjectApp.controller('UserProjectController', function($scope,$http) {
+    console.log("UserProjectController called");
     $http.get('projects/meptest').success(function(data){
         $scope.projects=data;
     });
@@ -103,6 +69,7 @@ UserProjectApp.controller('UserProjectController', function($scope,$http) {
 });
 
 UserProjectApp.controller('SimplexSubmitController',function($scope, $http){
+    console.log("SimplexSubmitController called");
         $scope.$on('upload', function (event, arg) {
             console.log('Got the message:'+arg);
         });
@@ -150,6 +117,7 @@ UserProjectApp.service('fileUpload', ['$http', function ($http) {
 }]);
 
 UserProjectApp.controller("UploadController", ['$scope','$rootScope','fileUpload', function($scope, $rootScope, fileUpload) {
+    console.log("UploadController called");
     $scope.uploadFile=function(){
         //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
         var file=$scope.myFile;
@@ -162,6 +130,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','fileUpload
 }]);
 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
+    console.log("LogoutController called");
     $scope.logout=function() {
         console.log("form action");
         AuthenticationServices.clearCredentials2();

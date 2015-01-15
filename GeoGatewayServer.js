@@ -18,7 +18,7 @@ var util=require('util');
 var mkdirp=require('mkdirp');
 
 //Place for uploading files.
-var baseDestDir='public/userUploads/';
+var baseDestDir='html/userUploads/';
 
 //Call or prepare constructors
 var app=express();
