@@ -3,4 +3,4 @@ npm-debug
 bower_components
 *.*~
 #*
-public/userUploads/*
+html/userUploads/*

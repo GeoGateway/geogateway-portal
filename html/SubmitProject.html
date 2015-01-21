@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      Upload your Simplex input file.
+      <div ng-controller="UploadController">
+        <input type="file" file-model="myFile">
+        <button ng-click="uploadFile()">Upload File</button>
+      </div>
+      <div ng-controller="SubmitProjectController">
+        <button ng-disabled="isDisabled" ng-click="submit()">Do thing!</button>
+      </div>
+      <form ng-submit="submit()" ng-controller="SubmitProjectController">
+        Hit the button and watch it fizz!
+        <input ng-disabled="isDisabled" type="submit" id="submitSimplex" value="Submit Simplex"/>
+      </form>
+    </div>
+  </div>
+</div>
+<form ng-submit="logout()" ng-controller="LogoutController">
+  <input type="submit" id="logout" name="logout" value="Logout">
+</form>
+

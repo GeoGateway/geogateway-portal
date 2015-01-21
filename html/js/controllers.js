@@ -15,6 +15,11 @@ UserProjectApp.config(['$routeProvider', function ($routeProvider) {
                 controller: 'UserProjectController',
                 templateUrl: 'UserProjects.html'
             })
+
+            .when('/submit', {
+                controller: 'SubmitProjectController',
+                templateUrl: 'SubmitProject.html'
+            })
         
             .otherwise({ redirectTo: '/login' });
     }]);
@@ -36,7 +41,7 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     });
 }]);
 
-UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices,DoLogin,SetCredentials) {
+UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
     console.log("LoginController called");
     $scope.login=function(){
         console.log("Doing the login thing");
@@ -68,14 +73,14 @@ UserProjectApp.controller('UserProjectController', function($scope,$http) {
     $scope.orderProp='_id';
 });
 
-UserProjectApp.controller('SimplexSubmitController',function($scope, $http){
-    console.log("SimplexSubmitController called");
+UserProjectApp.controller('SubmitProjectController',function($scope, $http){
+    console.log("SubmitProjectController called");
         $scope.$on('upload', function (event, arg) {
             console.log('Got the message:'+arg);
         });
         $scope.submit=function(){
             console.log("Hollow world!");
-            $http.get('/execute/simplex/'+$scope.userName+'/'+$scope.projectId);
+            //$http.get('/execute/simplex/'+$scope.userName+'/'+$scope.projectId);
         }
     });
 
@@ -101,22 +106,7 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
     };
 }]);
 
-UserProjectApp.service('fileUpload', ['$http', function ($http) {
-    this.uploadFileToUrl=function(file, uploadUrl){
-        var fd=new FormData();
-        fd.append('file', file);
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity, 
-            headers:{'Content-Type':undefined}
-        })
-            .success(function() {
-            })
-            .error(function() {
-            } );
-    }
-}]);
-
-UserProjectApp.controller("UploadController", ['$scope','$rootScope','fileUpload', function($scope, $rootScope, fileUpload) {
+UserProjectApp.controller("UploadController", ['$scope','$rootScope','UploadService', function($scope, $rootScope, UploadService) {
     console.log("UploadController called");
     $scope.uploadFile=function(){
         //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
@@ -124,7 +114,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','fileUpload
         console.log('file is '+JSON.stringify(file));
         //This is a hard-coded path for now.
         var uploadUrl="/doUpload/andrea/project2";
-        fileUpload.uploadFileToUrl(file,uploadUrl);
+        UploadService.uploadFileToUrl2(file,uploadUrl);
     };
     $rootScope.$broadcast('upload','done');
 }]);
@@ -138,5 +128,17 @@ UserProjectApp.controller("LogoutController", ['$scope','$location','Authenticat
     };
 }]);
 
+UserProjectApp.controller("EditProjectController",['$scope','$location', function($scope,$location) {
+    console.log("EditProjectController called");
+    $scope.createNewProject=function() {
+        console.log("Creating new project");
+    }
+    $scope.editProject=function(projectId) {
+        console.log(projectId);
+    }
+    $scope.createOrEditProject=function(){
+        $location.path('/submit');
+    }
+}]);
                          
                        
