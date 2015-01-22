@@ -20,6 +20,10 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
             currentUser: {
                 username: username,
                 password: password
+            },
+            currentProject: {
+                projectName: "",
+                projectId:""
             }
         };
         $cookieStore.put('globals', $rootScope.globals);

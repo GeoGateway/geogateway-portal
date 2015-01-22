@@ -9,8 +9,8 @@
         <th>Project Name</th>
         <th>Project ID</th>
         <th>Creation Time</th>
+        <th>Status</th>
         <th>Edit</th>
-        <th>Test</th>
       </tr>
     </thead>
     <tbody>
@@ -39,7 +39,7 @@
         <input type="text" ng-model="projectId" placeholder="Project ID">
       </div>
     </div>
-    <button class="btn btn-success" ng-click="createOrEditProject()" ng-disabled="error || incomplete">
+    <button class="btn btn-success" ng-click="createProject()" ng-disabled="error || incomplete">
       Launch
     </button>
   </div>

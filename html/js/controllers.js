@@ -73,14 +73,15 @@ UserProjectApp.controller('UserProjectController', function($scope,$http) {
     $scope.orderProp='_id';
 });
 
-UserProjectApp.controller('SubmitProjectController',function($scope, $http){
+UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,$http){
     console.log("SubmitProjectController called");
         $scope.$on('upload', function (event, arg) {
             console.log('Got the message:'+arg);
         });
         $scope.submit=function(){
             console.log("Hollow world!");
-            //$http.get('/execute/simplex/'+$scope.userName+'/'+$scope.projectId);
+            console.log('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject.projectId);
+            //$http.get('/execute/simplex/'+$rootScope.userName+'/'+$rootScope.projectId);
         }
     });
 
@@ -113,7 +114,8 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','UploadServ
         var file=$scope.myFile;
         console.log('file is '+JSON.stringify(file));
         //This is a hard-coded path for now.
-        var uploadUrl="/doUpload/andrea/project2";
+        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"_"+$rootScope.globals.currentProject.projectId;
+        console.log(uploadUrl);
         UploadService.uploadFileToUrl2(file,uploadUrl);
     };
     $rootScope.$broadcast('upload','done');
@@ -128,7 +130,7 @@ UserProjectApp.controller("LogoutController", ['$scope','$location','Authenticat
     };
 }]);
 
-UserProjectApp.controller("EditProjectController",['$scope','$location', function($scope,$location) {
+UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
     console.log("EditProjectController called");
     $scope.createNewProject=function() {
         console.log("Creating new project");
@@ -136,7 +138,9 @@ UserProjectApp.controller("EditProjectController",['$scope','$location', functio
     $scope.editProject=function(projectId) {
         console.log(projectId);
     }
-    $scope.createOrEditProject=function(){
+    $scope.createProject=function(){
+        $rootScope.globals.currentProject.projectName=$scope.projectName;
+        //$http.put('/projects/:'+$scope.userName);  //put or post? Correct this.
         $location.path('/submit');
     }
 }]);
