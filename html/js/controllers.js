@@ -81,7 +81,11 @@ UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,
         $scope.submit=function(){
             console.log("Hollow world!");
             console.log('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject.projectId);
-            //$http.get('/execute/simplex/'+$rootScope.userName+'/'+$rootScope.projectId);
+            $http.get('/execute/simplex/'+$rootScope.userName+'/'+$rootScope.projectId).
+                success(function(data){
+                }).
+                error(function(data){
+                });
         }
     });
 
@@ -140,7 +144,12 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     }
     $scope.createProject=function(){
         $rootScope.globals.currentProject.projectName=$scope.projectName;
-        //$http.put('/projects/:'+$scope.userName);  //put or post? Correct this.
+        var msgBody='{"projectName":'+$scope.projectName+'}';
+        $http.post('/projects/:'+$scope.userName,msgBody).
+            success(function(data){
+            }).
+            error(function(data){
+            });
         $location.path('/submit');
     }
 }]);
