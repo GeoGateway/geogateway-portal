@@ -11,7 +11,7 @@ UserProjectApp.config(['$routeProvider', function ($routeProvider) {
                 hideMenus: true
             })
         
-            .when('/', {
+            .when('/projects', {
                 controller: 'UserProjectController',
                 templateUrl: 'UserProjects.html'
             })
@@ -29,7 +29,7 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
     $rootScope.globals = $cookieStore.get('globals') || {};
     if ($rootScope.globals.currentUser) {
-        //        $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
+        //Current user is set
     }
     
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
@@ -42,19 +42,13 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
 }]);
 
 UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
-    console.log("LoginController called");
     $scope.login=function(){
-        console.log("Doing the login thing");
-//        ClearCredentials.clearCredentials();
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
         AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
-            console.log("Login response is "+JSON.stringify(response));
-            console.log(response.success);
             if(response.success) {
-                console.log("Authentication successful");
                 AuthenticationServices.setCredentials2($scope.username, $scope.password);
-                $location.path('/');
+                $location.path('/projects');
             } else {
                 console.error("Authentication error");
                 $scope.error = response.message;
@@ -65,9 +59,9 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
 }]);
                   
 
-UserProjectApp.controller('UserProjectController', function($scope,$http) {
-    console.log("UserProjectController called");
-    $http.get('projects/meptest').success(function(data){
+UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
+    $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
+        console.log(data);
         $scope.projects=data;
     });
     $scope.orderProp='_id';
@@ -79,9 +73,8 @@ UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,
             console.log('Got the message:'+arg);
         });
         $scope.submit=function(){
-            console.log("Hollow world!");
             console.log('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject.projectId);
-            $http.get('/execute/simplex/'+$rootScope.userName+'/'+$rootScope.projectId).
+            $http.get('/execute/simplex/'+$rootScope.globals.currentUser.userName+'/'+$rootScope.globals.currentProject.projectId).
                 success(function(data){
                 }).
                 error(function(data){
@@ -111,47 +104,50 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
     };
 }]);
 
-UserProjectApp.controller("UploadController", ['$scope','$rootScope','UploadService', function($scope, $rootScope, UploadService) {
-    console.log("UploadController called");
-    $scope.uploadFile=function(){
-        //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
-        var file=$scope.myFile;
-        console.log('file is '+JSON.stringify(file));
-        //This is a hard-coded path for now.
-        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"_"+$rootScope.globals.currentProject.projectId;
-        console.log(uploadUrl);
-        UploadService.uploadFileToUrl2(file,uploadUrl);
-    };
-    $rootScope.$broadcast('upload','done');
-}]);
-
-UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
-    console.log("LogoutController called");
-    $scope.logout=function() {
-        console.log("form action");
-        AuthenticationServices.clearCredentials2();
-        $location.path('/login');    
-    };
-}]);
-
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
-    console.log("EditProjectController called");
-    $scope.createNewProject=function() {
-        console.log("Creating new project");
-    }
     $scope.editProject=function(projectId) {
         console.log(projectId);
     }
     $scope.createProject=function(){
         $rootScope.globals.currentProject.projectName=$scope.projectName;
-        var msgBody='{"projectName":'+$scope.projectName+'}';
-        $http.post('/projects/:'+$scope.userName,msgBody).
-            success(function(data){
+        var newProject={};
+        newProject.projectName=$scope.projectName;
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        $rootScope.globals.currentProject=newProject;
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+            success(function(project){
+                console.log(project);
+                $rootScope.globals.currentProject=project;
             }).
             error(function(data){
+                console.error("Could not create the new project");
             });
         $location.path('/submit');
     }
 }]);
                          
                        
+UserProjectApp.controller("UploadController", ['$scope','$rootScope','UploadService', function($scope, $rootScope, UploadService) {
+    $scope.uploadFile=function(){
+        //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
+        var file=$scope.myFile;
+        console.log('file is '+JSON.stringify(file));
+
+        //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
+        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"_"+$rootScope.globals.currentProject.projectId;
+        console.log(uploadUrl);
+        UploadService.uploadFileToUrl2(file,uploadUrl);
+        
+        //Now update the project object
+        
+    };
+    $rootScope.$broadcast('upload','done');
+}]);
+
+UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
+    $scope.logout=function() {
+        console.log("form action");
+        AuthenticationServices.clearCredentials2();
+        $location.path('/login');    
+    };
+}]);

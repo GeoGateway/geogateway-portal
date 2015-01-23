@@ -1,5 +1,5 @@
 /**
-* This is a simple use of exrpess+node+mongodb that does not use views.
+* This is the server-side JavaScript.
 */
 
 //Call requires
@@ -25,7 +25,7 @@ var app=express();
 var collectionUtils;
 
 //Set up MongoClient
-var url="mongodb://127.0.0.1:27017/mydb";
+var url="mongodb://127.0.0.1:27017/geogatewaydb";  //This should not be hard coded?
 MongoClient.connect(url, function(err, db) {
 	 test.equal(null, err);
 	 collectionUtils=new CollectionUtils(db);

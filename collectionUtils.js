@@ -56,6 +56,7 @@ CollectionUtils.prototype.save = function(collectionName, obj, callback) {
         else {
 				console.log("We got this: ",collectionName,obj);
 				obj.creationTime = new Date(); 
+            obj.status="New";
 				the_collection.insert(obj, function() { 
 					 callback(null, obj);
 				});
