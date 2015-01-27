@@ -54,7 +54,6 @@ CollectionUtils.prototype.save = function(collectionName, obj, callback) {
     this.getCollection(collectionName, function(error, the_collection) { 
         if( error ) callback(error)
         else {
-				console.log("We got this: ",collectionName,obj);
 				obj.creationTime = new Date(); 
             obj.status="New";
 				the_collection.insert(obj, function() { 
@@ -76,7 +75,6 @@ CollectionUtils.prototype.update = function(collectionName, entityId, obj, callb
 						  console.log(error);
 					 }
 					 else {
-						  console.log("FindOne results:",doc);
 						  obj._id = ObjectID(entityId); //Convert to a real obj id
 						  obj.creationTime=doc.creationTime;
 						  obj.updateTime = new Date(); 

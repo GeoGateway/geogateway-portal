@@ -1,0 +1,3 @@
+#!/bin/sh
+pwd
+echo "This is simplex. Flag is "$1 ". Input is "$2 > $3 

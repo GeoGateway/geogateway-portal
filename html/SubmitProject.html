@@ -1,22 +1,32 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2">
-      Upload your Simplex input file.
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h4>Select the input file that you want to upload</h4>
       <div ng-controller="UploadController">
-        <input type="file" file-model="myFile">
-        <button ng-click="uploadFile()">Upload File</button>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <input type="file" file-model="myFile">
+          </div>
+          <div class="col-md-12 form-group">
+            <button class="btn btn-sm btn-primary" ng-click="uploadFile()">Upload File</button>
+          </div>
+        </div>
       </div>
-      <div ng-controller="SubmitProjectController">
-        <button ng-disabled="isDisabled" ng-click="submit()">Do thing!</button>
-      </div>
-      <form ng-submit="submit()" ng-controller="SubmitProjectController">
-        Hit the button and watch it fizz!
-        <input ng-disabled="isDisabled" type="submit" id="submitSimplex" value="Submit Simplex"/>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form role="form" ng-submit="submit()" ng-controller="SubmitProjectController">
+        After uploading your input file, click the button to submit.
+        <div class="form-group">
+          <label for="submitSimplex">Click to Submit:</label>
+          <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
+        </div>
       </form>
     </div>
   </div>
+  
+  <form role="form" ng-submit="logout()" ng-controller="LogoutController">
+    <input type="submit" id="logout" name="logout" value="Logout">
+  </form>
 </div>
-<form ng-submit="logout()" ng-controller="LogoutController">
-  <input type="submit" id="logout" name="logout" value="Logout">
-</form>
-

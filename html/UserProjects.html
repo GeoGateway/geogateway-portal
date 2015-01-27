@@ -11,6 +11,7 @@
         <th>Creation Time</th>
         <th>Status</th>
         <th>Edit</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -21,8 +22,18 @@
         <td>{{project.status}}</td>
         <td>
           <div ng-controller="EditProjectController">
-            <button class="btn" ng-click="editProject(project._id)">Edit</button>
+            <button class="btn btn-success" ng-click="editProject(project._id)">Edit</button>
           </div>
+        </td>
+        <td>
+          <form ng-submit="deleteProject(project._id)" ng-controller="EditProjectController">
+            <input class="btn btn-danger" type="submit" id="deleteProject" name="deleteProject" value="Delete">
+          </form>
+          <!--
+          <div ng-controller="EditProjectController">
+            <button class="btn btn-danger" ng-click="deleteProject(project._id)">Delete</button>
+          </div>
+          -->
         </td>
     </tbody>
   </table>

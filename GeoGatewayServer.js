@@ -19,6 +19,10 @@ var mkdirp=require('mkdirp');
 
 //Place for uploading files.
 var baseDestDir='html/userUploads/';
+var geogatewayHomeDir="/Users/mpierce/GeoGateway/";
+var projectBinDir=geogatewayHomeDir+"/bin/";
+var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
+
 
 //Call or prepare constructors
 var app=express();
@@ -163,9 +167,9 @@ app.post('doUpload2', function(req,res){
 app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
 //		  handleResponse(error, obj, res);
-		  console.log(obj);
-		  var simplexExec="./simplex -a "+obj.ProjectSummary.inputFile+" "+obj.ProjectSummary.outputFile;
-		  exec(simplexExec, function(error, stdout, stderr){
+		  console.log("Selected Project:"+obj);
+		  var simplexExec=projectBinDir+"simplex -a "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+		  exec(simplexExec, {"cwd":baseUserProjectPath+obj.projectWorkDir},function(error, stdout, stderr){
 				if(error) {
 					 console.error(error.stack);
 					 res.status(400).send(error)

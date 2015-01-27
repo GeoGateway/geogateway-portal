@@ -2,6 +2,7 @@ var GeoGatewayServices=angular.module('GeoGatewayServices',['ngCookies']);
 
 GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore',function($rootScope,$cookieStore){
     var service={};
+    //Note this will also clear current project and anything else.
     service.clearCredentials2=function() {    
         console.log("Clearing credentials");
         $rootScope.globals = {};
@@ -16,6 +17,7 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
     };
     service.setCredentials2=function(username, password){
         console.log("Setting new credentials");
+        //This sets only the currentUser. The currentProject will be set later.
         $rootScope.globals = {
             currentUser: {
                 username: username,
