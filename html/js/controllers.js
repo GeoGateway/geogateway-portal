@@ -61,12 +61,11 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
 
 UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
     $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
-        console.log("Got projects:"+data);
         $scope.projects=data;
     });
     
-    $scope.$on('refresh', function(even,arg) {
-        console.log("Event detected");
+    $scope.$on('refresh', function(event,arg) {
+        console.log("Event detected:"+JSON.stringify(event));
         $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
             $scope.projects=data;
         });
@@ -101,7 +100,18 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
 
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
     $scope.editProject=function(projectId) {
-        console.log("Selected project ID:"+projectId);
+        console.log('Project GET request:'+'projects/'+$rootScope.globals.currentUser.username+"/"+projectId);
+        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+            success(function(project) {
+                console.log("Got the project:"+JSON.stringify(project));
+                $rootScope.globals.currentProject=project;
+                $rootScope.$broadcast('loadProject',project);
+            }).
+            error(function(data){
+                console.log("Could not load the old project");
+            });
+        $location.path('/submit');
+        
     }
 
     $scope.deleteProject=function(projectId){
@@ -139,8 +149,9 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         var file=$scope.myFile;
 
         //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
-        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id;
-//        console.log("Upload URL:"+uploadUrl);
+        //Note: need to consolidate these naming conventions in some variable or function.
+        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+        console.log("Upload URL:"+uploadUrl);
         UploadService.uploadFileToUrl2(file,uploadUrl);
         
         $rootScope.globals.currentProject.projectInputFileName=file.name;
@@ -154,7 +165,8 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
             success(function(project){
                 console.log("updated project:"+JSON.stringify(project));
-                $rootScope.$broadcast('upload','done');
+//                $rootScope.$broadcast('upload','done');
+                $rootScope.$broadcast('upload',project);
             }).
             error(function(data){
                 console.error("Could not update project: "+data);
@@ -166,15 +178,22 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
 
 UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,$http){
     $scope.readyToSubmit=false;
-    $scope.$on('upload', function (event, arg) {
-//        console.log('Got the message:'+arg);
+    $scope.username=$rootScope.globals.currentUser.username;
+    $scope.$on('loadProject', function(event, arg) {
+        console.log("Event received:"+event+" "+arg);
         $scope.readyToSubmit=true;
-        
-        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
-            console.log("project data:"+JSON.stringify(data));
-            $scope.myproject=data;
-            $scope.username=$rootScope.globals.currentUser.useranme;
-        });
+        $scope.myproject=arg;
+    });
+    $scope.$on('upload', function (event, arg) {
+        //        console.log('Got the message:'+event+" "+arg);
+        $scope.readyToSubmit=true;
+        $scope.myproject=arg;        
+        //        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
+        //            console.log("project data:"+JSON.stringify(data));
+        //            $scope.myproject=data;
+
+        //});
+
     });
 
     $scope.submit=function(){

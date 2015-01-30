@@ -70,7 +70,15 @@ app.put("/projects/:user/:documentId", function(req,res) {
 //Deletes a specific document.
 app.delete("/projects/:user/:documentId", function(req, res) {
 	 collectionUtils.delete(req.params.user, req.params.documentId, function(error, doc){
-		  handleResponse(error, doc, res);
+		  if(error) {
+				console.error(error.stack);
+				res.set('Content-Type','application/json');
+				res.status(400).send(error);
+		  }
+		  else {
+				res.set('Content-Type','application/json');
+				res.sendSttatus(200);
+        }
 	 });
 });
 			
@@ -113,6 +121,7 @@ app.get('/projects/:collection/:document', function(req,res){
 //This version just streams the data directly to a chose file.
 app.post('/doUpload/:userName/:projectId',function(req,res){
     var destDir=baseDestDir+"/"+req.params.userName+"/"+req.params.projectId+"/";
+    console.log("File dest dir: "+destDir);
     mkdirp.sync(destDir);
     
     var form=new multiparty.Form();
@@ -166,10 +175,10 @@ app.post('doUpload2', function(req,res){
 //with input and output files specfiied.
 app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
-//		  handleResponse(error, obj, res);
-		  console.log("Selected Project:"+obj);
 		  var simplexExec=projectBinDir+"simplex -a "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+        console.log("Execution path:"+simplexExec);
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        console.log("baseWorkDirPath:"+baseWorkDirPath);
 		  exec(simplexExec, {"cwd":baseWorkDirPath},function(error, stdout, stderr){
 				if(error) {
 					 console.error(error.stack);
@@ -178,9 +187,10 @@ app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 				else {
                 //                console.log('Standard Out:',stdout);
                 //					 console.log('Standard Err:', stderr);
-                
                 fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
                 fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
+				    res.set('Content-Type','application/json');
+                res.sendStatus(200);
 				}
 		  });
 	 });

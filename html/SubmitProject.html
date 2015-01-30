@@ -1,7 +1,7 @@
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-body">
-      <h4>Select the input file that you want to upload</h4>
+      <h4>Upload your Simplex input file</h4>
       <div ng-controller="UploadController">
         <div class="row">
           <div class="col-md-12 form-group">
@@ -38,10 +38,10 @@
               <td>{{myproject._id}}</td>
               <td>{{myproject.creationTime}}</td>
               <td>{{myproject.updateTime}}</td>
-              <td><a href="#/userUploads/{{username}}/{{myproject.projectInputFileName}}">{{myproject.projectInputFileName}}</a></td>
-              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputFileName}}">{{myproject.projectOutputFileName}}</a></td>
-              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputStandardOut}}">{{myproject.projectStandardOut}}</td>
-              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputStandardError}}">{{myproject.projectStandardError}}</a></td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}">{{myproject.projectInputFileName}}</a></td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputFileName}}" target="_blank">{{myproject.projectOutputFileName}}</a></td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardOut}}" target="_blank">{{myproject.projectStandardOut}}</td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank">{{myproject.projectStandardError}}</a></td>
               <td>{{myproject.status}}</td>
           </tbody>
         </table>
@@ -62,4 +62,5 @@
   <form role="form" ng-submit="logout()" ng-controller="LogoutController">
     <input class="btn btn-link" type="submit" id="logout" name="logout" value="Logout">
   </form>
+  <a href="#/projects">Projects</a>
 </div>

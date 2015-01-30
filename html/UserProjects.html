@@ -47,14 +47,8 @@
     </button>
   </div>
   <hr>
-  Search: <input ng-model="query">
-  <select ng-model="orderProp">
-    <option value="-projectName">Project Name</option>
-    <option value="_id">Project Id</option>
-    <option value="creationTime">Creation Time</option>
-  </select>
   <form ng-submit="logout()" ng-controller="LogoutController">
-    <input type="submit" id="logout" name="logout" value="Logout">
+    <input class="btn btn-link" type="submit" id="logout" name="logout" value="Logout">
   </form>
 </div>
 
