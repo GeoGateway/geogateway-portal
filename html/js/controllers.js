@@ -68,7 +68,6 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
     $scope.$on('refresh', function(even,arg) {
         console.log("Event detected");
         $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
-            console.log("Got projects:"+data);
             $scope.projects=data;
         });
     });
@@ -79,7 +78,7 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
 
 
 /**
-* I took the following three snippets from 
+* I took the following snippets from 
 * http://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
 */
 //This will transform the file-model attributes when the page is compiled.
@@ -106,8 +105,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     }
 
     $scope.deleteProject=function(projectId){
-        console.log("Delete project: "+projectId);
-        console.log('/projects/'+$rootScope.globals.currentUser.username+"/"+projectId);
         $http.delete('/projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
             success(function(data){
                 console.log("Delete response:"+JSON.stringify(data));
@@ -125,10 +122,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //Need to see if necessary to stringify newProject or if it can be passed directly.
         $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
             success(function(project){
-                console.log("Here is the updated project:"+JSON.stringify(project));
                 //Set or update the current project
                 $rootScope.globals.currentProject=project;
-                console.log("And our rootScope copy:"+JSON.stringify($rootScope.globals.currentProject));
             }).
             error(function(data){
                 console.error("Could not create the new project");
@@ -145,43 +140,55 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
 
         //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
         var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id;
-        console.log("Upload URL:"+uploadUrl);
+//        console.log("Upload URL:"+uploadUrl);
         UploadService.uploadFileToUrl2(file,uploadUrl);
         
         $rootScope.globals.currentProject.projectInputFileName=file.name;
         $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
-        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id;
+        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+        $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+        $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
         //Now update the project object
-        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);
+//        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);
 
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
             success(function(project){
                 console.log("updated project:"+JSON.stringify(project));
+                $rootScope.$broadcast('upload','done');
             }).
             error(function(data){
                 console.error("Could not update project: "+data);
             });
 
     };
-    $rootScope.$broadcast('upload','done');
+
 }]);
 
 UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,$http){
-        $scope.$on('upload', function (event, arg) {
-            console.log('Got the message:'+arg);
+    $scope.readyToSubmit=false;
+    $scope.$on('upload', function (event, arg) {
+//        console.log('Got the message:'+arg);
+        $scope.readyToSubmit=true;
+        
+        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
+            console.log("project data:"+JSON.stringify(data));
+            $scope.myproject=data;
+            $scope.username=$rootScope.globals.currentUser.useranme;
         });
-        $scope.submit=function(){
-            console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
-            console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
-            $http.get('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
-                success(function(data){
-                    console.log("Successful exec:"+JSON.stringify(data));
-                }).
-                error(function(data){
-                    console.error("Unsuccessful exec:"+JSON.stringify(data));
-                });
-        }
     });
+
+    $scope.submit=function(){
+//        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
+//        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
+        $http.get('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+            success(function(data){
+                console.log("Successful exec:"+JSON.stringify(data));
+            }).
+            error(function(data){
+                console.error("Unsuccessful exec:"+JSON.stringify(data));
+            });
+    }
+});
 
 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){

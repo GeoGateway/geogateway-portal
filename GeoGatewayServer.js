@@ -169,15 +169,18 @@ app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 //		  handleResponse(error, obj, res);
 		  console.log("Selected Project:"+obj);
 		  var simplexExec=projectBinDir+"simplex -a "+obj.projectInputFileName+" "+obj.projectOutputFileName;
-		  exec(simplexExec, {"cwd":baseUserProjectPath+obj.projectWorkDir},function(error, stdout, stderr){
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+		  exec(simplexExec, {"cwd":baseWorkDirPath},function(error, stdout, stderr){
 				if(error) {
 					 console.error(error.stack);
 					 res.status(400).send(error)
 				}
 				else {
-					 console.log('Standard Out:',stdout);
-					 console.log('Standard Err:', stderr);
-					 res.status(200).send("OK");
+                //                console.log('Standard Out:',stdout);
+                //					 console.log('Standard Err:', stderr);
+                
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
 				}
 		  });
 	 });

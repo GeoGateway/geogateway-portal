@@ -14,19 +14,52 @@
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form role="form" ng-submit="submit()" ng-controller="SubmitProjectController">
-        After uploading your input file, click the button to submit.
-        <div class="form-group">
-          <label for="submitSimplex">Click to Submit:</label>
-          <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
-        </div>
-      </form>
+  <div ng-controller="SubmitProjectController">
+    <div class="panel panel-default" ng-show="readyToSubmit">
+      <div class="panel-body">
+        <h4>Your project's components</h4>
+        <table class="table table-striped table-bordered table-condensed table-responsive">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Project ID</th>
+              <th>Creation Time</th>
+              <th>Update Time</th>
+              <th>Input File</th>
+              <th>Output File</th>
+              <th>Stdout</th>
+              <th>Stderr</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{myproject.projectName}}</td>
+              <td>{{myproject._id}}</td>
+              <td>{{myproject.creationTime}}</td>
+              <td>{{myproject.updateTime}}</td>
+              <td><a href="#/userUploads/{{username}}/{{myproject.projectInputFileName}}">{{myproject.projectInputFileName}}</a></td>
+              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputFileName}}">{{myproject.projectOutputFileName}}</a></td>
+              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputStandardOut}}">{{myproject.projectStandardOut}}</td>
+              <td><a href="#/userUploads/{{username}}/{{myproject.projectOutputStandardError}}">{{myproject.projectStandardError}}</a></td>
+              <td>{{myproject.status}}</td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="panel panel-default" ng-show="readyToSubmit">
+      <div class="panel-body">
+        <h4>Click the button to submit.</h4>
+        <form role="form" ng-submit="submit()">
+          <div class="form-group">
+            <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-  
   <form role="form" ng-submit="logout()" ng-controller="LogoutController">
-    <input type="submit" id="logout" name="logout" value="Logout">
+    <input class="btn btn-link" type="submit" id="logout" name="logout" value="Logout">
   </form>
 </div>
