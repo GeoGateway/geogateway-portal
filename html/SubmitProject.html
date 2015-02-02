@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  <div ng-controller="SubmitProjectController">
+  <div ng-controller="EditProjectController">
     <div class="panel panel-default" ng-show="readyToSubmit">
       <div class="panel-body">
         <h4>Your project's components</h4>
@@ -51,7 +51,7 @@
     <div class="panel panel-default" ng-show="readyToSubmit">
       <div class="panel-body">
         <h4>Click the button to submit.</h4>
-        <form role="form" ng-submit="submit()">
+        <form role="form" ng-submit="submitNonblocking()">
           <div class="form-group">
             <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
           </div>
@@ -59,8 +59,15 @@
       </div>
     </div>
   </div>
-  <form role="form" ng-submit="logout()" ng-controller="LogoutController">
-    <input class="btn btn-link" type="submit" id="logout" name="logout" value="Logout">
-  </form>
-  <a href="#/projects">Projects</a>
+  <table>
+    <tr>
+      <td>
+        <a href="#/projects">Projects</a>
+      </td>
+      <td>
+        <form role="form" ng-submit="logout()" ng-controller="LogoutController">
+          <input class="btn btn-link" type="submit" id="logout" name="logout" value="Logout">
+        </form>
+      </td>
+    </tr>
 </div>

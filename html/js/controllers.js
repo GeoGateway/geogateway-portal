@@ -17,7 +17,7 @@ UserProjectApp.config(['$routeProvider', function ($routeProvider) {
             })
 
             .when('/submit', {
-                controller: 'SubmitProjectController',
+                controller: 'EditProjectController',
                 templateUrl: 'SubmitProject.html'
             })
         
@@ -65,7 +65,6 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
     });
     
     $scope.$on('refresh', function(event,arg) {
-        console.log("Event detected:"+JSON.stringify(event));
         $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
             $scope.projects=data;
         });
@@ -99,33 +98,23 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
 }]);
 
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
-    $scope.editProject=function(projectId) {
-        console.log('Project GET request:'+'projects/'+$rootScope.globals.currentUser.username+"/"+projectId);
-        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
-            success(function(project) {
-                console.log("Got the project:"+JSON.stringify(project));
-                $rootScope.globals.currentProject=project;
-                $rootScope.$broadcast('loadProject',project);
-            }).
-            error(function(data){
-                console.log("Could not load the old project");
-            });
-        $location.path('/submit');
+    $scope.username=$rootScope.globals.currentUser.username;
+
+    //Set $scope's myproject 
+    if(typeof $rootScope.globals.currentProject !== 'undefined') {
+        $scope.myproject=$rootScope.globals.currentProject;
+    }
+
+    //Set readyToSubmit
+    if((typeof $rootScope.globals.currentProject !== 'undefined') && (typeof $rootScope.globals.currentProject.readyToSubmit !== 'undefined')) {
+        $scope.readyToSubmit=$rootScope.globals.currentProject.readyToSubmit;
         
     }
-
-    $scope.deleteProject=function(projectId){
-        $http.delete('/projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
-            success(function(data){
-                console.log("Delete response:"+JSON.stringify(data));
-            }).
-            error(function(data){
-                console.error("Could not delete project:"+JSON.stringify(data));
-            });
-        //Refresh the projects display
-        $rootScope.$broadcast("refresh","true");
+    else {
+        $scope.readyToSubmit=false;
     }
 
+    
     $scope.createProject=function(){
         var newProject={};
         newProject.projectName=$scope.projectName;
@@ -134,12 +123,93 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(project){
                 //Set or update the current project
                 $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.readyToSubmit=false; 
+                $location.path('/submit');
             }).
             error(function(data){
                 console.error("Could not create the new project");
             });
-        $location.path('/submit');
     }
+
+    //User will review or edit a previous project
+    $scope.editProject=function(projectId) {
+        console.log('Project GET request:'+'projects/'+$rootScope.globals.currentUser.username+"/"+projectId);
+        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+            success(function(project) {
+                console.log("Got the project:"+JSON.stringify(project));
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.readyToSubmit=true;     
+                $scope.myproject=$rootScope.globals.currentProject;
+                $location.path('/submit');
+            }).
+            error(function(data){
+                console.log("Could not load the old project");
+            });
+        
+    }
+
+    //User will delete the selected project.
+    $scope.deleteProject=function(projectId){
+        $http.delete('/projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+            success(function(data){
+                console.log("Delete response:"+data);
+            }).
+            error(function(data){
+                console.error("Could not delete project:"+JSON.stringify(data));
+            });
+        //Refresh the projects display
+        $rootScope.$broadcast("refresh","true");
+    }
+
+/**
+    $scope.$on('loadProject', function(event, arg) {
+        console.log("Event received:"+event+" "+arg);
+        $scope.readyToSubmit=true;
+        $scope.myproject=arg;
+    });
+*/
+
+    $scope.$on('upload', function (event, arg) {
+        //        console.log('Got the message:'+event+" "+arg);
+        $scope.readyToSubmit=$rootScope.globals.currentProject.readyToSubmit;
+        console.log("Ready to submit set to false; sanity:"+$scope.readyToSubmit);
+        $scope.myproject=arg;        
+        //        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
+        //            console.log("project data:"+JSON.stringify(data));
+        //            $scope.myproject=data;
+        
+        //});
+        
+    });
+    
+    //This runs the blocking version of the executable wrapper
+    $scope.submit=function(){
+        //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
+        //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
+        $http.get('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+            success(function(data){
+                console.log("Successful exec:"+JSON.stringify(data));
+                $location.path('/projects');
+            }).
+            error(function(data){
+                console.error("Unsuccessful exec:"+JSON.stringify(data));
+            });
+    }
+
+    //This runs the non-blocking version of the executable wrapper
+    $scope.submitNonblocking=function(){
+        //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
+        //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
+        $http.get('/spawn/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+            success(function(data){
+                console.log("Successful exec:"+JSON.stringify(data));
+                $location.path('/projects');
+            }).
+            error(function(data){
+                console.error("Unsuccessful exec:"+JSON.stringify(data));
+            });
+    }
+    
 }]);
                          
                        
@@ -159,6 +229,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
         $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
         $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        $rootScope.globals.currentProject.readyToSubmit=true;
         //Now update the project object
 //        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);
 
@@ -176,6 +247,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
 
 }]);
 
+/**
 UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,$http){
     $scope.readyToSubmit=false;
     $scope.username=$rootScope.globals.currentUser.username;
@@ -208,6 +280,7 @@ UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,
             });
     }
 });
+*/
 
 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){

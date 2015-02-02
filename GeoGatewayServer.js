@@ -77,7 +77,7 @@ app.delete("/projects/:user/:documentId", function(req, res) {
 		  }
 		  else {
 				res.set('Content-Type','application/json');
-				res.sendSttatus(200);
+				res.sendStatus(200);
         }
 	 });
 });
@@ -171,7 +171,7 @@ app.post('doUpload2', function(req,res){
 * The Execute family calls external processes
 */		  
 
-//Runs Simplex.  This assumes that the project has been correctly created,
+//Runs Simplex in blocking (exec) mode.  This assumes that the project has been correctly created,
 //with input and output files specfiied.
 app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
@@ -196,6 +196,39 @@ app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 	 });
 });
 
+//Runs Simplex in non-blocking (spawn) mode.  
+app.get('/spawn/simplex/:collection/:documentId', function(req, res) {
+	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+        var simplexExec="simplex";
+        var simplexArgs=['-a',obj.projectInputFileName,obj.projectOutputFileName];
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        console.log("Base workdir:"+baseWorkDirPath);
+        var theProcess=spawn(simplexExec,simplexArgs,{'cwd':baseWorkDirPath,'env':{PATH:process.env.PATH+':'+projectBinDir}});
+        
+        //Return to the clienb tub go ahead and keep running.
+        //This is a poor man's solution for now.
+        res.sendStatus(200);
+        
+	     theProcess.stdout.on('data', function (data) {
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,data);
+//		      console.log('Standard Out: "%s"', data);
+	     });
+	     
+	     theProcess.stderr.on('data', function (data) {
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,data);
+//		      console.log('Standard Error: "%s"', data);
+	     });
+	     
+        theProcess.on('error',function(err){
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,data);
+            console.error("Got an error: "+err);
+        });
+
+	     theProcess.on('close', function (exitCode) {
+		      console.log('Exit code:', exitCode);
+	     });
+    })
+});
 
 //Runs the node.js execute function.
 app.get('/execute/exec-test', function (req,res) {
