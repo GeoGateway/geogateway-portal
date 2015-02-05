@@ -203,6 +203,11 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $http.get('/spawn/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Submitted";
+                //Push the job's status to the DB.
+                $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).success(function(data, status) { 
+                    console.log("Updated the job status");
+                });
                 $location.path('/projects');
             }).
             error(function(data){
@@ -230,6 +235,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
         $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
         $rootScope.globals.currentProject.readyToSubmit=true;
+        $rootScope.globals.currentProject.status="Ready";
         //Now update the project object
 //        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);
 
@@ -242,9 +248,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
             error(function(data){
                 console.error("Could not update project: "+data);
             });
-
     };
-
 }]);
 
 /**

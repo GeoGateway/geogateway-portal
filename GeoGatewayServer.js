@@ -84,7 +84,7 @@ app.delete("/projects/:user/:documentId", function(req, res) {
 			
 //Gets the entire contents of a particular collection.  This is returned as an array.
 app.get('/projects/:user', function(req,res){
-    console.log("Getting contents of collection for user "+req.params.user);
+//    console.log("Getting contents of collection for user "+req.params.user);
 	 collectionUtils.findAll(req.params.user, function(error, obj) {
 		  if(error) {
 				console.error(error.stack);
