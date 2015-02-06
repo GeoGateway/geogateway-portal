@@ -1,7 +1,7 @@
-This is the GeoGateway project.  To install, you need to install the NPM package manager, Node, Git, and MongoDB.
+This is the GeoGateway project.  To install, you need to install the NPM package manager, Node, Git, and MongoDB. MongoDB's default data directory is /data/db, so either make this directory and give it the correct permissions or else change the data directory.
 
 INSTALLATION
-Next, run the following commands:
+Run the following commands:
 
 * cd $INSTALL_PATH
    - You don't need this environment variable set, but we will use it for clarity.
@@ -12,16 +12,22 @@ Next, run the following commands:
 
 * npm install
    - This will install the packages listed in packages.json.
+   - Will need to put npm in your PATH
+   - ex: export PATH=~/node-v0.10.36-linux-x64/bin/:$PATH
 
 * cd $INSTALL_PATH/geogateway/html
 
-* bower install
+* bower install  
+
+* mkdir $INSTALL_PATH/geogateway/html/userUploads  (make sure this directory exists)
 
 RUNNING THE SERVICE
 Run the following commands
 
 * mongod
    - This starts MongoDB and can be run from anywhere.
+   - You need mongod in your path
+   - ex: export PATH=$HOME/mongodb-linux-x86_64-2.6.7/bin/:$PATH
 
 * cd $INSTALL_PATH/geogateway
 
