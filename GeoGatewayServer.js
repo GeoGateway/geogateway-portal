@@ -40,7 +40,7 @@ app.set('port',process.env.PORT || 3000);
 //We'll put HTML documents in the local "html" directory
 var serverOpts= {
     setHeaders: function (res,path,stat) {
-        console.log("Path is "+path);
+//        console.log("Path is "+path);
         if(path.indexOf('.html')>0) {
             res.setHeader('Content-Type','text/html');
         }
@@ -52,7 +52,7 @@ var serverOpts= {
         }
                 
         else {
-            console.log('Sending text/plain');
+//            console.log('Sending text/plain');
             res.setHeader('Content-Type','text/plain');
         }
     }
