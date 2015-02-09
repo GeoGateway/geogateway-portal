@@ -26,7 +26,6 @@ var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
 
 
 //Call or prepare constructors
-var contentDisposition=require('content-disposition');
 var app=express();
 var collectionUtils;
 
@@ -42,8 +41,6 @@ app.set('port',process.env.PORT || 3000);
 var serverOpts= {
     setHeaders: function (res,path,stat) {
         res.setHeader('Content-Type','text/html');
-        console.log("Content disposition:"+contentDisposition(path));
-//        res.setHeader('Content-Disposition',contentDisposition(path));
     }
 };
 app.use(express.static(__dirname+'/html',serverOpts));
