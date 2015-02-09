@@ -18,13 +18,15 @@ var util=require('util');
 var mkdirp=require('mkdirp');
 
 //Place for uploading files.
-var baseDestDir='html/userUploads/';
-var geogatewayHomeDir="/Users/mpierce/GeoGateway/";
-var projectBinDir=geogatewayHomeDir+"/bin/";
+var config=require('./config');
+var geogatewayHomeDir=config.home; //"/Users/mpierce/GeoGateway/";
+var baseDestDir=config.baseDestDir; //'html/userUploads/';
+var projectBinDir=config.bin; //geogatewayHomeDir+"/bin/";
 var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
 
 
 //Call or prepare constructors
+var contentDisposition=require('content-disposition');
 var app=express();
 var collectionUtils;
 
@@ -36,8 +38,16 @@ MongoClient.connect(url, function(err, db) {
 });
 
 app.set('port',process.env.PORT || 3000);
-//We'll put HTML documents in the local "public" directory
-app.use(express.static(__dirname+'/html'));
+//We'll put HTML documents in the local "html" directory
+var serverOpts= {
+    setHeaders: function (res,path,stat) {
+        res.setHeader('Content-Type','text/html');
+        console.log("Content disposition:"+contentDisposition(path));
+//        res.setHeader('Content-Disposition',contentDisposition(path));
+    }
+};
+app.use(express.static(__dirname+'/html',serverOpts));
+//app.use(express.static(__dirname+'/html'));
 app.use(bodyParser.json());
 
 /**
@@ -200,7 +210,7 @@ app.get('/execute/simplex/:collection/:documentId', function (req,res) {
 app.get('/spawn/simplex/:collection/:documentId', function(req, res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
         var simplexExec="simplex";
-        var simplexArgs=['-a',obj.projectInputFileName,obj.projectOutputFileName];
+        var simplexArgs=['-a','True',obj.projectInputFileName,obj.projectOutputFileName];
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
         console.log("Base workdir:"+baseWorkDirPath);
         var theProcess=spawn(simplexExec,simplexArgs,{'cwd':baseWorkDirPath,'env':{PATH:process.env.PATH+':'+projectBinDir}});
@@ -220,8 +230,8 @@ app.get('/spawn/simplex/:collection/:documentId', function(req, res) {
 	     });
 	     
         theProcess.on('error',function(err){
-            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,data);
             console.error("Got an error: "+err);
+//            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,err);
         });
 
 	     theProcess.on('close', function (exitCode) {
