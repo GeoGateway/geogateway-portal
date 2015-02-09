@@ -27,6 +27,8 @@
               <th>Update Time</th>
               <th>Input File</th>
               <th>Output File</th>
+              <th>Log File</th>
+              <th>Fault File</th>
               <th>Stdout</th>
               <th>Stderr</th>
               <th>Status</th>
@@ -40,6 +42,8 @@
               <td>{{myproject.updateTime}}</td>
               <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
               <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputFileName}}" target="_blank" type="text/plain">{{myproject.projectOutputFileName}}</a></td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectLogFileName}}" target="_blank" type="text/plain">{{myproject.projectLogFileName}}</a></td>
+              <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectFaultFileName}}" target="_blank" type="text/plain">{{myproject.projectFaultFileName}}</a></td>
               <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardOut}}" target="_blank" type="text/plain">{{myproject.projectStandardOut}}</td>
               <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank" type="text/plain">{{myproject.projectStandardError}}</a></td>
               <td>{{myproject.status}}</td>

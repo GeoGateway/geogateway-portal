@@ -204,6 +204,13 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
                 $rootScope.globals.currentProject.status="Submitted";
+                $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
+                $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
+                $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
+                $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+                $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+                $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+                
                 //Push the job's status to the DB.
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).success(function(data, status) { 
                     console.log("Updated the job status");
@@ -230,10 +237,6 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         UploadService.uploadFileToUrl2(file,uploadUrl);
         
         $rootScope.globals.currentProject.projectInputFileName=file.name;
-        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
-        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
-        $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
-        $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
         $rootScope.globals.currentProject.readyToSubmit=true;
         $rootScope.globals.currentProject.status="Ready";
         //Now update the project object
@@ -250,41 +253,6 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
             });
     };
 }]);
-
-/**
-UserProjectApp.controller('SubmitProjectController',function($scope, $rootScope,$http){
-    $scope.readyToSubmit=false;
-    $scope.username=$rootScope.globals.currentUser.username;
-    $scope.$on('loadProject', function(event, arg) {
-        console.log("Event received:"+event+" "+arg);
-        $scope.readyToSubmit=true;
-        $scope.myproject=arg;
-    });
-    $scope.$on('upload', function (event, arg) {
-        //        console.log('Got the message:'+event+" "+arg);
-        $scope.readyToSubmit=true;
-        $scope.myproject=arg;        
-        //        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
-        //            console.log("project data:"+JSON.stringify(data));
-        //            $scope.myproject=data;
-
-        //});
-
-    });
-
-    $scope.submit=function(){
-//        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
-//        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
-        $http.get('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
-            success(function(data){
-                console.log("Successful exec:"+JSON.stringify(data));
-            }).
-            error(function(data){
-                console.error("Unsuccessful exec:"+JSON.stringify(data));
-            });
-    }
-});
-*/
 
 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){

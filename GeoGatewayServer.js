@@ -48,6 +48,7 @@ var serverOpts= {
             res.setHeader('Content-Type','text/css');
         }
         else if(path.indexOf('.js')>0) {
+            //Note this may need to be changed to text/javascript
             res.setHeader('Content-Type','application/x-javascript');
         }
                 
@@ -242,10 +243,19 @@ app.get('/spawn/simplex/:collection/:documentId', function(req, res) {
 	     
         theProcess.on('error',function(err){
             console.error("Got an error: "+err);
-//            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,err);
         });
 
 	     theProcess.on('close', function (exitCode) {
+            obj.status="Completed";
+            collectionUtils.update(req.params.collection,req.params.documentId,obj,function(error,doc){
+                if(error) {
+                    console.log("Could not save the updated object");
+                }
+                else {
+                    console.log("State changed to completed");
+                    console.log(doc);
+                }
+            });
 		      console.log('Exit code:', exitCode);
 	     });
     })

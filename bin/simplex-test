@@ -1,5 +1,5 @@
 #!/bin/sh
 echo "sleep...sleep..."
-sleep 30
+sleep 5
 pwd
 echo "This is simplex. Flag is "$1 $2 ". Input is "$3 > $4 
