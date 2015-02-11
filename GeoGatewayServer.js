@@ -193,6 +193,79 @@ app.post('doUpload2', function(req,res){
 * The Execute family calls external processes
 */		  
 
+//Runs the given executable in blocking (exec) mode.  This assumes that the project has 
+//been correctly created, with input and output files specfiied.  It will only execute
+//things in the project's bin directory but need to watch for semicolons.
+app.get('/execute/:exec/:collection/:documentId', function (req,res) {
+	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+		  var theExec=projectBinDir+req.params.exec+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+        console.log("Execution path:"+theExec);
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        console.log("baseWorkDirPath:"+baseWorkDirPath);
+		  exec(theExec, {"cwd":baseWorkDirPath},function(error, stdout, stderr){
+				if(error) {
+					 console.error(error.stack);
+					 res.status(400).send(error)
+				}
+				else {
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
+				    res.set('Content-Type','application/json');
+                res.sendStatus(200);
+				}
+		  });
+	 });
+});
+
+//Runs provided executable in non-blocking (spawn) mode. Should only run things project's
+//bin directory. This version requires the command line arguments to be set separately in the
+//project's entry (that is, the object retreived from the collection).
+app.get('/spawn/:exec/:collection/:documentId', function(req, res) {
+	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+        var theExec=req.params.exec;
+//        var simplexArgs=['-a','True',obj.projectInputFileName,obj.projectOutputFileName];
+        var theArgs=obj.cmdLineArgs;
+        theArgs.push(obj.projectInputFileName);
+        theArgs.push(obj.projectOutputFileName);
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        console.log("Base workdir:"+baseWorkDirPath);
+        var theProcess=spawn(theExec,theArgs,{'cwd':baseWorkDirPath,'env':{PATH:process.env.PATH+':'+projectBinDir}});
+        
+        //Return to the clienb tub go ahead and keep running.
+        //This is a poor man's solution for now.
+        res.sendStatus(200);
+        
+	     theProcess.stdout.on('data', function (data) {
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,data);
+//		      console.log('Standard Out: "%s"', data);
+	     });
+	     
+	     theProcess.stderr.on('data', function (data) {
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,data);
+//		      console.log('Standard Error: "%s"', data);
+	     });
+	     
+        theProcess.on('error',function(err){
+            console.error("Got an error: "+err);
+        });
+
+	     theProcess.on('close', function (exitCode) {
+            obj.status="Completed";
+            collectionUtils.update(req.params.collection,req.params.documentId,obj,function(error,doc){
+                if(error) {
+                    console.log("Could not save the updated object");
+                }
+                else {
+                    console.log("State changed to completed");
+                    console.log(doc);
+                }
+            });
+		      console.log('Exit code:', exitCode);
+	     });
+    })
+});
+
+
 //Runs Simplex in blocking (exec) mode.  This assumes that the project has been correctly created,
 //with input and output files specfiied.
 app.get('/execute/simplex/:collection/:documentId', function (req,res) {
@@ -300,6 +373,12 @@ app.get('/execute/spawn-test', function(req, res) {
 /**
 * Local helper functions
 */ 
+function myExec() {
+};
+
+function mySpawn() {
+};
+
 function handleResponse(error, obj, res) {
 	 if(error) {
 		  console.error(error.stack);

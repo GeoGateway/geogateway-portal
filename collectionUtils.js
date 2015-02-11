@@ -77,6 +77,9 @@ CollectionUtils.prototype.update = function(collectionName, entityId, obj, callb
 					 else {
 						  obj._id = ObjectID(entityId); //Convert to a real obj id
 						  obj.creationTime=doc.creationTime;
+                    //TODO: this is saved in Mongo as an ISODate object, which is not
+                    //easily readable. The native JS date is in an easier format, so
+                    //see if we can preseve this.
 						  obj.updateTime = new Date(); 
 						  the_collection.save(obj, function(error,doc) {
             				if (error) callback(error)

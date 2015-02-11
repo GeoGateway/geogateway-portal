@@ -16,6 +16,11 @@ UserProjectApp.config(['$routeProvider', function ($routeProvider) {
                 templateUrl: 'UserProjects.html'
             })
 
+            .when('/view', {
+                controller: 'EditProjectController',
+                templateUrl: 'ViewProjectDetails.html'
+            })
+        
             .when('/submit', {
                 controller: 'EditProjectController',
                 templateUrl: 'SubmitProject.html'
@@ -58,7 +63,7 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
     };
 }]);
                   
-
+//TODO: consolidate this with the other controllers, or at least with EditProjectController
 UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
     $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
         $scope.projects=data;
@@ -114,6 +119,19 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $scope.readyToSubmit=false;
     }
 
+    $scope.viewProject=function(projectId) {
+        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+            success(function(project) {
+                console.log("Got the project:"+JSON.stringify(project));
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.readyToSubmit=true;     
+                $scope.myproject=$rootScope.globals.currentProject;
+                $location.path('/view');
+            }).
+            error(function(data){
+                console.log("Could not load the old project");
+            });
+    }
     
     $scope.createProject=function(){
         var newProject={};
