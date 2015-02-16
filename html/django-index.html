@@ -1,0 +1,120 @@
+<!-- extend base template -->
+{% extends "main/base.html" %}
+
+$def with (queryurl)
+
+<!-- load django static files -->
+{% load staticfiles %}
+
+<!-- css block -->
+{% block css %}
+{% endblock %}
+
+<!-- js block -->
+{% block js %}
+    <script type="text/javascript">
+    function showLogin() {
+        $('.auth-redirect').removeClass('active').addClass('inactive');
+        $('.auth-form').removeClass('inactive').addClass('active');
+    }
+
+    function hideLogin() {
+        $('.auth-redirect').removeClass('inactive');
+        $('.auth-form').removeClass('active').addClass('inactive');
+    }
+    </script>
+{% endblock %}
+
+<!-- header block -->
+{% block header %}
+    <title>GeoGateway</title>
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+        <div class="main-sector">
+            <img class="logo-main" src="{% static "images/logos/logo.png" %}" alt="GeoGateway Logo">
+            <h1 class="hook">Gateway to Earthquake Simulation and Geodetic Image Analysis Tools</h1>
+        </div>
+        <div class="main-divider"></div>
+        <div class="main-sector">
+            <div class="main-content">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#about" role="tab" data-toggle="tab">About</a></li>
+                    <li><a href="#news" role="tab" data-toggle="tab">News</a></li>
+                    <li><a href="#people" role="tab" data-toggle="tab">People</a></li>
+                    <li><a href="#feedback" role="tab" data-toggle="tab">Feedback</a></li>
+                </ul>
+
+                    <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="about">
+                        Join and get access to:
+                        <ul>
+                            <li>Advanced Earthquake tools such as InSAR Profile Tool, Time Series Analysis Tool, etc</li>
+                            <li>Sophisticated blogging tool for convenient scientific documentation</li>
+                            <li>Community of colleagues for sharing and evaluating projects and findings</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="news">
+                        news
+                        <p>import news elements!!!</p>
+                        <ul>
+                            {% for news_content in news_contents %}
+                                <li>
+                                    {{ news_content.title }} {{ news_content.content }} {{ news_content.last_edited }}
+                                    <img src="{{ MEDIA_URL }}{{ news_content.image }}" alt="News Image">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="people">
+                        people
+                    </div>
+                    <div class="tab-pane" id="feedback">
+                        feedback
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-divider"></div>
+        <div class="main-sector">
+            <div class="auth-redirect {% if login %}inactive{% else %}active{% endif %}">
+                <button class="auth-redirect-btn" onclick="showLogin();">Log In</button>
+                <button class="auth-redirect-btn" onclick="window.location='/gguser/'">Guest Access</button>
+                <button class="auth-redirect-btn" onclick="window.location='/signup/'">Sign Up</button>
+            </div>
+            <form class="auth-form {% if login %}active{% else %}inactive{% endif %}" action="/login/" method="POST"> {% csrf_token %}
+                <fieldset>
+                    <table class="login-table">
+                        <tr>
+                            <td>
+                                <label class="control-label" for="username">{{ login_form.username.label }}</label>
+                            </td>
+                            <td>
+                                {{ login_form.username }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label" for="password">{{ login_form.password.label }}</label>
+                            </td>
+                            <td>
+                                {{ login_form.password }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <span class="form-error">{{ login_form.errors }}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <button type="submit" class="btn btn-default login-btn">Log In</button>
+                <button type="button" class="btn btn-default login-btn" onclick="hideLogin();">Cancel</button>
+            </form>
+        </div>
+        <div class="main-divider"></div>
+    </div>
+{% endblock %}

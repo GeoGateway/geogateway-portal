@@ -1,0 +1,854 @@
+<!-- extend base template -->
+{% extends "main/base.html" %}
+
+$def with (queryurl)
+
+<!-- load django static files -->
+{% load staticfiles %}
+
+<!-- css block -->
+{% block css %}
+{% endblock %}
+
+<!-- js block -->
+{% block js %}
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+<script type="text/javascript" src="{% static "js/tools.js" %}"></script>
+<!-- dygraphs -->
+<script type="text/javascript" src="{% static "js/dygraph-combined.js" %}"></script>
+
+<!-- ajaxForm jquery plugin -->
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<!-- javascript for the animated PROFILE PANEL -->
+<script>
+// PROFILE-PANEL-RIGHT contains all of the profile tab panels
+// this includes Notecards, Colleagues, Settings, Logout button, etc
+
+// script for animated PROFILE-PANEL OPENING functionality
+$(document).ready(function() {
+    // open up profile panel
+    $('.panel-toggle').click(function() {
+        if($(this).is('#tools')) {
+            if($('.tools-panel').hasClass('open'))
+            {
+                $('.tools-panel').removeClass('open');
+                $('.tools-panel').addClass('closed');
+                $('.tools-panel').animate({width: "0px"}, 50);
+                $('#map-canvas').animate({left: "0px"}, 50);
+                var new_width = $('#map-canvas').width() + 450;
+                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                new_width = $('.extra-tools-panel').width() + 450;
+                $('.extra-tools-panel').animate({left: "0px",
+                                                width: new_width + "px"}, 50);
+            }
+            else
+            {
+                $('.tools-panel').removeClass('closed');
+                $('.tools-panel').addClass('open');
+                $('.tools-panel').animate({width: "450px"}, 50);
+                $('#map-canvas').animate({left: "450px"}, 50);
+                var new_width = $('#map-canvas').width() - 450;
+                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                new_width = $('.extra-tools-panel').width() - 450;
+                $('.extra-tools-panel').animate({left: "450px",
+                                                width: new_width + "px"}, 50);
+            }
+            // loadNotecards('.notecard-container', {{ user.id }}, 0, 5, 'append');
+            // loadNotecards('.newsfeed-container', -1, 0, 5, 'append');
+            // getColleagues();
+        }
+        else {
+            if($('.profile-panel').hasClass('open'))
+            {
+                $('.profile-panel').removeClass('open');
+                $('.profile-panel').addClass('closed');
+                $('.profile-panel').animate({width: "0px"}, 50);
+                var new_width = $('#map-canvas').width() + 250;
+                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                new_width = $('.extra-tools-panel').width() + 250;
+                $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
+            }
+            else
+            {
+                $('.profile-panel').removeClass('closed');
+                $('.profile-panel').addClass('open');
+                $('.profile-panel').animate({width: "250px"}, 50);
+                var new_width = $('#map-canvas').width() - 250;
+                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                new_width = $('.extra-tools-panel').width() - 250;
+                $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
+            }
+            // $('.notecard-container').empty();
+            // $('.colleague-container').empty();
+        }
+    });
+});
+
+///////////////////////////// NOTECARDS RELATED //////////////////////////
+
+// sends an ajax GET request to the view to retreive some of the NOTECARD
+// posted by the user
+// start_index and num_cards decides which NOTECARDs to return
+// e.g. start_index = 4, num_cards = 3 means return 4th, 5th and 6th
+// latest cards)
+// container decides which div the notecards should be loaded to
+// card_owner_id decides whose notecards to load
+// This function is also used for retrieving NOTECARDs for the NEWS FEED
+// tab panel (this query is made with /gguser/-1/get_notecards/num_cards
+// in other words, card_ownder_id = -1)
+function loadNotecards(container, card_owner_id, start_index, num_cards, type) {
+    // keep track of how many notecards are retrieved
+    var num_loaded_cards = 0;
+    // send ajax request for recent Notecards
+    $.get('/gguser/' + String(card_owner_id) + '/get_notecards/' + start_index + '/' + num_cards, function(notecards) {
+        $.each(notecards, function() {
+            // append/ prepend the notecards
+            // append used for new notecards
+            // prepend used for loading more notecards
+            if(type == 'append')
+                $(container).append('\
+                    <div class="notecard" id="' + this.id + '">\
+                        <div class="notecard-title">\
+                            <b>' + this.title + '</b> <span class="pub-date">last edited: ' + 
+                            this.last_edited + ' by ' + this.last_editor + '</span>\
+                        </div>\
+                        <div class="notecard-content">' +
+                            this.content + '\
+                        </div>\
+                    </div>\
+                    <div class="profile-panel-divider"></div>');
+            else
+                $(container).prepend('\
+                    <div class="notecard" id="' + this.id + '">\
+                        <div class="notecard-title">\
+                            <b>' + this.title + '</b> <span class="pub-date">last edited: ' + 
+                            this.last_edited + '</span>\
+                        </div>\
+                        <div class="notecard-content">' +
+                            this.content + '\
+                        </div>\
+                    </div>\
+                    <div class="profile-panel-divider"></div>');
+            // attach image if it exists
+            if(this.image)
+                $(container).children('.notecard#' + this.id).append('\
+                        <div class="notecard-image-container">\
+                            <img class="notecard-image" src="{{ MEDIA_URL }}' + this.image + '" alt="notecard_pic">\
+                        </div>');
+            // attach Public/ Private button if not NEWS FEED
+            if(container == '.notecard-container')
+            {
+                $(container).children('.notecard#' + this.id).children('.notecard-title').append('\
+                            <a class="notecard-delete">delete</a>\
+                            <a class="notecard-edit">edit|</a>\
+                            <button class="notecard-privacy-btn ' + this.privacy.toLowerCase() + '">' +
+                                this.privacy +
+                            '</button>');
+            }
+            // console.log('logs retrieved');
+            num_loaded_cards = num_loaded_cards + 1;
+        });
+        // if no notecards are left, remove the btn for loading more
+        // notecards
+        if(num_loaded_cards < 5)
+            $(container).parent().children('.load-more-notecards').addClass('inactive');
+    });
+}
+
+// script for loading more NOTECARDs
+$(document).ready(function() {
+    $('.load-more-notecards').click(function() {
+        var container_class = $(this).val();
+        if(container_class == '.newsfeed-container')
+            loadNotecards(container_class, -1, $(container_class + ' .notecard').length, 5, 'append');
+        else
+            loadNotecards(container_class, {{ user.id }}, $(container_class + ' .notecard').length, 5, 'append');
+    });
+});
+
+// if you click on a small image in a NOTECARD, it enlarges
+// if you click on a large image in a NOTECARD, it shrinks
+$(document).ready(function() {
+    $('.notecard-container').on('click', '.notecard-image', function() {
+        $(this).removeClass('notecard-image').addClass('notecard-image-large');
+    });
+    $('.notecard-container').on('click', '.notecard-image-large', function() {
+        $(this).removeClass('notecard-image-large').addClass('notecard-image');
+    });
+});
+
+// script for posting a new NOTECARD
+$(document).ready(function() {
+    var options = {
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(response) {
+            if(response == 'SUCCESS')
+            {
+                loadNotecards('.notecard-container', {{ user.id }}, 0, 1, 'prepend');
+                $('.new-notecard-form').clearForm();
+                // console.log('log posted');
+            }
+            else
+            {
+                $('.new-notecard-form').prepend('<div class="required">* title and content are both required and only images can be attached<div>');
+            }
+        }
+    };
+    $('.new-notecard-form').ajaxForm(options);
+});
+$(document).on('submit', '.new-notecard-form', function (event) {
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
+});
+
+// script for editing a NOTECARD
+/*
+$(document).ready(function() {
+    var options = {
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(response) {
+            if(response == 'SUCCESS')
+            {
+                loadNotecards('.notecard-container', {{ user.id }}, 0, 1, 'prepend');
+                $('.new-notecard-form').clearForm();
+                // console.log('log posted');
+            }
+            else
+            {
+                $('.new-notecard-form').prepend('<div class="required">* title and content are both required and only images can be attached<div>');
+            }
+        }
+    };
+    $('.notecard-edit-form').ajaxForm(options);
+});*/
+
+// script for deleting a NOTECARD
+$(document).ready(function() {
+    $('.notecard-container').on('click', '.notecard-delete', function() {
+        var card_id = $(this).parent().parent().attr('id');
+        $.ajax({
+                type: "POST",
+                url: '/gguser/{{ user.id }}/delete_notecard/' + String(card_id) + '/'
+            })
+                .done(function() {
+                    $('.notecard#' + card_id).remove();
+                });
+    });
+});
+
+// script for publishing/ unpublishing a NOTECARD
+$(document).ready(function() {
+    $('.notecard-container').on('click', '.notecard-privacy-btn', function() {
+        var card_id = $(this).parent().parent().attr('id');
+        var btn = $(this);
+        if($(this).hasClass('private'))
+            $.ajax({
+                    type: "POST",
+                    url: '/gguser/{{ user.id }}/publish_notecard/' + String(card_id) + '/1/'
+                })
+                    .done(function() {
+                        $(btn).removeClass('private').addClass('public');
+                        $(btn).text('Public');
+                    });
+        else
+            $.ajax({
+                    type: "POST",
+                    url: '/gguser/{{ user.id }}/publish_notecard/' + String(card_id) + '/0/'
+                })
+                    .done(function() {
+                        $(btn).removeClass('public').addClass('private');
+                        $(btn).text('Private');
+                    });
+    });
+});
+
+//////////////////////////// COLLEAGUES RELATED //////////////////////////
+
+// sends an ajax POST request that marks a COLLEAGUE as FOLLOWED by adding
+// the corresponding COLLEAGUE to the user's COLLEAGUES list in the view
+// also change FOLLOW BTN to FOLLOWING BTN
+function follow(btn, followee_id) {
+    $.ajax({
+            type: "POST",
+            url: '/gguser/{{ user.id }}/follow/' + followee_id + '/',
+        })
+            .done(function() {
+                $(btn).removeClass('follow-btn').addClass('following-btn');
+                $(btn).text("Following");
+            })
+            .fail(function() {
+                console.log("ajax request failed")
+            });
+}
+
+// opposite of follow function
+function unfollow(btn, followee_id) {
+    $.ajax({
+            type: "POST",
+            url: '/gguser/{{ user.id }}/unfollow/' + followee_id + '/',
+        })
+            .done(function() {
+                $(btn).removeClass('following-btn').addClass('follow-btn');
+                $(btn).text("Follow");
+            })
+            .fail(function() {
+                console.log("ajax request failed")
+            });
+}
+
+// ready click listeners for FOLLOW/ FOLLOWING BTNs
+$(document).ready(function() {
+    $('.colleague-container').on('click', '.follow-btn', function() {
+        var followee_id = $(this).val();
+        follow($(this), followee_id);
+    });
+    $('.colleague-container').on('click', '.following-btn', function() {
+        var followee_id = $(this).val();
+        unfollow($(this), followee_id);
+    });
+});
+
+// sends an ajax GET request to retrieve ALL COLLEAGUES currently
+// registered (will implement DJANGO HAYSTACK SOLR search engine later)
+function getColleagues() {
+    $.get('/gguser/{{ user.id }}/get_colleagues/', function(colleagues) {
+        $.each(colleagues, function() {
+            if(this.following == "True")
+                $('.colleague-container').append('\
+                    <div class="colleague">\
+                        <img class="prof-pic-thumbnail" src="{{ MEDIA_URL }}' + this.prof_pic + '" alt="prof_pic" onError="noImage(this);">\
+                        <div class="colleague-info">\
+                            @' + this.username + '\n' +
+                            this.email + '\n' +
+                            this.name + ' <button class="following-btn" value="' + this.id + '">Following</button><br>' +
+                        '</div>\
+                    </div>');
+            else
+                $('.colleague-container').append('\
+                    <div class="colleague">\
+                        <img class="prof-pic-thumbnail" src="{{ MEDIA_URL }}' + this.prof_pic + '" alt="prof_pic" onError="noImage(this);">\
+                        <div class="colleague-info">\
+                            @' + this.username + '\n' +
+                            this.email + '\n' +
+                            this.name + ' <button class="follow-btn" value="' + this.id + '">Follow</button><br>' +
+                        '</div>\
+                    </div>');
+        });
+    });
+}
+
+//////////////////////////////// SETTINGS ////////////////////////////////
+
+// script for editting SETTINGS
+$(document).ready(function() {
+    $('.settings-change').click(function() {
+        $('.setting-table td').each(function() {
+            if($(this).hasClass('active'))
+                $(this).removeClass('active').addClass('inactive');
+            else if($(this).hasClass('inactive'))
+                $(this).removeClass('inactive').addClass('active');
+        });
+    });
+});
+</script>
+
+////////////////////////////////// OTHER /////////////////////////////////
+
+<script type="text/javascript">
+// updates the TAB panel to highlight only the active tab
+// called every time a tab is activated
+function updateTabPanel(type) {
+    if(type == 'profile')
+    {
+        var active_tab = $('.profile-tabs').children('.active').children().val();
+        $('.profile-panel').children('.active').removeClass('active').addClass('inactive');
+        $('.profile-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
+    }
+    else if(type == "tools")
+    {
+        var active_tab = $('.tool-tabs').children('.active').children().val();
+        $('.tools-panel').children('.active').removeClass('active').addClass('inactive');
+        $('.tools-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
+    }
+}
+
+// listener for PROFILE PANEL TABS
+$(document).ready(function() {
+    $('.tab-button').click(function() {
+        if($(this).hasClass('tool-tab-button'))
+        {
+            $(this).parent().parent().children().removeClass('active');
+            $(this).parent().addClass('active');
+            updateTabPanel('tools');
+        }
+        if($(this).hasClass('profile-tab-button'))
+        {
+            $(this).parent().parent().children().removeClass('active');
+            $(this).parent().addClass('active');
+            updateTabPanel('profile');
+        }
+    });
+});
+
+// javascript for MISSING IMAGE replacement
+function noImage(image) {
+    image.onerror = "";
+    image.src = "{% static "images/prof_pics/default.jpg" %}"
+}
+</script>
+{% endblock %}
+
+<!-- header block -->
+{% block header %}
+    {% if auth_user.is_authenticated %}
+        <title>GeoGateway | {% if auth_user.first_name %}{{ auth_user.first_name }}{% endif %} @{{ auth_user.username }}</title>
+    {% else %}
+        <title>GeoGateway | GUEST</title>
+    {% endif %}
+{% endblock %}
+
+<!-- navbar block -->
+{% block navbar %}
+<!-- set up tools panel and profile panel toggle -->
+<button class="panel-toggle" id="tools"><span class="glyphicon glyphicon-wrench"> </span></button>
+<button class="panel-toggle" id="profile"><span class="glyphicon glyphicon-user"> </span></button>
+{% endblock %}
+
+<!-- profile block -->
+{% block profile %}
+<div class="profile-panel closed">
+    {% if auth_user.is_authenticated %}
+    <div class="user-info-box">
+        <div class="user-identification">
+            <img class="prof-pic" src="{{ MEDIA_URL }}{{ user.profile_pic }}" alt="prof_pic" onError="noImage(this);">
+            <div>{{ auth_user.first_name }}</div>
+        </div>
+        <div class="user-info">
+            {{ auth_user.email }}
+            <form action="/logout/">
+                <button type="submit" class="profile-tab-button">
+                    <span class="glyphicon glyphicon-log-out"> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- profile-panel tabs -->
+    <ul type="none" class="profile-tabs">
+        <li class="active">
+            <button class="tab-button profile-tab-button" value="notecards">
+                <span class="glyphicon glyphicon-file"> 
+            </button>
+        </li>
+        <li>
+            <button class="tab-button profile-tab-button" value="colleagues">
+                <span class="glyphicon glyphicon-user"> 
+            </button>
+        </li>
+        <li>
+            <button class="tab-button profile-tab-button" value="newsfeed">
+                <span class="glyphicon glyphicon-globe"> 
+            </button>
+        </li>
+        <li>
+            <button class="tab-button profile-tab-button" value="settings">
+                <span class="glyphicon glyphicon-cog"> 
+            </button>
+        </li>
+    </ul>
+    <!--  -->
+    <div class="tab-pane profile-tab-pane active" id="notecards">
+        <div class="profile-tab-panel-header">
+            Notecards
+        </div>
+        <div class="profile-panel-divider"></div>
+        <form class="new-notecard-form" action="/gguser/{{ user.id }}/post_notecard" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            {{ notecard_form.title }}
+            {{ notecard_form.content }}
+            <div class="log-tools">
+                {{ notecard_form.image }}
+                <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
+            </div>
+        </form>
+        <div class="profile-panel-divider"></div>
+        <div class="notecard-container"></div>
+        <button class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
+    </div>
+    <div class="tab-pane profile-tab-pane inactive" id="colleagues">
+        <div class="profile-tab-panel-header">
+            Colleagues
+        </div>
+        <div class="profile-panel-divider"></div>
+        <div class="colleague-container"></div>
+    </div>
+    <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
+        <div class="profile-tab-panel-header">
+            News Feed
+        </div>
+        <div class="profile-panel-divider"></div>
+        <div class="newsfeed-container"></div>
+        <button class="load-more-notecards" value=".newsfeed-container">Load more Notecards</button>
+    </div>
+    <div class="tab-pane profile-tab-pane inactive" id="feedback">
+        <div class="profile-tab-panel-header">
+            Feedback
+        </div>
+        <div class="profile-panel-divider"></div>
+    </div>
+    <div class="tab-pane profile-tab-pane inactive" id="settings">
+        <div class="profile-tab-panel-header">
+            General Account Settings <a class="settings-change" id="general">Change</a>
+        </div>
+        <div class="profile-panel-divider"></div>
+        <form class="settings-change-form" id="general" action="/settings_submit/" type="POST"> {% csrf_token %}
+            <table class="setting-table" id="general">
+                <tr>
+                    <td>Name:</td>
+                    <td class="active">
+                        {{ auth_user.first_name }}
+                    </td>
+                    <td class="inactive">
+                        {{ settings_form.new_name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>{{ auth_user.email }}</td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td class="active">********</td>
+                    <td class="inactive">
+                        {{ settings_form.new_password }}
+                        {{ settings_form.new_password_conf }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Profile Picture:</td>
+                    <td>
+                        <img class="prof-pic" src="{{ MEDIA_URL }}{{ user.profile_pic }}" alt="prof_pic" onError="noImage(this);">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="inactive">
+                        {{ settings_form.new_prof_pic }}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="inactive">
+                        <button type="submit" class="btn btn-default new-notecard-submit-btn">Submit</button>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    {% else %}
+    <div class="tab-pane profile-tab-pane active" id="auth">
+        <div class="tool">
+            <div class="tool-title"><b>Login</b></div>
+            <div class="divider"></div>
+            <div class="tool-content">
+                <form class="auth-form" action="/login/" method="POST"> {% csrf_token %}
+                    <fieldset>
+                        <table class="login-table">
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="username">{{ login_form.username.label }}</label>
+                                </td>
+                                <td>
+                                    {{ login_form.username }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="password">{{ login_form.password.label }}</label>
+                                </td>
+                                <td>
+                                    {{ login_form.password }}
+                                </td>
+                            </tr>
+                        </table>
+                        <span class="form-error">{{ login_error }}</span>
+                    </fieldset>
+                    <div class="auth-btn-container">
+                        <button type="submit" class="btn auth-btn">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-title"><b>Sign Up</b></div>
+            <div class="divider"></div>
+            <div class="tool-content">
+                <form class="auth-form" action="/signup/" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    <fieldset>
+                        <table class="signup-table">
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="username">{{ signup_form.username.label }} <span class="required">*</span></label>
+                                </td>
+                                <td>
+                                    {{ signup_form.username }}
+                                    <span class="form-error">{{ signup_username_error }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="email">{{ signup_form.email.label }} <span class="required">*</span></label>
+                                </td>
+                                <td>
+                                    {{ signup_form.email }}
+                                    <span class="form-error">{{ signup_email_error }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="name">{{ signup_form.name.label }} <span class="required">*</span></label>
+                                </td>
+                                <td>
+                                    {{ signup_form.name }}
+                                    <span class="form-error">{{ signup_name_error }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="password">{{ signup_form.password.label }} <span class="required">*</span></label>
+                                </td>
+                                <td>
+                                    {{ signup_form.password }}
+                                    <span class="form-error">{{ signup_password_error }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="control-label" for="password_conf">{{ signup_form.password_conf.label }} <span class="required">*</span></label>
+                                </td>
+                                <td>
+                                    {{ signup_form.password_conf }}
+                                    <span class="form-error">{{ signup_password_conf_error }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <span class="required">*</span> required fields
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <div class="auth-btn-container">
+                        <button type="submit" class="btn auth-btn">SIGN UP</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+<!-- tools block -->
+{% block tools %}
+<div class="tools-panel open">
+    <ul type="none" class="tool-tabs">
+        <li>
+            <button class="tab-button tool-tab-button" value="news">
+                <span class="glyphicon glyphicon-cloud"> </span>
+            </button>
+        </li>
+        <li class="active">
+            <button class="tab-button tool-tab-button" value="tools">
+                <span class="glyphicon glyphicon-wrench"> </span>
+            </button>
+        </li>
+        <!-- {% if not auth_user.is_authenticated %}
+        <li class="active">
+            <button class="tab-button tool-tab-button" value="auth">
+                <span class="glyphicon glyphicon-off"> </span>
+            </button>
+        </li>
+        {% endif %} -->
+        <li>
+            <button class="tab-button tool-tab-button" value="about">
+                <span class="glyphicon glyphicon-question-sign"> </span>
+            </button>
+        </li>
+    </ul>
+    <div class="tab-pane tool-tab-pane inactive" id="news">
+        <div class="tool">
+            <div class="tool-title"><b>News</b></div>
+            <div class="divider"></div>
+            <div class="tool-content">
+                
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane tool-tab-pane active" id="tools">
+        <div class="tool">
+            <div class="tool-title"><b>Tools</b></div>
+            <div class="divider"></div>
+            <div class="tool-content">
+                <div>
+                    <input class="tools-checkbox" type="checkbox" name="active-tools" value="uavsar"/><span class="default-font">&nbsp;UAVSAR</span>
+                    <div class="tools-box" id="UAVSAR-geometry"></div>
+                    <div class="tool-content" id="data-panel">
+                       <button class="panel-close-button inactive">X</button>
+                        <div id="uavsar" class="inactive"></div>
+                    </div>
+                    <div></div>
+                    <input class="tools-checkbox" type="checkbox" name="active-tools" value="moment_magnitude_calc"/><span class="default-font">&nbsp;Moment Magnitude Calculator</span>
+                    <div class="tools-box inactive" id="moment-magnitude-calc">
+                        <table>
+                            <tr>
+                                <td>
+                                    <span class="default-font">Length:&nbsp;</span>
+                                </td>
+                                <td>
+                                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="length" value="249"/></td>
+                                <td>
+                                    <span class="default-font">&nbsp;km</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="default-font">Width:&nbsp;</span>
+                                </td>
+                                <td>
+                                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="width" value="120.0"/>
+                                </td>
+                                <td>
+                                    <span class="default-font">&nbsp;km</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="default-font">Slip:&nbsp;</span>
+                                </td>
+                                <td>
+                                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="slip" value="23"/>
+                                </td>
+                                <td>
+                                    <span class="default-font">&nbsp;m</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="default-font">Shear Modulus:&nbsp;</span>
+                                </td>
+                                <td>
+                                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="shear-modulus" value="3"/>
+                                </td>
+                                <td>
+                                    <span class="default-font">&nbsp;10^11 dyne/cm^2</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="moment-magnitude-calc-btn">
+                                        <span class="default-font">Calculate</span>
+                                    </button>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td>
+                                    <span class="default-font">Seismic Moment:&nbsp;</span>
+                                </td>
+                                <td class="moment-magnitude-calc-result" id="seismic">
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b><span class="default-font">Moment Magnitude:&nbsp;</span></b>
+                                </td>
+                                <td class="moment-magnitude-calc-result" id="moment">
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                        <span class="small-note">Default values are approximate for 2011 M 9.0 Tohoku-Oki earthquake</span>
+                    </div>
+                    <div></div>
+                    <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;Fault Layer (ucerf3)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane tool-tab-pane inactive" id="about">
+        <div class="tool">
+            <div class="tool-title"><b>Help</b></div>
+            <div class="divider"></div>
+            <div class="tool-content">
+                <table class="about-table">
+                    <tr>
+                        <td>
+                            <a href="http://www.quakesim.org/about/people" target="_blank">
+                                <span class="default-font large">People</span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://www.quakesim.org/tools" target="_blank">
+                                <span class="default-font large">Tools</span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://www.quakesim.org/about/sponsors" target="_blank">
+                                <span class="default-font large">Sponsors</span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://www.quakesim.org/about/partners" target="_blank">
+                                <span class="default-font large">Partners</span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://www.quakesim.org/publications" target="_blank">
+                                <span class="default-font large">Publications</span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_tools %}
+<div class="extra-tools-panel inactive">
+    <div class="extra-tool">
+        <!-- get rid of title
+        <div class="extra-tool-title">PLOT</div>
+        <div class="divider"></div>
+        -->
+        <div class="extra-tool-content" id="dygraph-LOS"></div>
+        <div class="extra-tool-content" id="dygraph-HGT"></div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- map -->
+{% block main_frame %}
+<div id="map-canvas"></div>
+{% endblock %}
+
+{% block body %}
+<script>
+    initialize();
+</script>
+{% endblock %}
