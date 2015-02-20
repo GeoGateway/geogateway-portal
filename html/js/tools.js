@@ -551,7 +551,7 @@ $(document).ready(function() {
 function initialize() {
     //geocoder = new google.maps.Geocoder();
     //Set the center of the map
-    var connecticut = new google.maps.LatLng(35.5,-119.0);
+    var connecticut = new google.maps.LatLng(37.5,-116.0);
 
     var mapA_setup = {
         zoom: 6,

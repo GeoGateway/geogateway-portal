@@ -371,6 +371,17 @@ app.get('/execute/spawn-test', function(req, res) {
 //--------------------------------------------------
 
 /**
+* These are GeoServer functions
+*/
+app.get('/uavsar_query',function(req,res){
+    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
+    var queryStr=req.body;
+    
+});
+
+//--------------------------------------------------
+
+/**
 * Local helper functions
 */ 
 function myExec() {
