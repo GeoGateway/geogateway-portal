@@ -16,6 +16,9 @@ var fs=require('fs');
 var multiparty=require('multiparty');  //Form multipart form uploads.
 var util=require('util');
 var mkdirp=require('mkdirp');
+var RestClient=require('node-rest-client').Client;
+
+var restClient=new RestClient();
 
 //Place for uploading files.
 var config=require('./config');
@@ -37,7 +40,8 @@ MongoClient.connect(url, function(err, db) {
 });
 
 app.set('port',process.env.PORT || 3000);
-//We'll put HTML documents in the local "html" directory
+
+//Use serverOpts to set content types for static content.
 var serverOpts= {
     setHeaders: function (res,path,stat) {
 //        console.log("Path is "+path);
@@ -58,6 +62,7 @@ var serverOpts= {
         }
     }
 };
+//We'll put HTML documents in the local "html" directory
 app.use(express.static(__dirname+'/html',serverOpts));
 //app.use(express.static(__dirname+'/html'));
 app.use(bodyParser.json());
@@ -190,7 +195,7 @@ app.post('doUpload2', function(req,res){
 });
 
 /**
-* The Execute family calls external processes
+* The Execute API family calls external processes
 */		  
 
 //Runs the given executable in blocking (exec) mode.  This assumes that the project has 
@@ -373,10 +378,18 @@ app.get('/execute/spawn-test', function(req, res) {
 /**
 * These are GeoServer functions
 */
-app.get('/uavsar_query',function(req,res){
+//The jQuery .get() sends the request parameters as a query ("?"), so we need to extract the 
+//value of the query from the request object.
+app.get('/uavsar_query/',function(req,res){
+    console.log("Query: ",req.query);
     var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
-    var queryStr=req.body;
-    
+    var queryStr=req.query.querystr;
+//    console.log(JSON.stringify(queryStr));
+
+    restClient.get(geoServerUrl+queryStr, function(data, response){
+        res.status(200).send(data);
+    });
+
 });
 
 //--------------------------------------------------

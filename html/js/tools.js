@@ -14,6 +14,7 @@ var drawing_listener;
 
 // deletes all geometry markings made for UAVSAR
 function deleteAllShape() {
+    console.log("Calling deleteAllShape");
     for (var i=0; i < all_overlays.length; i++)
     {
         all_overlays[i].overlay.setMap(null);
@@ -91,6 +92,7 @@ function setup_UAVSAR() {
     });
 
     drawing_listener = google.maps.event.addListener(UAVSARDrawingManager, 'overlaycomplete', function(e) {
+        console.log("Calling Drawing Listener");
         deleteAllShape();
         all_overlays.push(e);
         UAVSARDrawingManager.setDrawingMode(null);
@@ -105,6 +107,7 @@ function setup_UAVSAR() {
             {x.innerHTML = "Rectangle: " + e.overlay.getBounds();};
     
         // call uavsar query
+        console.log(x.innerHTML);
         uavsarquery(x.innerHTML);
     });
 }
@@ -116,9 +119,9 @@ var LOS_line = null;
 function draw_marker(lat, lng, color) {
     var myLatlng = new google.maps.LatLng(lat, lng);
     if(color == 'red')
-        var icon = '/static/etc/google_maps_markers/blue_MarkerO.png';
+        var icon = '/etc/google_maps_markers/blue_MarkerO.png';
     else
-        var icon = '/static/etc/google_maps_markers/red_MarkerO.png';
+        var icon = '/etc/google_maps_markers/red_MarkerO.png';
     var marker = new google.maps.Marker({
         position: myLatlng,
         map: mapA,
@@ -179,8 +182,9 @@ function selectDataset(uid, dataname) {
     // });
     // console.log(querystr);
     // make sure wmsgf9_select is on top
-    if(wmsgf9_select[2])
+    if(wmsgf9_select[2]) {
         viewDataset(uid, dataname, false);
+    }
     viewDataset(uid, dataname, true);
     updateVisibleDatasets();
     $("input:checkbox[value="+uid+"]").prop("checked", true);
@@ -220,6 +224,7 @@ function selectDataset(uid, dataname) {
     // updated
 function viewDataset(uid, dataname, show)
 {
+//    console.log("View Dataset: ", uid,dataname);
     if(show)
     {
         if(uid in wmsgf9_samples)
@@ -256,6 +261,7 @@ function viewDataset(uid, dataname, show)
         else
         {
             var querystr = uid + '/' + dataname;
+//            console.log( 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz');
             var wmsgf9_temp = new google.maps.KmlLayer({
                 url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz',
                 suppressInfoWindows: true,
@@ -312,6 +318,7 @@ function WMSGetTileUrl2(tile, zoom) {
 // accomplished by sending link to backend so that the query can be sent from
 // python which bypasses the issue of cross-domain queries
 function uavsarquery(querystr) {
+    console.log("uavsarquery() called with querystr "+querystr);
     $(".panel-close-button").click(function() {
         closeDataPanel();
         $("#UAVSAR-geometry").empty();
@@ -319,7 +326,9 @@ function uavsarquery(querystr) {
     });
 
     $.get("/uavsar_query/", {'querystr': querystr})
-        .done(function(datasets) {
+        .done(function(datasetsStr) {
+//            console.log(datasetsStr);
+            var datasets=jQuery.parseJSON(datasetsStr);
             // first check if the query has already been made
             // if no, activate the data panel close button
             if($('.panel-close-button').hasClass('inactive') && $('#uavsar').hasClass('inactive'))
@@ -334,16 +343,17 @@ function uavsarquery(querystr) {
             wmsgf9_samples = {};
             // clear uavsar dataset overlays
             mapA.overlayMapTypes.setAt(0, null);
-            $.each(datasets, function() {
-                var uid_str = "'" + this.uid + "'";
-                var dataname_str = "'" + this.dataname + "'";
+            for (var index1 in datasets) {
+                var uid_str = "'" + datasets[index1]['uid'] + "'";
+                var dataname_str = "'" +datasets[index1]['dataname'] + "'";
+//                console.log(uid_str + " " + dataname_str);
                 dynatable='<div style="word-wrap:break-word;">';
                 dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
                 dynatable+='<tr>'; //Create row in embedded table
-                dynatable+='<th colspan="2">'+this.dataname+'</th>'; //Add header to table row
+                dynatable+='<th colspan="2">'+dataname_str+'</th>'; //Add header to table row
                 dynatable+='</tr>'; //Close embedded table's header row
                 dynatable+='<tr>'; //Start second embedded table row
-                dynatable+='<td>'+this.time1 +'</td><td>'+this.time2+'</td>'; //Display time1 and time2 in embedded table's second row
+                dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
                 dynatable+='</tr>'; //Close embedded table's second row
                 dynatable+='</table>'; //Close the embedded table
                 dynatable+='</div>'
@@ -354,8 +364,30 @@ function uavsarquery(querystr) {
                         <a href="#" onClick="selectDataset(' + uid_str + ', ' + dataname_str + ');">\
                             <span class="default-font">' + dynatable + '</span>\
                     </div>');
-                viewDataset(this.uid, this.dataname, true);
-            });
+                viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
+            };
+//            $.each(datasets, function() {
+//                var uid_str = "'" + this.uid + "'";
+//                var dataname_str = "'" + this.dataname + "'";
+//                dynatable='<div style="word-wrap:break-word;">';
+//                dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
+//                dynatable+='<tr>'; //Create row in embedded table
+//                dynatable+='<th colspan="2">'+this.dataname+'</th>'; //Add header to table row
+//                dynatable+='</tr>'; //Close embedded table's header row
+//                dynatable+='<tr>'; //Start second embedded table row
+//                dynatable+='<td>'+this.time1 +'</td><td>'+this.time2+'</td>'; //Display time1 and time2 in embedded table's second row
+//                dynatable+='</tr>'; //Close embedded table's second row
+//                dynatable+='</table>'; //Close the embedded table
+//                dynatable+='</div>'
+//
+//                $('#uavsar').append('\
+//                    <div class="dataset">\
+//                        <input class="dataset-checkbox" type="checkbox" name="dataset" value="' + this.uid + '" checked/>\
+//                        <a href="#" onClick="selectDataset(' + uid_str + ', ' + dataname_str + ');">\
+//                            <span class="default-font">' + dynatable + '</span>\
+//                    </div>');
+//                viewDataset(this.uid, this.dataname, true);
+//            });
             // update displayed datasets
             updateVisibleDatasets();
             $("#data-panel").on('click', '.dataset-checkbox', function() {
@@ -376,7 +408,7 @@ function uavsarquery(querystr) {
 }
 
 function updateVisibleDatasets() {
-    for(var uid in wmsgf9_samples)
+    for(var uid in wmsgf9_samples) {
         if(wmsgf9_samples.hasOwnProperty(uid))
         {
             if(wmsgf9_samples[uid][1] && !wmsgf9_samples[uid][2])
@@ -390,6 +422,7 @@ function updateVisibleDatasets() {
                 wmsgf9_samples[uid][2] = false;
             }
         }
+    }
 }
 
 // script for closing the data panel

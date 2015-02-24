@@ -19,7 +19,7 @@ Run the following commands:
 
 * bower install  
 
-* mkdir $INSTALL_PATH/geogateway/html/userUploads  (make sure this directory exists)
+* mkdir -p $INSTALL_PATH/geogateway/html/userUploads  (make sure this directory exists)
 
 RUNNING THE SERVICE
 Run the following commands
@@ -32,3 +32,11 @@ Run the following commands
 * cd $INSTALL_PATH/geogateway
 
 * node GeoGatewayServer.js
+
+UPDATING THIRD PARTY DEPENDENCIES
+To keep libraries up to date, periodically run the following:
+
+* npm update (from $INSTALL_PATH/geogateway)
+
+* bower update (from $INSTALL_PATH/geogateway/html)
+

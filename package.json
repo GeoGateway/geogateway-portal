@@ -12,6 +12,7 @@
     "mkdirp": "^0.5.0",
     "mongodb": "^1.4.22",
     "multiparty": "^4.1.0",
-    "node-modules": "^0.1.4"
+    "node-modules": "^0.1.4",
+    "node-rest-client": "^1.4.4"
   }
 }
