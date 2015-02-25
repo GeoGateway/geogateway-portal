@@ -381,12 +381,80 @@ app.get('/execute/spawn-test', function(req, res) {
 //The jQuery .get() sends the request parameters as a query ("?"), so we need to extract the 
 //value of the query from the request object.
 app.get('/uavsar_query/',function(req,res){
-    console.log("Query: ",req.query);
+//    console.log("Query: ",req.query);
     var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
     var queryStr=req.query.querystr;
 //    console.log(JSON.stringify(queryStr));
 
     restClient.get(geoServerUrl+queryStr, function(data, response){
+        res.status(200).send(data);
+    });
+
+});
+
+app.get('/los_query/',function(req,res) {
+	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid'
+    image_uid=req.query.image_uid;
+    lat1=req.query.lat1;
+    lat2=req.query.lat2;
+    lng1=req.query.lng1;
+    lng2=req.query.lng2;
+	 latlng1 = lng1 + ',' + lat1
+	 latlng2 = lng2 + ',' + lat2
+    frmt=req.query.format;
+    resolution=req.query.resolution;
+    method=req.query.method;
+    //The below code for averaging needs to be validated.
+    average=null;
+    if(method=="average"){
+        average=req.query.average;
+    }
+    query_url= base_url + image_uid + '_unw' + '&point=' + 
+	     latlng1 + "," + latlng2 + '&format=' + frmt + 
+	     '&resolution=' + resolution + '&method=' + method;
+    if(average!=null) {
+        query_url+="&average="+average;
+    }
+//    console.log("Query URL: "+query_url);
+
+    // Make the call to GeoServer.
+	 // GeoServer will return lines that should have the format "lon, lat, distance, value".  
+    // We pass this directly back to the client.
+    restClient.get(query_url, function(data, response){
+//        console.log(data);
+        res.setHeader('Content-Type','text/csv');
+        res.setHeader('Content-Disposition','attachment; filename="LOS.csv"');
+        res.status(200).send(data);
+    });
+
+});
+
+app.get('/hgt_query/',function(req,res) {
+	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid'
+    image_uid=req.query.image_uid;
+    lat1=req.query.lat1;
+    lat2=req.query.lat2;
+    lng1=req.query.lng1;
+    lng2=req.query.lng2;
+	 latlng1 = lng1 + ',' + lat1
+	 latlng2 = lng2 + ',' + lat2
+    frmt=req.query.format;
+    resolution=req.query.resolution;
+    method=req.query.method;
+    //The below code for averaging needs to be validated.
+    average=null;
+    if(method=="average"){
+        average=req.query.average;
+    }
+    query_url= base_url + image_uid + '_hgt' + '&point=' + 
+	     latlng1 + "," + latlng2 + '&format=' + frmt + 
+	     '&resolution=' + resolution + '&method=' + method;
+    if(average!=null) {
+        query_url+="&average="+average;
+    }
+//    console.log("Query URL: "+query_url);
+    restClient.get(query_url, function(data, response){
+//        console.log(data);
         res.status(200).send(data);
     });
 

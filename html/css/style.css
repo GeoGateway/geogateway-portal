@@ -344,7 +344,8 @@ a:visited {
     height: calc(96% - 5px);
     background-color: rgb(200, 200, 255);
     color: black;
-    overflow: auto;
+    /* Change this to auto if you want the entire tools panel to scroll*/
+    overflow: visible;
     z-index: -100;
 }
 
@@ -492,8 +493,10 @@ a:visited {
 
 /* UAVSAR */
 #uavsar {
+    /* Change this 'visible' to turn off scrolling */
     overflow-y: auto;
     overflow-x: none;
+    /* Change this to adjust the max space for holding the table lines */
     max-height: 600px; 
 }
 

@@ -459,12 +459,15 @@ function noImage(image) {
     
     <!-- set up tools panel and profile panel toggle -->
     <button class="panel-toggle" id="tools"><span class="glyphicon glyphicon-wrench"> </span></button>
+    <!-- Disable for now
     <button class="panel-toggle" id="profile"><span class="glyphicon glyphicon-user"> </span></button>
+    -->
   </div>
   
   <div class="navigation-shadow"></div>
   
   <!-- profile block -->
+  <!-- Disabled for now
   <div class="profile-panel closed">    
     <div class="tab-pane profile-tab-pane active" id="auth">
       <div class="tool">
@@ -472,9 +475,6 @@ function noImage(image) {
         <div class="divider"></div>
         <div class="tool-content">
           <form class="auth-form" action="/login/" method="POST"> 
-            <!--TODO: Need to renable this
-                {% csrf_token %}
-              -->
             <fieldset>
               <table class="login-table">
                 <tr>
@@ -507,9 +507,6 @@ function noImage(image) {
         <div class="divider"></div>
         <div class="tool-content">
           <form class="auth-form" action="/signup/" method="POST" enctype="multipart/form-data"> 
-            <!-- TODO Need to re-enable this
-                 {% csrf_token %}
-              -->
             <fieldset>
               <table class="signup-table">
                 <tr>
@@ -573,6 +570,7 @@ function noImage(image) {
       </div>
     </div>
   </div>
+  -->
   
   <!-- tools block -->
   
@@ -622,7 +620,8 @@ function noImage(image) {
               <button class="panel-close-button inactive">X</button>
               <div id="uavsar" class="inactive"></div>
             </div>
-            <div></div>
+          </div>
+          <div>
             <input class="tools-checkbox" type="checkbox" name="active-tools" value="moment_magnitude_calc"/><span class="default-font">&nbsp;Moment Magnitude Calculator</span>
             <div class="tools-box inactive" id="moment-magnitude-calc">
               <table>
@@ -699,8 +698,9 @@ function noImage(image) {
               </table>
               <span class="small-note">Default values are approximate for 2011 M 9.0 Tohoku-Oki earthquake</span>
             </div>
-            <div></div>
-            <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;Fault Layer (ucerf3)</span>
+            <div>
+              <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;Fault Layer (ucerf3)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -769,6 +769,6 @@ function noImage(image) {
   <script>
     initialize();
   </script>
-  
+   <script type="text/javascript" src="https://gateways.atlassian.net/s/16440f2c700db98bbac93b48f79772eb-T/en_US-6pg8zz/64014/46/1.4.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=e035a70e"></script>  
 </body>
 </html> 

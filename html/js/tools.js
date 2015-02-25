@@ -14,7 +14,7 @@ var drawing_listener;
 
 // deletes all geometry markings made for UAVSAR
 function deleteAllShape() {
-    console.log("Calling deleteAllShape");
+//    console.log("Calling deleteAllShape");
     for (var i=0; i < all_overlays.length; i++)
     {
         all_overlays[i].overlay.setMap(null);
@@ -24,12 +24,14 @@ function deleteAllShape() {
 
 // delete all UAVSAR kml layers
 function deleteAllKml() {
-  if (wmsgf9_samples) {
-    for (i in wmsgf9_samples) {
-      wmsgf9_samples[i][0].setMap(null);
+    if (wmsgf9_samples != null) {
+        for (i in wmsgf9_samples) {
+//            console.log(wmsgf9_samples[i]);
+            wmsgf9_samples[i][0].setMap(null);
+        }
+//        wmsgf9_samples.length = 0;
+        wmsgf9_samples={};
     }
-    wmsgf9_samples.length = 0;
-  }
 }
 
 // START UAVSAR
@@ -92,7 +94,7 @@ function setup_UAVSAR() {
     });
 
     drawing_listener = google.maps.event.addListener(UAVSARDrawingManager, 'overlaycomplete', function(e) {
-        console.log("Calling Drawing Listener");
+//        console.log("Calling Drawing Listener");
         deleteAllShape();
         all_overlays.push(e);
         UAVSARDrawingManager.setDrawingMode(null);
@@ -107,7 +109,7 @@ function setup_UAVSAR() {
             {x.innerHTML = "Rectangle: " + e.overlay.getBounds();};
     
         // call uavsar query
-        console.log(x.innerHTML);
+        //console.log(x.innerHTML);
         uavsarquery(x.innerHTML);
     });
 }
@@ -170,8 +172,23 @@ function connect_LOS_markers() {
 var LOS_uid = null;
 
 function selectDataset(uid, dataname) {
+    //Turn off the radio buttons
+    console.log(uid,dataname);
+    for(var uid1 in wmsgf9_samples) {
+		  $("#sarDisplayOrNot_"+uid1).prop('checked',false);	
+		  $("#sarDisplayOrNot_"+uid1).prop('disabled',false);	
+        wmsgf9_samples[uid1][1]=false;
+        wmsgf9_samples[uid1][2]=true;
+    }
+	 $("#sarDisplayOrNot_"+uid).prop('checked',true);	 
+	 $("#sarDisplayOrNot_"+uid).prop('disabled',true);
+	 wmsgf9_samples[uid][1]=true;
+	 wmsgf9_samples[uid][2]=false;
+   
     // var querystr = uid + "/" + dataname;
     wmsgf9_select = wmsgf9_samples[uid];
+
+//    console.log(wmsgf9_select);
 
     // zoom to the kmllayer
     mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
@@ -263,7 +280,8 @@ function viewDataset(uid, dataname, show)
             var querystr = uid + '/' + dataname;
 //            console.log( 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz');
             var wmsgf9_temp = new google.maps.KmlLayer({
-                url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz',
+//                url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz',
+                url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kml',
                 suppressInfoWindows: true,
                 preserveViewport: true,
             });
@@ -273,9 +291,9 @@ function viewDataset(uid, dataname, show)
     // it is assumed that type = hide is only called for wmsgf9s already visible
     else
     {
+//        console.log(uid,wmsgf9_samples);
         wmsgf9_samples[uid][1] = false;
     }
-    // console.log(wmsgf9_samples);
 }
 
 //The code that reads in the WMS file.  To change the WMS layer the user would update the layers line.  As this is constructed now you need to have this code for each WMS layer.
@@ -318,7 +336,7 @@ function WMSGetTileUrl2(tile, zoom) {
 // accomplished by sending link to backend so that the query can be sent from
 // python which bypasses the issue of cross-domain queries
 function uavsarquery(querystr) {
-    console.log("uavsarquery() called with querystr "+querystr);
+    //console.log("uavsarquery() called with querystr "+querystr);
     $(".panel-close-button").click(function() {
         closeDataPanel();
         $("#UAVSAR-geometry").empty();
@@ -360,8 +378,8 @@ function uavsarquery(querystr) {
 
                 $('#uavsar').append('\
                     <div class="dataset">\
-                        <input class="dataset-checkbox" type="checkbox" name="dataset" value="' + this.uid + '" checked/>\
-                        <a href="#" onClick="selectDataset(' + uid_str + ', ' + dataname_str + ');">\
+                        <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'"type="checkbox" name="dataset" value="' + datasets[index1]['uid'] + '" checked/>\
+                        <a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ');">\
                             <span class="default-font">' + dynatable + '</span>\
                     </div>');
                 viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
@@ -394,12 +412,13 @@ function uavsarquery(querystr) {
                 var uid = $(this).val();
                 if(this.checked)
                 {
-                    // console.log(uid);
+//                    console.log(uid);
                     viewDataset(uid, '', true);
                 }
                 else
                 {
                     // console.log('hiding');
+//                    console.log(uid);
                     viewDataset(uid, '', false);
                 }
                 updateVisibleDatasets();
@@ -466,6 +485,7 @@ function clear_UAVSAR() {
 }
 
 function drawDygraph(image_uid) {
+//    console.log("drawDygraph called: "+image_uid);
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
@@ -494,9 +514,20 @@ function drawDygraph(image_uid) {
             'average': average
         })
         .done(function(csv) {
+            var csv2=csv.split("\n");
+            var csv_final="";
+            for(var i=0;i<csv2.length;i++) {
+                csv3=csv2[i].split(",");
+//                console.log(csv2[i],csv3)
+                if(csv3[2] && csv3[3]) {
+                    csv_final+=csv3[2]+","+csv3[3]+"\n";
+                }
+//                console.log(csv_final);
+            }
+
             var g2 = new Dygraph(
                 document.getElementById("dygraph-LOS"),
-                csv,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
+                csv_final,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
                       titleHeight:20, 
                     xLabelHeight:16,
                       yLabelWidth:16,
@@ -505,29 +536,29 @@ function drawDygraph(image_uid) {
         );
         });
 
-    $.get("/hgt_query/",
-        {
-            'image_uid': image_uid,
-            'lat1': lat1,
-            'lng1': lng1,
-            'lat2': lat2,
-            'lng2': lng2,
-            'format': format,
-            'resolution': resolution,
-            'method': method,
-            'average': average
-        })
-        .done(function(csv) {
-            var g2 = new Dygraph(
-                document.getElementById("dygraph-HGT"),
-                csv,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Topographic Height',
-                      titleHeight:20, 
-                    xLabelHeight:16,
-                      yLabelWidth:16,
-                      xlabel:'Distance (km)',
-                      ylabel:'Topographic Height (m)'}
-        );
-        });
+ //   $.get("/hgt_query/",
+ //       {
+ //           'image_uid': image_uid,
+ //           'lat1': lat1,
+ //           'lng1': lng1,
+ //           'lat2': lat2,
+ //           'lng2': lng2,
+ //           'format': format,
+ //           'resolution': resolution,
+ //           'method': method,
+ //           'average': average
+ //       })
+ //       .done(function(csv) {
+ //           var g2 = new Dygraph(
+ //               document.getElementById("dygraph-HGT"),
+ //               csv,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Topographic Height',
+ //                     titleHeight:20, 
+ //                   xLabelHeight:16,
+ //                     yLabelWidth:16,
+ //                     xlabel:'Distance (km)',
+ //                     ylabel:'Topographic Height (m)'}
+ //       );
+ //       });
 }
 
 ////////////////////////////////// FAULT LAYER ////////////////////////////////
@@ -618,9 +649,12 @@ $(document).ready(function() {
                     draw_UAVSAR();
                 }
                 else {
-                    clear_UAVSAR();
-                    wmsgf9_select.setMap(null);
-                    $('#UAVSAR-geometry').empty();
+                    closeDataPanel();
+                    //clear_UAVSAR();
+                    if(typeof wmsgf9_select != 'undefined') {
+                        wmsgf9_select.setMap(null);
+                    }
+                   // $('#UAVSAR-geometry').empty();
                 }
                 break;
             // MOMENT MAGNITUDE CALCULATOR
@@ -644,3 +678,4 @@ $(document).ready(function() {
         }
     });
 });
+
