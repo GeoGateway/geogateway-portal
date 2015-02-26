@@ -345,7 +345,8 @@ a:visited {
     background-color: rgb(200, 200, 255);
     color: black;
     /* Change this to auto if you want the entire tools panel to scroll*/
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: auto;
     z-index: -100;
 }
 
