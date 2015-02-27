@@ -9,6 +9,7 @@ var UAVSARDrawingManager;
 var ctaLayer;
 var all_overlays = [];
 var drawing_listener;
+var dygraph1;
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
@@ -154,7 +155,8 @@ function connect_LOS_markers() {
 
     google.maps.event.addListener(LOS_markers[0], 'dragend', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
-        drawDygraph(LOS_uid);
+//        drawDygraph(LOS_uid);
+        drawDygraphAjax(LOS_uid);
     });
 
     google.maps.event.addListener(LOS_markers[1], 'drag', function (event) {
@@ -163,7 +165,8 @@ function connect_LOS_markers() {
 
     google.maps.event.addListener(LOS_markers[1], 'dragend', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
-        drawDygraph(LOS_uid);
+//        drawDygraph(LOS_uid);
+        drawDygraphAjax(LOS_uid);
     });
     LOS_line = line;
 }
@@ -173,7 +176,7 @@ var LOS_uid = null;
 
 function selectDataset(uid, dataname) {
     //Turn off the radio buttons
-    console.log(uid,dataname);
+//    console.log(uid,dataname);
     for(var uid1 in wmsgf9_samples) {
 		  $("#sarDisplayOrNot_"+uid1).prop('checked',false);	
 		  $("#sarDisplayOrNot_"+uid1).prop('disabled',false);	
@@ -221,7 +224,8 @@ function selectDataset(uid, dataname) {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng(), 'blue');
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng() + 0.1, 'red');
             connect_LOS_markers();
-            drawDygraph(uid);
+//            drawDygraph(uid);
+            drawDygraphAjax(uid);
         }
     });
     LOS_uid = uid;
@@ -457,8 +461,10 @@ function closeDataPanel() {
 // script for displaying UAVSAR layer
 // this script does not load the UAVSAR layer. loading in done in separate script
 function draw_UAVSAR() {
-    if(wmsgf9_select != null)
-        wmsgf9_select.setMap(null);
+    wmsgf9_select={};
+//    if(wmsgf9_select != null) {
+//        wmsgf9_select.setMap(null);
+//    };
     $('#UAVSAR-geometry').empty();
     UAVSARDrawingManager.setMap(mapA);
     mapA.overlayMapTypes.setAt(0, wmsgf9);
@@ -484,13 +490,71 @@ function clear_UAVSAR() {
     deleteAllShape();
 }
 
+function drawDygraphAjax(image_uid) {
+//    console.log("drawDygraphAjax called");
+    if($('.extra-tools-panel').hasClass('inactive'))
+    {
+        $('.extra-tools-panel').removeClass('inactive').addClass('active');
+        $('.extra-tools-panel').animate({height: "160px"}, 50);
+    }
+    var lat1 = LOS_markers[0].getPosition().lat();
+    var lng1 = LOS_markers[0].getPosition().lng();
+    var lat2 = LOS_markers[1].getPosition().lat();
+    var lng2 = LOS_markers[1].getPosition().lng();
+    var format = 'csv';
+    var resolution = '100';
+    var method = 'average';
+    var average = '10';
+    $.ajax({        
+        url:"/los_query",
+        beforeSend:function() {if(dygraph1) {dygraph1.destroy(); };
+										 $('#dygraph-LOS').html('<center><img src="http://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
+                              },
+        data: {
+            'image_uid': image_uid,
+            'lat1': lat1,
+            'lng1': lng1,
+            'lat2': lat2,
+            'lng2': lng2,
+            'format': format,
+            'resolution': resolution,
+            'method': method,
+            'average': average
+        },
+        async: true
+    })
+        .done(function(csv) {
+            var csv2=csv.split("\n");
+            var csv_final="";
+            for(var i=0;i<csv2.length;i++) {
+                csv3=csv2[i].split(",");
+                //                console.log(csv2[i],csv3)
+                if(csv3[2] && csv3[3]) {
+                    csv_final+=csv3[2]+","+csv3[3]+"\n";
+                }
+                //                console.log(csv_final);
+            }
+            
+            dygraph1= new Dygraph(
+                document.getElementById("dygraph-LOS"),
+                csv_final,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
+                           titleHeight:20, 
+                           xLabelHeight:16,
+                           yLabelWidth:16,
+                           xlabel:'Distance (km)',
+                           ylabel:'Ground Range Change (cm)'}
+            );
+        });
+    
+}
+//TODO: Deprecate this in favor of the jQuery().ajax() method above.
 function drawDygraph(image_uid) {
 //    console.log("drawDygraph called: "+image_uid);
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
-        var new_height = $('#map-canvas').height() - 160;
-        $('#map-canvas').animate({height: new_height + "px"}, 50);
+//        var new_height = $('#map-canvas').height() - 160;
+//        $('#map-canvas').animate({height: new_height + "px"}, 50);
         $('.extra-tools-panel').animate({height: "160px"}, 50);
     }
     var lat1 = LOS_markers[0].getPosition().lat();
@@ -650,11 +714,12 @@ $(document).ready(function() {
                 }
                 else {
                     closeDataPanel();
+                    wmsgf9_select={};
                     //clear_UAVSAR();
-                    if(typeof wmsgf9_select != 'undefined') {
-                        wmsgf9_select.setMap(null);
-                    }
-                   // $('#UAVSAR-geometry').empty();
+//                    if(typeof wmsgf9_select != 'undefined') {
+//                        wmsgf9_select.setMap(null);
+//                    }
+                    $('#UAVSAR-geometry').empty();
                 }
                 break;
             // MOMENT MAGNITUDE CALCULATOR
