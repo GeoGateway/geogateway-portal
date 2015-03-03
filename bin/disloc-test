@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "sleep...sleep..."
+sleep 5
+pwd
+echo "This is disloc. Input is "$1 > $2 

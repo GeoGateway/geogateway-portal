@@ -200,7 +200,7 @@ app.post('doUpload2', function(req,res){
 
 //Runs the given executable in blocking (exec) mode.  This assumes that the project has 
 //been correctly created, with input and output files specfiied.  It will only execute
-//things in the project's bin directory but need to watch for semicolons.
+//things in the project's bin directory, but we need to watch for semicolons.
 app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
 		  var theExec=projectBinDir+req.params.exec+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
@@ -227,9 +227,10 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 //project's entry (that is, the object retreived from the collection).
 app.get('/spawn/:exec/:collection/:documentId', function(req, res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+        console.log(obj);
         var theExec=req.params.exec;
 //        var simplexArgs=['-a','True',obj.projectInputFileName,obj.projectOutputFileName];
-        var theArgs=obj.cmdLineArgs;
+        var theArgs=['-a','True']; //obj.cmdLineArgs;
         theArgs.push(obj.projectInputFileName);
         theArgs.push(obj.projectOutputFileName);
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
@@ -255,17 +256,23 @@ app.get('/spawn/:exec/:collection/:documentId', function(req, res) {
         });
 
 	     theProcess.on('close', function (exitCode) {
-            obj.status="Completed";
-            collectionUtils.update(req.params.collection,req.params.documentId,obj,function(error,doc){
-                if(error) {
-                    console.log("Could not save the updated object");
-                }
-                else {
-                    console.log("State changed to completed");
-                    console.log(doc);
-                }
+            //TODO: This hard coded string depends on correct values both here and in the 
+            //client-side controller code.  Must fix.
+            //The project object may have been updated by other processes, so 
+            //refresh.	 
+            //TODO: we need a way to update just one field of a object instead of the entire object.
+            collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+                obj.status="Completed";
+                collectionUtils.update(req.params.collection,req.params.documentId,obj,function(error,doc){
+                    if(error) {
+                        console.log("Could not save the updated object");
+                    }
+                    else {
+                        console.log("Completed Project Metadata",doc);
+                    }
+                });
             });
-		      console.log('Exit code:', exitCode);
+//		      console.log('Exit code:', exitCode);
 	     });
     })
 });

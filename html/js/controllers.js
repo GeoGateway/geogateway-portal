@@ -2,40 +2,55 @@
 
 var UserProjectApp=angular.module('UserProjectApp',['ngRoute','ngCookies','GeoGatewayServices']);
 
-UserProjectApp.config(['$routeProvider', function ($routeProvider) {
-        
-        $routeProvider
-            .when('/login', {
-                controller: 'LoginController',
-                templateUrl: 'Login.html',
-                hideMenus: true
-            })
-        
-            .when('/projects', {
-                controller: 'UserProjectController',
-                templateUrl: 'UserProjects.html'
-            })
-
-            .when('/view', {
-                controller: 'EditProjectController',
-                templateUrl: 'ViewProjectDetails.html'
-            })
-        
-            .when('/submit', {
-                controller: 'EditProjectController',
-                templateUrl: 'SubmitProject.html'
-            })
-        
-            .otherwise({ redirectTo: '/login' });
-    }]);
+UserProjectApp.config(['$routeProvider',function ($routeProvider) {
+    $routeProvider
+        .when('/login', {
+            controller: 'LoginController',
+            templateUrl: 'Login.html',
+            hideMenus: true
+        })
+    
+        .when('/projects', {
+            controller: 'UserProjectController',
+            templateUrl: 'UserProjects.html'
+        })
+    
+        .when('/view', {
+            controller: 'EditProjectController',
+            templateUrl: 'ViewProjectDetails.html'
+        })
+    
+        .when('/submit', {
+            controller: 'EditProjectController',
+            templateUrl: 'SubmitProject.html'
+        })
+    
+        .otherwise({ redirectTo: '/login' });
+}]);
 
 UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($rootScope, $location, $cookieStore, $http) {
-    // keep user logged in after page refresh
-    console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
+    
     $rootScope.globals = $cookieStore.get('globals') || {};
     if ($rootScope.globals.currentUser) {
         //Current user is set
     }
+    else {
+        $rootScope.globals = {
+            //User can still do stuff.
+            currentUser: {
+                username: "anonymous",
+                password: ""
+            },
+            currentProject: {
+                //This is a barebones project
+                projectName: "anoymousProject",
+                status: "New",
+            }
+        };
+        $cookieStore.put('globals', $rootScope.globals);        
+    }
+
+    // keep user logged in after page refresh
     
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
         console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
@@ -104,27 +119,48 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
 
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
     $scope.username=$rootScope.globals.currentUser.username;
-
-    //Set $scope's myproject 
+    
+    //This function is done to create a new anonymous project
+    //TODO: Remove hard coding of string "anonymous"
+    if($scope.username="anonymous") {
+        var newProject={};
+        newProject.projectName=$rootScope.globals.currentProject.projectName;
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        console.log("Creating anonymous project");
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+            success(function(project){
+                console.log("Anon project created: "+project._id);
+                //Set or update the current project
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.status="New"; 
+            }).
+            error(function(data){
+                console.error("Could not create the new project");
+            });
+    }
+    
+    //Set $scope's myproject. 
+    //Note this will only be called if the project isn't anonymous.
+    //TODO: Clean this up.  
     if(typeof $rootScope.globals.currentProject !== 'undefined') {
         $scope.myproject=$rootScope.globals.currentProject;
     }
 
-    //Set readyToSubmit
-    if((typeof $rootScope.globals.currentProject !== 'undefined') && (typeof $rootScope.globals.currentProject.readyToSubmit !== 'undefined')) {
-        $scope.readyToSubmit=$rootScope.globals.currentProject.readyToSubmit;
-        
+    //Set state
+    if((typeof $rootScope.globals.currentProject !== 'undefined') && (typeof $rootScope.globals.currentProject.state !== 'undefined')) {
+        $scope.status=$rootScope.globals.currentProject.status;
     }
     else {
-        $scope.readyToSubmit=false;
+        //Must be a new project
+        $scope.status="New";
     }
 
+    //The following are functions that can be associated with submit actions.
     $scope.viewProject=function(projectId) {
         $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
             success(function(project) {
                 console.log("Got the project:"+JSON.stringify(project));
                 $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.readyToSubmit=true;     
                 $scope.myproject=$rootScope.globals.currentProject;
                 $location.path('/view');
             }).
@@ -141,7 +177,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(project){
                 //Set or update the current project
                 $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.readyToSubmit=false; 
                 $location.path('/submit');
             }).
             error(function(data){
@@ -156,7 +191,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(project) {
                 console.log("Got the project:"+JSON.stringify(project));
                 $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.readyToSubmit=true;     
                 $scope.myproject=$rootScope.globals.currentProject;
                 $location.path('/submit');
             }).
@@ -179,18 +213,26 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.$broadcast("refresh","true");
     }
 
-/**
-    $scope.$on('loadProject', function(event, arg) {
-        console.log("Event received:"+event+" "+arg);
-        $scope.readyToSubmit=true;
-        $scope.myproject=arg;
-    });
-*/
+    //Show refreshed project information
+    $scope.refreshView=function() {
+        console.log("Refresh view");
+        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).
+            success(function(project) {
+                //Replace the $rootScope.globals.currentProject with its updated values
+                //from the MongoDB collection.
+                console.log("Got the project:"+JSON.stringify(project));
+                $rootScope.globals.currentProject=project;
+                $scope.myproject=$rootScope.globals.currentProject;
+            }).
+            error(function(data){
+                console.log("Could not load the project");
+            });
+    }
 
     $scope.$on('upload', function (event, arg) {
         //        console.log('Got the message:'+event+" "+arg);
-        $scope.readyToSubmit=$rootScope.globals.currentProject.readyToSubmit;
-        console.log("Ready to submit set to false; sanity:"+$scope.readyToSubmit);
+        $scope.status=$rootScope.globals.currentProject.status;
+        console.log("Ready to submit set to false; sanity:"+$scope.status);
         $scope.myproject=arg;        
         //        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
         //            console.log("project data:"+JSON.stringify(data));
@@ -201,47 +243,75 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     });
     
     //This runs the blocking version of the executable wrapper
-    $scope.submit=function(){
+    $scope.submit=function(appName){
+        console.log("appName:"+appName);
         //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
         //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
-        $http.get('/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+        //Note status is completed because we made a blocking call.
+        $rootScope.globals.currentProject.status="Completed";
+        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
+        $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
+        $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
+        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+        $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+        $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        //Put the updated project in the DB.
+        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+            success(function(data, status) { 
+            }).
+            error(function(data){
+                console.log("Couldn't update the db");
+            });
+        
+        $http.get('/execute/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
-                $location.path('/projects');
+                $scope.myproject=$rootScope.globals.currentProject;
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Failed";
+                $scope.myproject=$rootScope.globals.currentProject;
             });
     }
-
+    
     //This runs the non-blocking version of the executable wrapper
-    $scope.submitNonblocking=function(){
+    $scope.submitNonblocking=function(appName){
         //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
         //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
-        $http.get('/spawn/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+        //        console.log("appName:"+appName);
+        $rootScope.globals.currentProject.status="Submitted";
+        //TODO: This is crappy
+        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
+        $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
+        $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
+        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+        $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+        $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        
+        //                console.log("Submitted Project Metadata:",$rootScope.globals.currentProject);
+
+        //Push the job's status to the DB.
+        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+            success(function(data, status) { 
+                console.log("Updated the job status");
+            }).
+            error(function(data){
+                console.log("Couldn't update the db");
+            });
+        
+        $http.get('/spawn/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
-                console.log("Successful exec:"+JSON.stringify(data));
-                $rootScope.globals.currentProject.status="Submitted";
-                $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
-                $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
-                $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
-                $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
-                $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
-                $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
-                
-                //Push the job's status to the DB.
-                $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).success(function(data, status) { 
-                    console.log("Updated the job status");
-                });
-                $location.path('/projects');
+                $scope.myproject=$rootScope.globals.currentProject;
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Failed";
+                $scope.myproject=$rootScope.globals.currentProject;
             });
     }
     
 }]);
-                         
                        
 UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','UploadService', function($scope, $rootScope, $http, UploadService) {
     $scope.uploadFile=function(){
@@ -255,7 +325,6 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','Up
         UploadService.uploadFileToUrl2(file,uploadUrl);
         
         $rootScope.globals.currentProject.projectInputFileName=file.name;
-        $rootScope.globals.currentProject.readyToSubmit=true;
         $rootScope.globals.currentProject.status="Ready";
         //Now update the project object
 //        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);

@@ -5,8 +5,18 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
     //Note this will also clear current project and anything else.
     service.clearCredentials2=function() {    
         console.log("Clearing credentials");
-        $rootScope.globals = {};
-        $cookieStore.remove('globals');        
+        $rootScope.globals = {
+            //User can still do stuff.
+            currentUser: {
+                username: "anonymous",
+                password: ""
+            },
+            currentProject: {
+                //This is a barebones project
+                projectName: "anoymousProject",
+                readyToSubmit: false
+            }
+        };
     };
     service.doLogin2=function(username, password, callback){
         console.log("Doing the login");
