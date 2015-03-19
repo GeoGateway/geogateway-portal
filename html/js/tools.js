@@ -100,15 +100,14 @@ function setup_UAVSAR() {
         all_overlays.push(e);
         UAVSARDrawingManager.setDrawingMode(null);
         var x = document.getElementById('UAVSAR-geometry');
-        x.innerHTML="Selected point or region:";
         if (e.type == "marker")
-            {x.innerHTML += "<b>Point:</b> " + e.overlay.getPosition()};
+            {x.innerHTML += "Point: " + e.overlay.getPosition()};
         if (e.type == "polyline")
-            {x.innerHTML += "<b>Line:</b> " + e.overlay.getPath().getArray();};
+            {x.innerHTML += "Line: " + e.overlay.getPath().getArray();};
         if (e.type == "polygon")
-            {x.innerHTML += "<b>Polygon:</b> " + e.overlay.getPath().getArray();};
+            {x.innerHTML += "Polygon: " + e.overlay.getPath().getArray();};
         if (e.type == "rectangle")
-            {x.innerHTML += "<b>Rectangle:</b> " + e.overlay.getBounds();};
+            {x.innerHTML += "Rectangle: " + e.overlay.getBounds();};
     
         // call uavsar query
         //console.log(x.innerHTML);
