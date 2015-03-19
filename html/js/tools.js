@@ -100,14 +100,15 @@ function setup_UAVSAR() {
         all_overlays.push(e);
         UAVSARDrawingManager.setDrawingMode(null);
         var x = document.getElementById('UAVSAR-geometry');
+        x.innerHTML="Selected point or region:";
         if (e.type == "marker")
-            {x.innerHTML = "Point: " + e.overlay.getPosition()};
+            {x.innerHTML += "<b>Point:</b> " + e.overlay.getPosition()};
         if (e.type == "polyline")
-            {x.innerHTML = "Line: " + e.overlay.getPath().getArray();};
+            {x.innerHTML += "<b>Line:</b> " + e.overlay.getPath().getArray();};
         if (e.type == "polygon")
-            {x.innerHTML = "Polygon: " + e.overlay.getPath().getArray();};
+            {x.innerHTML += "<b>Polygon:</b> " + e.overlay.getPath().getArray();};
         if (e.type == "rectangle")
-            {x.innerHTML = "Rectangle: " + e.overlay.getBounds();};
+            {x.innerHTML += "<b>Rectangle:</b> " + e.overlay.getBounds();};
     
         // call uavsar query
         //console.log(x.innerHTML);
@@ -174,7 +175,11 @@ function connect_LOS_markers() {
 // script for loading a specific UAVSAR dataset
 var LOS_uid = null;
 
-function selectDataset(uid, dataname) {
+function selectDataset(uid, dataname, heading, radardirection) {
+    var x=document.getElementById('UAVSAR-info');
+    x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
+    x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
+    
     //Turn off the radio buttons
 //    console.log(uid,dataname);
     for(var uid1 in wmsgf9_samples) {
@@ -210,11 +215,11 @@ function selectDataset(uid, dataname) {
     $("input:checkbox[value="+uid+"]").prop("checked", true);
     //wmsgf9_select[0].setMap(mapA); 
     // move wmsgf9_select to the top
-    //console.log(wmsgf9_select);
+//    console.log(wmsgf9_select[0]);
     // clear_UAVSAR();
     // DataPanel();
 
-    //shall be diable drawingmanger and all the markers
+    //Turn everything off
     UAVSARDrawingManager.setMap(null);
     deleteAllShape();
 
@@ -224,7 +229,11 @@ function selectDataset(uid, dataname) {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng(), 'blue');
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng() + 0.1, 'red');
             connect_LOS_markers();
-//            drawDygraph(uid);
+            var x=document.getElementById('UAVSAR-info');
+            x.innerHTML+="<br/>";
+            x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
+            x.innerHTML+="<br/>"
+            x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
             drawDygraphAjax(uid);
         }
     });
@@ -368,6 +377,7 @@ function uavsarquery(querystr) {
             for (var index1 in datasets) {
                 var uid_str = "'" + datasets[index1]['uid'] + "'";
                 var dataname_str = "'" +datasets[index1]['dataname'] + "'";
+                var radarDirectionStr="'" +datasets[index1]['radardirection'] + "'";
 //                console.log(uid_str + " " + dataname_str);
                 dynatable='<div style="word-wrap:break-word;">';
                 dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
@@ -383,10 +393,13 @@ function uavsarquery(querystr) {
                 $('#uavsar').append('\
                     <div class="dataset">\
                         <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'"type="checkbox" name="dataset" value="' + datasets[index1]['uid'] + '" checked/>\
-                        <a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ');">\
+<a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
                             <span class="default-font">' + dynatable + '</span>\
                     </div>');
                 viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
+//                console.log("Selected Dataset:",datasets[index1]);
+//                console.log("Heading and direction:",datasets[index1]['heading'],datasets[index1]['radardirection']);
+
             };
 //            $.each(datasets, function() {
 //                var uid_str = "'" + this.uid + "'";
