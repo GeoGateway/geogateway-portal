@@ -1,95 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="">
 <head>
     <link rel="shortcut icon" href="images/favicon/favicon.ico">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <!-- load css from static -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!-- call for jQuery from Google CDN -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
-    <!-- set up jQuery UI using Google CDN -->
+    <!--
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
+    -->
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <!-- bootstrap -->
-<!--    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">-->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-<!--    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- setup ajax CSRF -->
-    <script type="text/javascript">
-      function getCookie(name) {
-         var cookieValue = null;
-         if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-               var cookie = jQuery.trim(cookies[i]);
-               // Does this cookie string begin with the name we want?
-               if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                 break;
-               }
-            }
-         }
-         
-         return cookieValue;
-                          };
+    <script src="bower_components/angular/angular.js"></script>
 
-                          function setupCSRF() {
-                          $.ajaxSetup({
-                          beforeSubmit: function(xhr, settings) {
-                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                    // Only send the token to relative URLs i.e. locally.
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-            },
-            beforeSend: function(xhr, settings) {
-                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                    // Only send the token to relative URLs i.e. locally.
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-            }
-        });
-    };
-    setupCSRF();
-    </script>
-
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
-<script type="text/javascript" src="js/tools.js"></script>
-<!-- dygraphs -->
-<script type="text/javascript" src="js/dygraph-combined.js"></script>
-
-<!-- ajaxForm jquery plugin -->
-<script src="http://malsup.github.com/jquery.form.js"></script>
-<!-- javascript for the animated PROFILE PANEL -->
-<script>
-// PROFILE-PANEL-RIGHT contains all of the profile tab panels
-// this includes Notecards, Colleagues, Settings, Logout button, etc
-
-// script for animated PROFILE-PANEL OPENING functionality
-$(document).ready(function() {
-    // open up profile panel
-    $('.panel-toggle').click(function() {
-        if($(this).is('#tools')) {
-            if($('.tools-panel').hasClass('open'))
-            {
-                $('.tools-panel').removeClass('open');
-                $('.tools-panel').addClass('closed');
-                $('.tools-panel').animate({width: "0px"}, 50);
-                $('#map-canvas').animate({left: "0px"}, 50);
-                var new_width = $('#map-canvas').width() + 450;
-                $('#map-canvas').animate({width: new_width + "px"}, 50);
+    
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <!-- dygraphs -->
+    <script type="text/javascript" src="js/dygraph-combined.js"></script>
+    
+    <!-- ajaxForm jquery plugin -->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <!-- javascript for the animated PROFILE PANEL -->
+    <script>
+      // PROFILE-PANEL-RIGHT contains all of the profile tab panels
+      // this includes Notecards, Colleagues, Settings, Logout button, etc
+      
+      // script for animated PROFILE-PANEL OPENING functionality
+      $(document).ready(function() {
+      // open up profile panel
+      $('.panel-toggle').click(function() {
+      if($(this).is('#tools')) {
+      if($('.tools-panel').hasClass('open'))
+      {
+      $('.tools-panel').removeClass('open');
+      $('.tools-panel').addClass('closed');
+      $('.tools-panel').animate({width: "0px"}, 50);
+      $('#map-canvas').animate({left: "0px"}, 50);
+      var new_width = $('#map-canvas').width() + 450;
+      $('#map-canvas').animate({width: new_width + "px"}, 50);
                 new_width = $('.extra-tools-panel').width() + 450;
-                $('.extra-tools-panel').animate({left: "0px",
-                                                width: new_width + "px"}, 50);
+      $('.extra-tools-panel').animate({left: "0px",
+      width: new_width + "px"}, 50);
                 //This doesn't work for some reason
-                google.maps.event.trigger(mapA,'resize',{});
-            }
-            else
+      google.maps.event.trigger(mapA,'resize',{});
+      }
+      else
             {
                 $('.tools-panel').removeClass('closed');
                 $('.tools-panel').addClass('open');
@@ -580,38 +542,17 @@ function noImage(image) {
   
   <div class="tools-panel open">
     <ul type="none" class="tool-tabs">
-      <li>
-        <button class="tab-button tool-tab-button" value="news">
-          <span class="glyphicon glyphicon-cloud"> </span>
-        </button>
-      </li>
       <li class="active">
         <button class="tab-button tool-tab-button" value="tools">
           <span class="glyphicon glyphicon-wrench"> </span>
         </button>
       </li>
-      <!-- {% if not auth_user.is_authenticated %}
-           <li class="active">
-             <button class="tab-button tool-tab-button" value="auth">
-               <span class="glyphicon glyphicon-off"> </span>
-             </button>
-           </li>
-           {% endif %} -->
       <li>
         <button class="tab-button tool-tab-button" value="about">
           <span class="glyphicon glyphicon-question-sign"> </span>
         </button>
       </li>
     </ul>
-    <div class="tab-pane tool-tab-pane inactive" id="news">
-      <div class="tool">
-        <div class="tool-title"><b>News</b></div>
-        <div class="divider"></div>
-        <div class="tool-content">
-          
-        </div>
-      </div>
-    </div>
     <div class="tab-pane tool-tab-pane active" id="tools">
       <div class="tool">
         <div class="tool-title"><b>Tools</b></div>
@@ -709,6 +650,10 @@ function noImage(image) {
         </div>
       </div>
     </div>
+
+    <div ng-include="'About.html'"></div>
+      
+    <!--
     <div class="tab-pane tool-tab-pane inactive" id="about">
       <div class="tool">
         <div class="tool-title"><b>Help</b></div>
@@ -726,6 +671,7 @@ function noImage(image) {
         </div>
       </div>
     </div>
+-->
   </div>
 
   <div class="extra-tools-panel inactive">

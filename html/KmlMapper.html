@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>KML Layers</title>
+    <style>
+      html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+  </head>
+  <body>
+    <script>
+      var map;
+      var mapOptions;
+      var kmllayer;
+      var kmlLayerArray;
+      
+      function initialize() {
+      var myLatlng = new google.maps.LatLng(34.0, -118.0);
+      mapOptions = {
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.TERRAIN,
+      center: myLatlng
+      };
+      
+      map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+      
+      }
+      
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+      function addKmlLayer(){
+         var theLayer=document.getElementById("kmlUrl").value;
+         console.log("Adding layer:"+theLayer);
+         kmlLayer = new google.maps.KmlLayer({
+         url: theLayer,
+         suppressInfoWindows: false,
+         map: map
+      });
+      }
+      
+      
+    </script>
+    <div id="map-canvas" style="width:75%; height:100%; float: left"></div>
+    <div id="kml-list-canvas" style="width:25%; height:100%; float: left">
+      Enter KML URL here:
+      <br>
+      <input type="text" size="50" id="kmlUrl"/>
+      <button type="button" onclick="addKmlLayer()">Add</button>
+    </div>
+  </body>
+</html>
