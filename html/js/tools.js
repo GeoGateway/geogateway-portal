@@ -101,13 +101,13 @@ function setup_UAVSAR() {
         UAVSARDrawingManager.setDrawingMode(null);
         var x = document.getElementById('UAVSAR-geometry');
         if (e.type == "marker")
-            {x.innerHTML += "Point: " + e.overlay.getPosition()};
+            {x.innerHTML = "Point: " + e.overlay.getPosition()};
         if (e.type == "polyline")
-            {x.innerHTML += "Line: " + e.overlay.getPath().getArray();};
+            {x.innerHTML = "Line: " + e.overlay.getPath().getArray();};
         if (e.type == "polygon")
-            {x.innerHTML += "Polygon: " + e.overlay.getPath().getArray();};
+            {x.innerHTML = "Polygon: " + e.overlay.getPath().getArray();};
         if (e.type == "rectangle")
-            {x.innerHTML += "Rectangle: " + e.overlay.getBounds();};
+            {x.innerHTML = "Rectangle: " + e.overlay.getBounds();};
     
         // call uavsar query
         //console.log(x.innerHTML);
@@ -151,6 +151,7 @@ function connect_LOS_markers() {
     line.setMap(mapA);
     google.maps.event.addListener(LOS_markers[0], 'drag', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
+        updateToolPanelMarkerInfo();
     });
 
     google.maps.event.addListener(LOS_markers[0], 'dragend', function (event) {
@@ -161,6 +162,7 @@ function connect_LOS_markers() {
 
     google.maps.event.addListener(LOS_markers[1], 'drag', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
+        updateToolPanelMarkerInfo();
     });
 
     google.maps.event.addListener(LOS_markers[1], 'dragend', function (event) {
@@ -175,7 +177,7 @@ function connect_LOS_markers() {
 var LOS_uid = null;
 
 function selectDataset(uid, dataname, heading, radardirection) {
-    var x=document.getElementById('UAVSAR-info');
+    var x=document.getElementById('UAVSAR-heading');
     x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
     
@@ -228,11 +230,12 @@ function selectDataset(uid, dataname, heading, radardirection) {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng(), 'blue');
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng() + 0.1, 'red');
             connect_LOS_markers();
-            var x=document.getElementById('UAVSAR-info');
-            x.innerHTML+="<br/>";
-            x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
-            x.innerHTML+="<br/>"
-            x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
+            updateToolPanelMarkerInfo();
+//            var x=document.getElementById('UAVSAR-markers');
+//            x.innerHTML="<br/>";
+//            x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
+//            x.innerHTML+="<br/>"
+//            x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
             drawDygraphAjax(uid);
         }
     });
@@ -351,7 +354,9 @@ function uavsarquery(querystr) {
     //console.log("uavsarquery() called with querystr "+querystr);
     $(".panel-close-button").click(function() {
         closeDataPanel();
-        $("#UAVSAR-geometry").empty();
+//        $("#UAVSAR-geometry").empty();
+//        $("#UAVSAR-heading").empty();
+//        $("#UAVSAR-markers").empty();
         deleteAllShape();
     });
 
@@ -466,6 +471,10 @@ function closeDataPanel() {
     $('.panel-close-button').removeClass('active').addClass('inactive');
     $('#uavsar').empty();
     $('#uavsar').removeClass('active').addClass('inactive');
+    $('#UAVSAR-geometry').empty();
+    $('#UAVSAR-heading').empty();
+    $('#UAVSAR-markers').empty();
+    $('#UAVSAR-active-tool').prop("checked",false);
     deleteAllKml();
     clear_UAVSAR();
 }
@@ -501,6 +510,15 @@ function clear_UAVSAR() {
     }
     deleteAllShape();
 }
+
+function updateToolPanelMarkerInfo() {
+    var x=document.getElementById('UAVSAR-markers');
+    x.innerHTML="<br/>";
+    x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
+    x.innerHTML+="<br/>"
+    x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[1].getPosition();
+}
+
 
 function drawDygraphAjax(image_uid) {
 //    console.log("drawDygraphAjax called");

@@ -559,12 +559,16 @@ function noImage(image) {
         <div class="divider"></div>
         <div class="tool-content">
           <div>
-            <input class="tools-checkbox" type="checkbox" name="active-tools" value="uavsar"/><span class="default-font">&nbsp;UAVSAR</span>
-            <div class="tools-box" id="UAVSAR-geometry"></div>
-            <div class="tools-box" id="UAVSAR-info"></div>
-            <div class="tool-content" id="data-panel">
+            <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/><span class="default-font">&nbsp;UAVSAR</span>
+
               <button class="panel-close-button inactive">X</button>
-              <div id="uavsar" class="inactive"></div>
+            <div id="UAVSAR-geometry"></div>
+            <div id="UAVSAR-heading"></div>
+            <div id="UAVSAR-markers"></div>
+
+              <div id="uavsar" class="inactive">
+                <div class="tool-content" id="data-panel">
+              </div>
             </div>
           </div>
           <div>
