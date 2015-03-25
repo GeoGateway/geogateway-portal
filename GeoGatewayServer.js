@@ -431,6 +431,8 @@ app.get('/los_query/',function(req,res) {
 //        console.log(data);
         res.setHeader('Content-Type','text/csv');
         res.setHeader('Content-Disposition','attachment; filename="LOS.csv"');
+        data="Lat, Lon, Distance (km), Displacement\n"+data;
+        console.log(data);
         res.status(200).send(data);
     });
 

@@ -152,6 +152,7 @@ function connect_LOS_markers() {
     google.maps.event.addListener(LOS_markers[0], 'drag', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
         updateToolPanelMarkerInfo();
+        updateMarkerFormFields();
     });
 
     google.maps.event.addListener(LOS_markers[0], 'dragend', function (event) {
@@ -163,6 +164,7 @@ function connect_LOS_markers() {
     google.maps.event.addListener(LOS_markers[1], 'drag', function (event) {
         line.setPath([LOS_markers[0].getPosition(), LOS_markers[1].getPosition()]);
         updateToolPanelMarkerInfo();
+        updateMarkerFormFields();
     });
 
     google.maps.event.addListener(LOS_markers[1], 'dragend', function (event) {
@@ -202,23 +204,12 @@ function selectDataset(uid, dataname, heading, radardirection) {
     // zoom to the kmllayer
     mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
 
-    // new google.maps.KmlLayer({
-    //  url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.int.kmz',
-    //  suppressInfoWindows: true,
-    // });
-    // console.log(querystr);
-    // make sure wmsgf9_select is on top
     if(wmsgf9_select[2]) {
         viewDataset(uid, dataname, false);
     }
     viewDataset(uid, dataname, true);
     updateVisibleDatasets();
     $("input:checkbox[value="+uid+"]").prop("checked", true);
-    //wmsgf9_select[0].setMap(mapA); 
-    // move wmsgf9_select to the top
-//    console.log(wmsgf9_select[0]);
-    // clear_UAVSAR();
-    // DataPanel();
 
     //Turn everything off
     UAVSARDrawingManager.setMap(null);
@@ -231,6 +222,7 @@ function selectDataset(uid, dataname, heading, radardirection) {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng() + 0.1, 'red');
             connect_LOS_markers();
             updateToolPanelMarkerInfo();
+            updateMarkerFormFields();
 //            var x=document.getElementById('UAVSAR-markers');
 //            x.innerHTML="<br/>";
 //            x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
@@ -241,6 +233,137 @@ function selectDataset(uid, dataname, heading, radardirection) {
     });
     LOS_uid = uid;
 }
+
+	 function setAzimuth(){
+		  var swLat=LOS_markers[0].getPosition().lat().toFixed(5);
+		  var swLon=LOS_markers[0].getPosition().lng().toFixed(5);
+		  var neLat=LOS_markers[1].getPosition().lat().toFixed(5);
+		  var neLon=LOS_markers[1].getPosition().lng().toFixed(5);
+
+		  //Using http://www.movable-type.co.uk/scripts/latlong.html
+		  var d2r=Math.PI/180.0;
+		  var flatten=1.0/298.247;
+
+		  //This is the old formula.
+//		  var dlon=(neLon-swLon)*d2r;
+//		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
+//		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
+//		  azimuth=Math.atan2(y,x)/d2r;
+
+		  var theFactor=d2r* Math.cos(d2r * swLat) * 6378.139 * (1.0 - Math.sin(d2r * swLat) * Math.sin(d2r * swLat) * flatten);
+		  var x=(neLon-swLon)*theFactor;
+		  var y=(neLat-swLat)*111.32;
+		  
+		  azimuth=Math.atan2(x,y)/d2r;
+		  azimuth=azimuth.toFixed(1);
+//		  if(azimuth.value>180) azimuth.value=azimuth.value-360;
+//		  if(azimuth.value<-180) azimuth.value=azimuth.value+360;
+
+		  if(azimuth>180) azimuth=azimuth-360;
+		  if(azimuth<-180) azimuth=azimuth+360;
+
+		  $("#azimuth-value").val(azimuth);
+	 }
+
+
+	 //--------------------------------------------------
+	 // Sets the ending (lat,lon) from a provided initial (lat, lon), 
+	 // a length, and a strike (or azimuth) angle.
+	 //--------------------------------------------------
+	 function setEndpointsFromAzimuthAndLength() {
+		  var d2r = Math.PI / 180.0;
+		  var flatten=1.0/298.247;
+
+		  var latStart=LOS_markers[0].getPosition().lat().toFixed(5);
+		  var lonStart=LOS_markers[0].getPosition().lng().toFixed(5);
+		  var latEnd;//=LOS_markers[1].getPosition().lat().toFixed(5);
+		  var lonEnd;//=LOS_markers[1].getPosition().lng().toFixed(5);
+		  var xend,yend,sval,thetan;
+
+		  //We'll use the convention that azimuth is -180 to 180. This is what Simplex assumes.
+		  if(azimuth>180) azimuth=azimuth-360;
+		  if(azimuth<-180) azimuth=azimuth+360;
+
+
+		  //Now find the lat/lon values of the translated endpoint.
+		  //First, find the Cartesian coordinates of the endpoint.  
+
+		  if (azimuth == 0) {
+				xend = 0; 
+				yend = losLength;
+		  }
+		  else if (azimuth == 90) { 
+				xend = losLength; yend = 0;
+		  }
+		  else if (azimuth == 180) { 
+				xend = 0; yend = (-1.0) * losLength;
+		  }
+		  else if (azimuth == -90) { 
+				xend = (-1.0) * losLength; yend = 0;
+		  }
+		  else {
+				sval = 90 - azimuth;//.value;
+				thetan = Math.tan(sval*d2r);
+				xend = losLength/Math.sqrt(1 + thetan*thetan);
+				yend = Math.sqrt(losLength*losLength - xend*xend);
+				
+				if (azimuth > 0 && azimuth < 90) { 
+					 xend = xend*1.0; yend = yend*1.0;
+				}
+				else if (azimuth > 90 && azimuth < 180) { 
+					 xend = xend*1.0; yend = yend* (-1.0);
+				}
+				else if (azimuth > -180 && azimuth < -90) { 
+					 xend = xend*(-1.0); yend = yend*(-1.0);
+				}
+				else if (azimuth > -90 && azimuth < 0) { 
+					 xend = xend*(-1.0); yend = yend*1.0;
+				}
+				else {
+					 console.log("Incorrect quadrant determination");
+				}
+		  }
+		  
+		  //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because
+		  //we are using the fault length (not the distance to the origin from the end point).
+		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+
+		  lonEnd = 1.0*xend/(1.0*theFactor) + lonStart*1.0;
+		  lonEnd=lonEnd.toFixed(5);
+		  latEnd = 1.0*yend/111.32 + latStart*1.0;
+		  latEnd=latEnd.toFixed(5);
+		  
+		  $("#endLat-value").val(latEnd);
+		  $("#endLon-value").val(lonEnd);
+
+		  var newPos=new google.maps.LatLng(latEnd,lonEnd);
+		  LOS_markers[1].setPosition(newPos);
+		  google.maps.event.trigger(LOS_markers[1],"drag");
+		  google.maps.event.trigger(LOS_markers[1],"dragend");
+	 }	 
+
+	 //--------------------------------------------------
+	 // This function calculates the distance between the starting 
+	 // and ending (lat,lon) points.  
+	 //--------------------------------------------------
+	 function setDistance() {
+		  var latStart=LOS_markers[0].getPosition().lat().toFixed(5);
+		  var lonStart=LOS_markers[0].getPosition().lng().toFixed(5);
+		  var latEnd=LOS_markers[1].getPosition().lat().toFixed(5);
+		  var lonEnd=LOS_markers[1].getPosition().lng().toFixed(5);
+
+		  var d2r = Math.PI / 180.0;
+		  var flatten=1.0/298.247;
+		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+
+		  var xdiff=(lonEnd-lonStart)*theFactor;
+		  var ydiff=(latEnd-latStart)*111.32;
+		  
+		  losLength=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
+		  losLength=losLength.toFixed(3);		  
+		  
+		  $("#losLength-value").val(losLength);
+	 }
 
 // viewDataset loads a dataset into wmsgf9_samples
 // called when a specific query for a specific geometry is made
@@ -474,6 +597,7 @@ function closeDataPanel() {
     $('#UAVSAR-geometry').empty();
     $('#UAVSAR-heading').empty();
     $('#UAVSAR-markers').empty();
+    $('#UAVSAR-formFields').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
     deleteAllKml();
     clear_UAVSAR();
@@ -514,9 +638,21 @@ function clear_UAVSAR() {
 function updateToolPanelMarkerInfo() {
     var x=document.getElementById('UAVSAR-markers');
     x.innerHTML="<br/>";
-    x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
+    x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition().lat().toFixed(5)+","+LOS_markers[0].getPosition().lng().toFixed(5);
     x.innerHTML+="<br/>"
-    x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[1].getPosition();
+    x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[1].getPosition().lat().toFixed(5)+","+LOS_markers[1].getPosition().lng().toFixed(5);
+}
+
+function updateMarkerFormFields() {
+//    var x=document.getElementById('UAVSAR-formFields');
+//    x.show();
+    $("#UAVSAR-formFields").show();
+    $("#startLat-value").val(LOS_markers[0].getPosition().lat().toFixed(5));
+	 $("#startLon-value").val(LOS_markers[0].getPosition().lng().toFixed(5));
+	 $("#endLat-value").val(LOS_markers[1].getPosition().lat().toFixed(5));
+	 $("#endLon-value").val(LOS_markers[1].getPosition().lng().toFixed(5));
+    setAzimuth();
+    setDistance();
 }
 
 
