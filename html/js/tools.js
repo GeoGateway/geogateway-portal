@@ -183,6 +183,10 @@ function updateDistance() {
 	 setEndpointsFromAzimuthAndLength();
 }
 
+function updateResolution() {
+    drawDygraphAjax(LOS_uid);
+}
+
 
 function connect_LOS_markers() {
     var lineCoordinates = [
@@ -717,7 +721,8 @@ function drawDygraphAjax(image_uid) {
     var lat2 = LOS_markers[1].getPosition().lat();
     var lng2 = LOS_markers[1].getPosition().lng();
     var format = 'csv';
-    var resolution = '100';
+    var resolution = $('#resolution-value').val();
+    console.log("resultion value:", resolution);
     var method = 'average';
     var average = '10';
     $.ajax({        
