@@ -313,13 +313,13 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     
 }]);
                        
-UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','UploadService', function($scope, $rootScope, $http, UploadService) {
+UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$location','UploadService',function($scope, $rootScope, $http, $location, UploadService) {
     //This version is used to plot a KML file
     $scope.uploadFileForKml=function(){
         var file=$scope.myFile;
         var uploadUrl="/doUpload/anonymousKmlUser/anonymousKmlProject";
         UploadService.uploadFileToUrl2(file,uploadUrl);
-        $scope.kmlUrl="/userUploads/anonymousKmlUser/anonymousKmlProject/"+file.name;
+        $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/anonymousKmlProject/"+file.name;
         document.getElementById("kmlUrl").value=$scope.kmlUrl;
     }
 
