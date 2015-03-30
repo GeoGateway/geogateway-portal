@@ -314,6 +314,16 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
 }]);
                        
 UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','UploadService', function($scope, $rootScope, $http, UploadService) {
+    //This version is used to plot a KML file
+    $scope.uploadFileForKml=function(){
+        var file=$scope.myFile;
+        var uploadUrl="/doUpload/anonymousKmlUser/anonymousKmlProject";
+        UploadService.uploadFileToUrl2(file,uploadUrl);
+        $scope.kmlUrl="/userUploads/anonymousKmlUser/anonymousKmlProject/"+file.name;
+        document.getElementById("kmlUrl").value=$scope.kmlUrl;
+    }
+
+    //This version is integrated with Disloc/Simplex submission
     $scope.uploadFile=function(){
         //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
         var file=$scope.myFile;
