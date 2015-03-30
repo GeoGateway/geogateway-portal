@@ -135,6 +135,55 @@ function draw_marker(lat, lng, color) {
     LOS_markers.push(marker);
 }
 
+function updateStartLat(){
+	 var newPos=new google.maps.LatLng($("#startLat-value").val(),LOS_markers[0].getPosition().lng());
+	 LOS_markers[0].setPosition(newPos);
+	 google.maps.event.trigger(LOS_markers[0],"drag");
+	 google.maps.event.trigger(LOS_markers[0],"dragend");
+}
+
+function updateStartLon(){
+	 var newPos=new google.maps.LatLng(LOS_markers[0].getPosition().lat(),$("#startLon-value").val());
+	 LOS_markers[0].setPosition(newPos);
+	 google.maps.event.trigger(LOS_markers[0],"drag");
+	 google.maps.event.trigger(LOS_markers[0],"dragend");
+}
+
+function updateEndLat(){
+	 var newPos=new google.maps.LatLng($("#endLat-value").val(),LOS_markers[1].getPosition().lng());
+	 LOS_markers[1].setPosition(newPos);
+	 google.maps.event.trigger(LOS_markers[1],"drag");
+	 google.maps.event.trigger(LOS_markers[1],"dragend");
+}
+
+function updateEndLon(){
+	 var newPos=new google.maps.LatLng(LOS_markers[1].getPosition().lat(),$("#endLon-value").val());
+	 LOS_markers[1].setPosition(newPos);
+	 google.maps.event.trigger(LOS_markers[1],"drag");
+	 google.maps.event.trigger(LOS_markers[1],"dragend");
+}
+
+function setEndPointFormValues() {
+	 $("#startLat-value").val(LOS_markers[0].getPosition().lat().toFixed(5));
+	 $("#startLon-value").val(LOS_markers[0].getPosition().lng().toFixed(5));
+	 $("#endLat-value").val(LOS_markers[1].getPosition().lat().toFixed(5));
+	 $("#endLon-value").val(LOS_markers[1].getPosition().lng().toFixed(5));
+}
+
+function updateAzimuth() {
+	 losLength=$("#losLength-value").val();
+	 azimuth=$("#azimuth-value").val();
+	 setEndpointsFromAzimuthAndLength();
+}
+
+//Uses the new distance to calculate the new ending lat,lon
+function updateDistance() {
+	 losLength=$("#losLength-value").val();
+	 azimuth=$("#azimuth-value").val();
+	 setEndpointsFromAzimuthAndLength();
+}
+
+
 function connect_LOS_markers() {
     var lineCoordinates = [
         LOS_markers[0].getPosition(),

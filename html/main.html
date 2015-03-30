@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="">
+<html lang="en" ng-app="UserProjectApp">
 <head>
-    <link rel="shortcut icon" href="images/favicon/favicon.ico">
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    
+
+    <link rel="shortcut icon" href="images/favicon/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/qtip2/jquery.qtip.min.css"/>
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <!--
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />
-    -->
-    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+
+    <script src="bower_components/qtip2/jquery.qtip.min.js"></script>
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
     <script src="bower_components/angular/angular.js"></script>
-
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
     <script type="text/javascript" src="js/tools.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+
     <!-- dygraphs -->
     <script type="text/javascript" src="js/dygraph-combined.js"></script>
     
     <!-- ajaxForm jquery plugin -->
     <script src="http://malsup.github.com/jquery.form.js"></script>
+    
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
     <!-- javascript for the animated PROFILE PANEL -->
     <script>
       // PROFILE-PANEL-RIGHT contains all of the profile tab panels
@@ -548,6 +556,16 @@ function noImage(image) {
         </button>
       </li>
       <li>
+        <button class="tab-button tool-tab-button" value="disloc">
+          <span class="glyphicon glyphicon-cog"> </span>
+        </button>
+      </li>
+      <li>
+        <button class="tab-button tool-tab-button" value="simplex">
+          <span class="glyphicon glyphicon-tasks"> </span>
+        </button>
+      </li>
+      <li>
         <button class="tab-button tool-tab-button" value="about">
           <span class="glyphicon glyphicon-question-sign"> </span>
         </button>
@@ -738,7 +756,201 @@ function noImage(image) {
         </div>
       </div>
     </div>
+    
+    <!-- Simplex Tool -->
+    <div class="tab-pane tool-tab-pane inactive" id="simplex">
+      <div class="tool">
+        <div class="tool-title"><b>Simplex</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
+          <h4>Upload your Simplex input file</h4>
+          <div ng-controller="UploadController">
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <input type="file" file-model="myFile">
+              </div>
+              <div class="col-md-12 form-group">
+                <button class="btn btn-sm btn-primary" ng-click="uploadFile()">Upload File</button>
+              </div>
+            </div>
+          </div>
+          <div ng-controller="EditProjectController">
+            <div class="panel panel-default" ng-show='status == "Ready" || status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Your project's components</h4>
+                <table class="table table-striped table-bordered table-condensed table-responsive">
+                  <tbody>
+                    <tr>
+                      <td>Project Name</td>
+                      <td>{{myproject.projectName}}</td>
+                    </tr>
+                    <tr>
+                      <td>Project ID</td>
+                      <td>{{myproject._id}}</td>
+                    </tr>
+                    <tr>
+                      <td>Creation Time</td>
+                      <td>{{myproject.creationTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Update Time</td>
+                      <td>{{myproject.updateTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Input File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Output File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputFileName}}" target="_blank" type="text/plain">{{myproject.projectOutputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Log File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectLogFileName}}" target="_blank" type="text/plain">{{myproject.projectLogFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Fault File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectFaultFileName}}" target="_blank" type="text/plain">{{myproject.projectFaultFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Stdout</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardOut}}" target="_blank" type="text/plain">{{myproject.projectStandardOut}}</td>
+                    </tr>
+                    <tr>
+                      <td>Stderr</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank" type="text/plain">{{myproject.projectStandardError}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{myproject.status}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="panel panel-default" ng-show='myproject.status == "Ready"'>
+              <div class="panel-body">
+                <h4>Click the button to submit.</h4>
+                <form role="form" ng-submit="submitNonblocking('simplex')">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="panel panel-default" ng-show='myproject.status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Click the button to refresh.</h4>
+                <form role="form" ng-submit="refreshView()">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="refreshSimplex" value="Refresh"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Disloc Tool -->
+    <div class="tab-pane tool-tab-pane inactive" id="disloc">
+      <div class="tool">
+        <div class="tool-title"><b>Disloc</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
+          Upload your Disloc input file
+          <div ng-controller="UploadController">
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <input type="file" file-model="myFile">
+              </div>
+              <div class="col-md-12 form-group">
+                <button class="btn btn-sm btn-primary" ng-click="uploadFile()">Upload File</button>
+              </div>
+            </div>
+          </div>
+          <div ng-controller="EditProjectController">
+            <div class="panel panel-default" ng-show='status == "Ready" || status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Your project's components</h4>
+                <table class="table table-striped table-bordered table-condensed table-responsive">
+                  <tbody>
+                    <tr>
+                      <td>Project Name</td>
+                      <td>{{myproject.projectName}}</td>
+                    </tr>
+                    <tr>
+                      <td>Project ID</td>
+                      <td>{{myproject._id}}</td>
+                    </tr>
+                    <tr>
+                      <td>Creation Time</td>
+                      <td>{{myproject.creationTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Update Time</td>
+                      <td>{{myproject.updateTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Input File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Output File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputFileName}}" target="_blank" type="text/plain">{{myproject.projectOutputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Log File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectLogFileName}}" target="_blank" type="text/plain">{{myproject.projectLogFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Fault File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectFaultFileName}}" target="_blank" type="text/plain">{{myproject.projectFaultFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Stdout</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardOut}}" target="_blank" type="text/plain">{{myproject.projectStandardOut}}</td>
+                    </tr>
+                    <tr>
+                      <td>Stderr</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank" type="text/plain">{{myproject.projectStandardError}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{myproject.status}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="panel panel-default" ng-show='myproject.status == "Ready"'>
+              <div class="panel-body">
+                <h4>Click the button to submit.</h4>
+                <form role="form" ng-submit="submit('disloc')">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="submitDisloc" value="Submit"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="panel panel-default" ng-show='myproject.status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Click the button to refresh.</h4>
+                <form role="form" ng-submit="refreshView()">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="refreshDisloc" value="Refresh"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div class="tab-pane tool-tab-pane inactive" id="about">
       <div class="tool">
         <div class="tool-title"><b>Help</b></div>
@@ -776,6 +988,45 @@ function noImage(image) {
     initialize();
   </script>
 
+  <!-- ========================= QTip Mouseovers =========================-->
+  <script>
+	 //--------------------------------------------------
+	 // These are qtip setups.
+	 //--------------------------------------------------
+
+	 $('#samplingInfoImg').qtip({
+	 content: 'The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters. <p><b>NOTE:</b> most of the source images have a resolution of 1 pixel:6 meters, so sampling below resolution will return interpolated values.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#plotMethodImg').qtip({
+	 content: 'Native method returns actual pixel values at the sampled points.  Averaging retuns the average pixel value for sampled points.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#averagingInfoImg').qtip({
+	 content: 'Sets the number of points used if averaging.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#distanceInfoImg').qtip({
+	 content: 'Sets the distance for the line of sight.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	$('#azimuthInfoImg').qtip({
+		content: 'Sets the azimuth (bearing) angle, measured from due North, of the line of sight.',
+		show: 'mouseover',
+		hide: 'mouseout'
+		});
+  </script>
+
+
+  <!-- ========================= Issue Collectors =========================-->
   <!-- Jira Issue Collector: Subtle-->
 <!--
   <script type="text/javascript" src="https://gateways.atlassian.net/s/16440f2c700db98bbac93b48f79772eb-T/en_US-6pg8zz/64014/46/1.4.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=e035a70e"></script>  
@@ -799,6 +1050,7 @@ function noImage(image) {
 -->
 
   <!-- Custom Jira Issue Collector: Bugs-->
+<!--
     <script type="text/javascript" src="https://gateways.atlassian.net/s/72c1e030cd7054035379885106084621-T/en_US-c1z37q/64014/46/1.4.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=a51b3555"></script>
     <script type="text/javascript">window.ATL_JQ_PAGE_PROPS =  {
 	   "triggerFunction": function(showCollectorDialog) {
@@ -809,6 +1061,6 @@ function noImage(image) {
 		});
 	   }};
     </script>
-    
+-->
 </body>
 </html> 
