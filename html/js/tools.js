@@ -723,7 +723,7 @@ function drawDygraphAjax(image_uid) {
     var format = 'csv';
     var resolution = $('#resolution-value').val();
     console.log("resultion value:", resolution);
-    var method = 'average';
+    var method = 'native';
     var average = '10';
     $.ajax({        
         url:"/los_query",
