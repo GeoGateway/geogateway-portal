@@ -286,6 +286,11 @@ function selectDataset(uid, dataname, heading, radardirection) {
             drawDygraphAjax(uid);
         }
     });
+    //update the plot if markers already exist when change the dataset
+    if (LOS_markers.length > 0 )
+        {
+            drawDygraphAjax(uid);
+        }
     LOS_uid = uid;
 }
 
