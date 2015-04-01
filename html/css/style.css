@@ -19,7 +19,7 @@ a:visited {
     height: 4%;
     padding: 0;
     /* Adds the transparent background */
-    background-color: rgb(0, 0, 50);
+    background-color: rgb(0, 0, 0);
     color: black;
     z-index: 10000;
 }
@@ -29,7 +29,7 @@ a:visited {
     top: 4%;
     width: 100%;
     height: 3px;
-    background-color: rgb(50, 50, 255);
+    background-color: rgb(200, 200, 255);
 }
 
 #logo-nav {
@@ -52,6 +52,178 @@ a:visited {
 
 /*****************************************************************************/
 
+/* INTRO WINDOW */
+.intro-window {
+    position: fixed;
+    top: calc(4% + 3px);
+    width: 100%;
+    height: calc(95% - 3px);
+    z-index: 10000;
+}
+
+.intro-window-welcome {
+    position: fixed;
+    padding: 15px;
+    left: calc(50% - 350px);
+    top: 4%;
+    width: 700px;
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: rgb(235, 235, 255);
+}
+
+.welcome-text {
+    position: fixed;
+    left: calc(50% - 250px);
+    top: calc(4% + 90px);
+    color: black;
+}
+
+.main-logo {
+    margin-left: 150px;
+    width: 300px;
+}
+
+.intro-window-content {
+    position: fixed;
+    left: calc(50% - 500px);
+    width: 1000px;
+    height: calc(95% - 3px);
+    background-color: rgb(245, 245, 255);
+    border-top: none;
+    border-right-style: solid;
+    border-right-width: 5px;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-color: rgb(235, 235, 255);
+    z-index: 10000;
+}
+
+.intro-window-open {
+    position: fixed;
+    top: calc(4% + 3px);
+    left: calc(50% - 50px);
+    width: 100px;
+    height: 23px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 3px solid;
+    border-right: 3px solid;
+    border-bottom: 3px solid;
+    border-color: rgb(200, 200, 200);
+    background-color: rgb(240, 240, 255);
+    text-align: center;
+    cursor: pointer;
+}
+.intro-window-close {
+    position: fixed;
+    bottom: 1%;
+    left: calc(50% - 150px);
+    width: 300px;
+    height: 70px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-left: 3px solid;
+    border-right: 3px solid;
+    border-top: 3px solid;
+    border-color: rgb(210, 210, 255);
+    background-color: rgb(240, 240, 255);
+    padding-top: 5px;
+    text-align: center;
+}
+
+.intro-window-open-glyph {
+
+}
+
+.intro-window-close-glyph {
+    font-size: 20px;
+}
+
+.intro-window-close-button {
+    height: 100%;
+    border: none;
+    background-color: rgb(240, 240, 255);
+    outline: none;
+}
+
+.intro-window-close-sign {
+    margin-bottom: 30px;
+}
+
+.intro-window-about {
+    position: fixed;
+    padding: 0;
+    top: calc(4% + 160px);
+    left: calc(50% - 470px);
+    width: 940px;
+    height: 200px;
+    background-color: rgb(245, 245, 255);
+    border-top-style: solid;
+    border-top-width:3px;
+    border-right-style: solid;
+    border-right-width: 3px;
+    border-left-style: solid;
+    border-left-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 8px;
+    border-color: rgb(235, 235, 255);
+}
+
+.intro-window-news {
+    position: fixed;
+    padding: 0;
+    top: calc(4% + 380px);
+    left: calc(50% - 470px);
+    width: 530px;
+    height: 350px;
+    background-color: rgb(245, 245, 255);
+    border-top-style: solid;
+    border-top-width:3px;
+    border-right-style: solid;
+    border-right-width: 3px;
+    border-left-style: solid;
+    border-left-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 8px;
+    border-color: rgb(235, 235, 255);
+}
+
+.intro-window-feedback {
+    position: fixed;
+    padding: 0;
+    top: calc(4% + 380px);
+    left: calc(50% + 80px);
+    width: 390px;
+    height: 350px;
+    background-color: rgb(245, 245, 255);
+    border-top-style: solid;
+    border-top-width:3px;
+    border-right-style: solid;
+    border-right-width: 3px;
+    border-left-style: solid;
+    border-left-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 8px;
+    border-color: rgb(235, 235, 255);
+}
+
+.intro-window-box-content {
+    padding: 10px;
+}
+
+.intro-window-box-title {
+    width: 100%;
+    background-color: rgb(235, 235, 255);
+    font-size: 25px;
+    padding-left: 15px;
+}
+
+/*****************************************************************************/
+
 /* PROFILE PANEL */
 .profile-panel {
     position: fixed;
@@ -60,7 +232,7 @@ a:visited {
     width: 0px;
     height: 96%;
     padding: 0;
-    background-color: rgb(150, 150, 250);
+    background-color: rgb(240, 240, 250);
     overflow-x: hidden;
     overflow-y: auto;
     color: black;
@@ -98,7 +270,7 @@ a:visited {
     width: 90px;
     height: 110px;
     text-align: center;
-    background-color: rgb(220, 220, 255);
+    background-color: rgb(230, 230, 255);
     border-radius: 5px;
 }
 
@@ -342,9 +514,8 @@ a:visited {
     left: 0;
     width: 450px;
     height: calc(96% - 5px);
-    background-color: rgb(200, 200, 255);
+    background-color: rgb(220, 220, 255);
     color: black;
-    /* Change this to auto if you want the entire tools panel to scroll*/
     overflow-x: visible;
     overflow-y: auto;
     z-index: -100;
@@ -355,7 +526,7 @@ a:visited {
     top: 0.5%;
     height: 3%;
     width: 70px;
-    background-color: rgb(100, 100, 255);
+    background-color: rgb(240, 240, 255);
     border: none;
 }
 
@@ -378,7 +549,7 @@ a:visited {
 .tool {
     padding: 5px;
     margin: 5px;
-    background-color: rgb(200, 200, 255);
+    background-color: rgb(235, 235, 255);
     border-radius: 5px;
 }
 
@@ -397,7 +568,7 @@ a:visited {
 
 .tools-box {
     padding: 5px;
-    background-color: rgb(200, 200, 255);
+    background-color: rgb(245, 245, 255);
     border-radius: 2px;
 }
 
@@ -408,6 +579,7 @@ a:visited {
     margin: 5px;
     padding: 2px;
     width: 80%;
+    background-color: rgb(255, 255, 255);
 }
 
 .moment-magnitude-calc-btn {
@@ -428,7 +600,6 @@ a:visited {
     padding: 5px;
     background-color: rgb(200, 200, 255);
     color: black;
-    border-radius: 
     z-index: -100;
 }
 
@@ -464,22 +635,21 @@ a:visited {
     outline: none;
     border: none;
     border-top-right-radius: 5px;
-    width: 50px;
     font-size: 15px;
     font-weight: 900;
     font-family: Arial, Helvetica, monospace;
-    background-color: rgb(80, 80, 200);
+    background-color: rgb(200, 200, 255);
 }
 
 .tool-tabs > li.active button {
-    background-color: rgb(150, 150, 255);
+    background-color: rgb(230, 230, 255);
 }
 
 .tool-tab-pane {
     padding-top: 1px;
     width: 100%;
     height: calc(95% - 3px);
-    background-color: rgb(150, 150, 255);
+    background-color: rgb(230, 230, 255);
 }
 
 .tool-tab-panel-header {
@@ -498,7 +668,7 @@ a:visited {
     overflow-y: auto;
     overflow-x: none;
     /* Change this to adjust the max space for holding the table lines */
-    max-height: 600px; 
+    max-height: 600px;
 }
 
 .dataset {
@@ -678,7 +848,7 @@ h1.hook {
 }
 
 .default-font { 
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 900;
     font-family: Arial, Helvetica, monospace;
 }
@@ -686,6 +856,11 @@ h1.hook {
 /* default font weight */
 .default-font.large {
     font-size: 15px;
+}
+
+.default-font.huge {
+    text-align: center;
+    font-size: 30px;
 }
 
 .default-font.light {
@@ -697,7 +872,7 @@ h1.hook {
     color: white;
 }
 .default-font.lightBLUE {
-    color: rgb(100, 100, 255);
+    color: rgb(240, 240, 255);
 }
 
 .form-error {
@@ -729,10 +904,19 @@ h1.hook {
     width: calc(100% - 60px);
     height: 1px;
     margin: 0 30px 0 30px;
-    background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(41,137,216,1) 50%, rgba(125,185,232,0) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(30,87,153,0)), color-stop(50%,rgba(41,137,216,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,0) 100%); /* IE10+ */
-    background: linear-gradient(to right,  rgba(30,87,153,0) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,0) 100%); /* W3C */
+    background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(100,137,216,1) 50%, rgba(125,185,232,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(30,87,153,0)), color-stop(50%,rgba(100,137,216,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(100,137,216,1) 50%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(100,137,216,1) 50%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(100,137,216,1) 50%,rgba(125,185,232,0) 100%); /* IE10+ */
+    background: linear-gradient(to right,  rgba(30,87,153,0) 0%,rgba(100,137,216,1) 50%,rgba(125,185,232,0) 100%); /* W3C */
+}
+
+.blur {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    opacity: 0.4;
 }
