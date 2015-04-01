@@ -44,10 +44,12 @@ function setup_UAVSAR() {
         maxZoom: 17,
         name: "Geoserver",
         tileSize: new google.maps.Size(256, 256),
+        opacity:0.6,
         credit: 'Image Credit: QuakeSim'
     };
 
     //Creating the object to create the ImageMapType that will call the WMS Layer Options. 
+    //setOpacity method
     wmsgf9 = new google.maps.ImageMapType(wmsOptions3);
 
     //Controling the Layers that appear in Map A.  You can set certain maps to appear in Map A or in Map B.  In this example they appear in both maps.
