@@ -971,3 +971,19 @@ $(document).ready(function() {
     });
 });
 
+
+//--------------------------------------------------
+// This function fades and restores the SAR image
+//--------------------------------------------------
+$(document).ready(function(){
+$(".faderButton").click(function() {
+//updated the source to usercontent
+//$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
+$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
+});
+
+$(".resetButton").click(function() {
+//$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
+$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
+});
+});
