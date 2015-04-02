@@ -318,8 +318,9 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
     $scope.uploadFileForKml=function(){
         var file=$scope.myFile;
         var uploadUrl="/doUpload/anonymousKmlUser/anonymousKmlProject";
+        var randInt=Math.floor(Math.random()*100000000);
         UploadService.uploadFileToUrl2(file,uploadUrl);
-        $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/anonymousKmlProject/"+file.name;
+        $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/anonymousKmlProject-"+randInt+"/"+file.name;
         document.getElementById("kmlUrl").value=$scope.kmlUrl;
     }
 
