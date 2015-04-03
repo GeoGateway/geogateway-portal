@@ -1,6 +1,6 @@
 var config={};
 
-config.home="/home/pwon111/Documents/repos/geogateway/";
+config.home="/Users/mpierce/GeoGateway/";
 config.bin=config.home+"/bin/";
 config.baseDestDir="html/userUploads/";
 
