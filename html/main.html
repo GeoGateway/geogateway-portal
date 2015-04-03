@@ -359,6 +359,48 @@ function getColleagues() {
     });
 };
 
+/////////////////////////// INTRO WINDOW RELATED /////////////////////////
+
+// script for the opening and closing animation for the intro window
+$(document).ready(function() {
+    $('.intro-window-close').click(function() {
+        if($('.intro-window').hasClass('open')) {
+            $('.intro-window').removeClass('open').addClass('closed');
+            $('.intro-window-close').hide(0);
+            $('.intro-window-feedback').hide(0);
+            $('.intro-window-news').hide(0);
+            $('.intro-window-about').hide(0);
+            $('.intro-window-welcome').hide(0);
+            $('.main-logo').hide(0);
+            $('.welcome-text').hide(0);
+            // $('.intro-window-content').animate({height: "0px"}, 500);
+            // $('.intro-window').animate({height: "0px"}, 500);
+            $('.intro-window-content').slideUp(500);
+            $('.intro-window').slideUp(500);
+            $('#map-canvas').removeClass('blur');
+            $('.tools-panel').removeClass('blur');
+        }
+    });
+    $('.intro-window-open').click(function() {
+        if($('.intro-window').hasClass('closed')) {
+            $('.intro-window').removeClass('closed').addClass('open');
+            // $('.intro-window').animate({height: "calc(95% - 3px)"}, 500);
+            // $('.intro-window-content').animate({height: "calc(95% - 3px)"}, 500);
+            $('.intro-window').slideDown(500);
+            $('.intro-window-content').slideDown(500);
+            $('.intro-window-close').show(0);
+            $('.intro-window-feedback').show(0);
+            $('.intro-window-news').show(0);
+            $('.intro-window-about').show(0);
+            $('.intro-window-welcome').show(0);
+            $('.main-logo').show(0);
+            $('.welcome-text').show(0);
+            $('#map-canvas').addClass('blur');
+            $('.tools-panel').addClass('blur');
+        }
+    });
+});
+
 //////////////////////////////// SETTINGS ////////////////////////////////
 
 // script for editting SETTINGS
@@ -422,13 +464,13 @@ function noImage(image) {
 </head>
 
 <body>
-  <div id="map-canvas"></div>
+  <div class="blur" id="map-canvas"></div>
   <div id="info-bar"></div>
   
   <!-- navbar block -->
   <!-- geogateway site navigation bar -->
   <div class="navigation">
-    <img id="logo-nav" src="/images/logos/logo.png" alt="GeoGateway Logo" onclick="window.location='/'">
+    <img id="logo-nav" src="/images/logos/logo.png" alt="GeoGateway Logo">
     <span class="default-font lightBLUE"> Tools for Analysis, Modeling, and Response of Geodetic Imaging Products</span>
     
     <!-- set up tools panel and profile panel toggle -->
@@ -439,6 +481,45 @@ function noImage(image) {
   </div>
   
   <div class="navigation-shadow"></div>
+
+    <div class="intro-window-open">
+        <span class="glyphicon glyphicon-chevron-down intro-window-open-glyph"> </span>
+    </div>
+    <div class="intro-window open">
+        <div class="intro-window-content">
+            <div class="intro-window-welcome">
+                <div class="welcome-text default-font huge">Welcome to</div>
+                <img class="main-logo" src="images/logos/logo_black.png" alt="GeoGateway Logo">
+            </div>
+            <div class="intro-window-about default-font large">
+                <div class="intro-window-box-title">About</div>
+                <div class="intro-window-box-content">
+                    GeoGateway is a data product search and analysis gateway for scientific discovery, field use, and disaster response. GeoGateway focuses on NASA geodetic imaging products from InSAR and GPS integrated with earthquake faults datasets, seismicity, and models.
+                    Read more...
+                </div>
+            </div>
+            <div class="intro-window-news default-font large">
+                <div class="intro-window-box-title">News</div>
+                <div class="intro-window-box-content">
+                    Front news item - we need to keep this fresh so updating needs to be easy
+                    More news...
+                </div>
+            </div>
+            <div class="intro-window-feedback default-font large">
+                <div class="intro-window-box-title">Feedback</div>
+                <div class="intro-window-box-content">
+                    <p>Feed for interface updates</p>
+                    <p>Feed for new products</p>
+                </div>
+            </div>
+            <div class="intro-window-close">
+                <button class="intro-window-close-button">
+                   <span class="glyphicon glyphicon-chevron-up intro-window-close-glyph"> </span>
+                    <span class="default-font huge intro-window-close-sign">&nbsp;Access Tools</span>
+                </button>
+            </div>
+        </div>
+    </div>
   
   <!-- profile block -->
   <!-- Disabled for now
@@ -548,7 +629,7 @@ function noImage(image) {
   
   <!-- tools block -->
   
-  <div class="tools-panel open">
+  <div class="tools-panel blur open">
     <ul type="none" class="tool-tabs">
       <li class="active">
         <button class="tab-button tool-tab-button" value="tools">
