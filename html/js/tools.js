@@ -553,6 +553,7 @@ function uavsarquery(querystr) {
             {
                 $('.panel-close-button').removeClass('inactive').addClass('active');
                 $('#uavsar').removeClass('inactive').addClass('active');
+                $('#FadeDisplay').show();
             }
             // else clear #uavsar
             else
@@ -658,6 +659,7 @@ function closeDataPanel() {
     $('#UAVSAR-heading').empty();
     $('#UAVSAR-markers').empty();
     $('#UAVSAR-formFields').hide();
+    $('#FadeDisplay').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
     deleteAllKml();
     clear_UAVSAR();
