@@ -663,6 +663,11 @@ function noImage(image) {
         <div class="tool-content">
           <div>
             <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/><span class="default-font">&nbsp;UAVSAR</span>
+            <div id="uavsar-instructions" style="display:none">
+                Use drawing tool on the map to select the region of interests.  
+                <br/>You can also search by flight name or flight path:
+                <input type="text" name="searchString" id="search-string-value" size="20" value="" onchange="sarselect.showSearchResults('dynatable')">
+             </div>
 
             <button class="panel-close-button inactive">X</button>
             <div id="UAVSAR-geometry"></div>

@@ -661,6 +661,7 @@ function closeDataPanel() {
     $('#UAVSAR-formFields').hide();
     $('#FadeDisplay').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
+    $('#uavsar-instructions').hide();
     deleteAllKml();
     clear_UAVSAR();
 }
@@ -940,6 +941,7 @@ $(document).ready(function() {
             case 'uavsar':
                 if(checked) {
                     draw_UAVSAR();
+                    $('#uavsar-instructions').show();
                 }
                 else {
                     closeDataPanel();
