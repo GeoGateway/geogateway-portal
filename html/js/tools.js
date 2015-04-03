@@ -44,10 +44,12 @@ function setup_UAVSAR() {
         maxZoom: 17,
         name: "Geoserver",
         tileSize: new google.maps.Size(256, 256),
+        opacity:0.6,
         credit: 'Image Credit: QuakeSim'
     };
 
     //Creating the object to create the ImageMapType that will call the WMS Layer Options. 
+    //setOpacity method
     wmsgf9 = new google.maps.ImageMapType(wmsOptions3);
 
     //Controling the Layers that appear in Map A.  You can set certain maps to appear in Map A or in Map B.  In this example they appear in both maps.
@@ -284,6 +286,11 @@ function selectDataset(uid, dataname, heading, radardirection) {
             drawDygraphAjax(uid);
         }
     });
+    //update the plot if markers already exist when change the dataset
+    if (LOS_markers.length > 0 )
+        {
+            drawDygraphAjax(uid);
+        }
     LOS_uid = uid;
 }
 
@@ -964,3 +971,19 @@ $(document).ready(function() {
     });
 });
 
+
+//--------------------------------------------------
+// This function fades and restores the SAR image
+//--------------------------------------------------
+$(document).ready(function(){
+$(".faderButton").click(function() {
+//updated the source to usercontent
+//$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
+$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
+});
+
+$(".resetButton").click(function() {
+//$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
+$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
+});
+});
