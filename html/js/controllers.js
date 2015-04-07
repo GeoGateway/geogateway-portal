@@ -241,6 +241,41 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //});
         
     });
+
+    //This runs the blocking version of the executable wrapper
+    $scope.submitdisloc=function(appName){
+        console.log("appName:"+appName);
+        //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
+        //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
+        //Note status is completed because we made a blocking call.
+        $rootScope.globals.currentProject.status="Completed";
+        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
+        $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
+        $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
+        $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+        $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+        $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        $rootScope.globals.currentProject.projectOutputKMLFileName=$rootScope.globals.currentProject.projectName+".kml";
+        console.log($rootScope.globals.currentProject.projectOutputKMLFileName);
+        //Put the updated project in the DB.
+        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+            success(function(data, status) { 
+            }).
+            error(function(data){
+                console.log("Couldn't update the db");
+            });
+        
+        $http.get('/execute/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+            success(function(data){
+                console.log("Successful exec:"+JSON.stringify(data));
+                $scope.myproject=$rootScope.globals.currentProject;
+            }).
+            error(function(data){
+                console.error("Unsuccessful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Failed";
+                $scope.myproject=$rootScope.globals.currentProject;
+            });
+    }
     
     //This runs the blocking version of the executable wrapper
     $scope.submit=function(appName){

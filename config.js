@@ -1,6 +1,6 @@
 var config={};
 
-config.home="/Users/mpierce/GeoGateway/";
+config.home="/home/webgisdeveloper/Bitbucket/geogateway/";
 config.bin=config.home+"/bin/";
 config.baseDestDir="html/userUploads/";
 

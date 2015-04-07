@@ -1013,6 +1013,10 @@ function noImage(image) {
                       <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank" type="text/plain">{{myproject.projectStandardError}}</a></td>
                     </tr>
                     <tr>
+                      <td>Output KML</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputKMLFileName}}" target="_blank" type="text/plain">{{myproject.myproject.projectOutputKMLFileName}}</a></td>
+                    </tr>
+                    <tr>
                       <td>Status</td>
                       <td>{{myproject.status}}</td>
                     </tr>
@@ -1024,7 +1028,7 @@ function noImage(image) {
             <div class="panel panel-default" ng-show='myproject.status == "Ready"'>
               <div class="panel-body">
                 <h4>Click the button to submit.</h4>
-                <form role="form" ng-submit="submit('disloc')">
+                <form role="form" ng-submit="submitdisloc('disloc')">
                   <div class="form-group">
                     <input class="btn btn-sm btn-primary" type="submit" id="submitDisloc" value="Submit"/>
                   </div>
