@@ -26,7 +26,7 @@ def loaddislocouput(dislocoutput):
             header_line = i
             break 
 
-    print header_line
+    #print header_line
     headers = lines[:header_line]
     # first line, 161  161  38.220001  -122.313004
     first_line = headers[0].split()[:4]

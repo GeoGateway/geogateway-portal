@@ -203,7 +203,7 @@ app.post('doUpload2', function(req,res){
 //things in the project's bin directory, but we need to watch for semicolons.
 app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 	 collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
-		  var theExec=projectBinDir+req.params.exec+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+		var theExec=projectBinDir+req.params.exec+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
         //console.log("Execution path:"+theExec);
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
         //console.log("baseWorkDirPath:"+baseWorkDirPath);
@@ -220,6 +220,30 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 				}
 		  });
 	 });
+});
+
+//Runs the given executable in blocking (exec) mode.  This assumes that the project has 
+//been correctly created, with input and output files specfiied.  It will only execute
+//things in the project's bin directory, but we need to watch for semicolons.
+app.get('/execute_disloc2kml/:exec/:collection/:documentId', function (req,res) {
+     collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+        var theExec=projectBinDir+req.params.exec+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
+        //console.log("Execution path: "+theExec);th);
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        //console.log("baseWorkDirPath:"+baseWorkDirPath);
+          exec(theExec, {"cwd":baseWorkDirPath},function(error, stdout, stderr){
+                if(error) {
+                     console.error(error.stack);
+                     res.status(400).send(error)
+                }
+                else {
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
+                    res.set('Content-Type','application/json');
+                res.sendStatus(200);
+                }
+          });
+     });
 });
 
 //Runs provided executable in non-blocking (spawn) mode. Should only run things project's
