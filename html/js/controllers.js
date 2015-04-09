@@ -266,27 +266,16 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 console.log("Couldn't update the db");
             });
         
-        $http.get('/execute/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+        $http.get('/execute_disloc/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
                 $scope.myproject=$rootScope.globals.currentProject;
-            // wait until disloc fully executed
-            $http.get('/execute_disloc2kml/'+'disloc2kml'+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
-                success(function(data){
-                    console.log("Successful exec:"+JSON.stringify(data));
-                    $scope.myproject=$rootScope.globals.currentProject;
-                }).
-                error(function(data){
-                    console.error("Unsuccessful exec:"+JSON.stringify(data));
-                    $rootScope.globals.currentProject.status="Failed";
-                    $scope.myproject=$rootScope.globals.currentProject;
-                });
-                }).
-                error(function(data){
-                    console.error("Unsuccessful exec:"+JSON.stringify(data));
-                    $rootScope.globals.currentProject.status="Failed";
-                    $scope.myproject=$rootScope.globals.currentProject;
-                });
+            }).
+            error(function(data){
+                console.error("Unsuccessful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Failed";
+                $scope.myproject=$rootScope.globals.currentProject;
+            });
 
     }
     

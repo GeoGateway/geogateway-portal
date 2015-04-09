@@ -11,6 +11,8 @@ var bodyParser=require('body-parser');
 var http=require('http');
 var exec=require('child_process').exec;
 var spawn=require('child_process').spawn;
+// need install sync-exec module
+var syncExec = require('sync-exec');
 var path=require('path');
 var fs=require('fs');
 var multiparty=require('multiparty');  //Form multipart form uploads.
@@ -225,24 +227,37 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 //Runs the given executable in blocking (exec) mode.  This assumes that the project has 
 //been correctly created, with input and output files specfiied.  It will only execute
 //things in the project's bin directory, but we need to watch for semicolons.
-app.get('/execute_disloc2kml/:exec/:collection/:documentId', function (req,res) {
+app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
      collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
-        var theExec=projectBinDir+req.params.exec+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
-        //console.log("Execution path: "+theExec);th);
+        //var theExec=projectBinDir+req.params.exec+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
+        var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+        //console.log("Execution path: "+theExec);
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
         //console.log("baseWorkDirPath:"+baseWorkDirPath);
-          exec(theExec, {"cwd":baseWorkDirPath},function(error, stdout, stderr){
-                if(error) {
-                     console.error(error.stack);
-                     res.status(400).send(error)
-                }
-                else {
-                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
-                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
-                    res.set('Content-Type','application/json');
-                res.sendStatus(200);
-                }
-          });
+        // output {stdout: '1\n', stderr: '', status: 0}
+        var execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+  
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+ 
+        theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
+
+        console.log("Execution path: "+theExec);
+
+        execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+
+        // after every command is successfully executed
+        fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,execResult.stdout);
+        fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,execResult.stderr);
+        res.set('Content-Type','application/json');
+        res.sendStatus(200);
+
      });
 });
 
