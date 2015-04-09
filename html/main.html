@@ -633,25 +633,26 @@ function noImage(image) {
     <ul type="none" class="tool-tabs">
       <li class="active">
         <button class="tab-button tool-tab-button" value="tools">
-          <span class="glyphicon glyphicon-wrench"> </span>
-          Tools
+          UAVSAR
         </button>
       </li>
       <li>
         <button class="tab-button tool-tab-button" value="disloc">
-          <span class="glyphicon glyphicon-cog"> </span>
           Disloc
         </button>
       </li>
       <li>
         <button class="tab-button tool-tab-button" value="simplex">
-          <span class="glyphicon glyphicon-tasks"> </span>
           Simplex
         </button>
       </li>
       <li>
+        <button class="tab-button tool-tab-button" value="kmlmapper">
+          KML Mapper
+        </button>
+      </li>
+      <li>
         <button class="tab-button tool-tab-button" value="about">
-          <span class="glyphicon glyphicon-question-sign"> </span>
           Help
         </button>
       </li>
@@ -852,6 +853,32 @@ function noImage(image) {
       </div>
     </div>
     
+    <!-- KML Mapper -->
+    <div class="tab-pane tool-tab-pane inactive" id="kmlmapper">
+      <div class="tool">
+        <div class="tool-title"><b>KML Mapper</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
+          (Optional) Upload from your local file system or else cut and paste URL below:
+          <div ng-controller="UploadController">
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <input type="file" file-model="myFile">
+              </div>
+              <div class="col-md-12 form-group">
+                <button class="btn btn-sm btn-primary" ng-click="uploadFileForKml()">Upload File</button>
+              </div> 
+            </div>
+          <p>
+            KML URL:
+            <br>
+            <input type="text" size="50" id="kmlUrl"/>
+            <button type="button" ng-click="addKmlLayer()">Plot</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
     <!-- Simplex Tool -->
     <div class="tab-pane tool-tab-pane inactive" id="simplex">
       <div class="tool">
