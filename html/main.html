@@ -760,6 +760,11 @@ function noImage(image) {
 						</td>
 						-->
 					 </tr>
+                <tr>
+                  <td>
+                    <div id="LOS-Data-Download"/>
+                  </td>
+                </tr>
 				  </table>
               
             </div>
@@ -872,7 +877,7 @@ function noImage(image) {
           <p>
             KML URL:
             <br>
-            <input type="text" size="50" id="kmlUrl"/>
+            <input type="text" size="50" id="kmlMapperUrl"/>
             <button type="button" onclick="addKmlLayer()">Plot</button>
           </div>
         </div>
@@ -1026,10 +1031,6 @@ function noImage(image) {
                     <tr>
                       <td>Log File</td>
                       <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectLogFileName}}" target="_blank" type="text/plain">{{myproject.projectLogFileName}}</a></td>
-                    </tr>
-                    <tr>
-                      <td>Fault File</td>
-                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectFaultFileName}}" target="_blank" type="text/plain">{{myproject.projectFaultFileName}}</a></td>
                     </tr>
                     <tr>
                       <td>Stdout</td>
