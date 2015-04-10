@@ -244,7 +244,18 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
  
         theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
 
-        console.log("Execution path: "+theExec);
+        //console.log("Execution path: "+theExec);
+
+        execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+
+        // run SARImage with the default parameter
+        theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+"  60 0 1.26 " + '""';
+        
+        //console.log("Execution path: "+theExec);
 
         execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
         if (execResult.status == 1) {
