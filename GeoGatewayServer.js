@@ -426,6 +426,15 @@ app.get('/execute/spawn-test', function(req, res) {
 */
 //The jQuery .get() sends the request parameters as a query ("?"), so we need to extract the 
 //value of the query from the request object.
+app.get('/uavsar_flight_search/',function(req,res) {
+    //TODO: need to do a better job of constructing this URL
+    var queryStr=req.query.searchstring;
+    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?searchstring=';
+    restClient.get(geoServerUrl+queryStr, function(data, response){
+        res.status(200).send(data);
+    });
+});
+        
 app.get('/uavsar_query/',function(req,res){
 //    console.log("Query: ",req.query);
     var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
