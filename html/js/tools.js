@@ -103,13 +103,13 @@ function setup_UAVSAR() {
         UAVSARDrawingManager.setDrawingMode(null);
         var x = document.getElementById('UAVSAR-geometry');
         if (e.type == "marker")
-            {x.innerHTML = "Point: " + e.overlay.getPosition()};
+        {x.innerHTML = "Point: " + e.overlay.getPosition();};
         if (e.type == "polyline")
             {x.innerHTML = "Line: " + e.overlay.getPath().getArray();};
         if (e.type == "polygon")
             {x.innerHTML = "Polygon: " + e.overlay.getPath().getArray();};
         if (e.type == "rectangle")
-            {x.innerHTML = "Rectangle: " + e.overlay.getBounds();};
+            {x.innerHTML = "Rectangle:" + e.overlay.getBounds();};
     
         // call uavsar query
         //console.log(x.innerHTML);
@@ -248,6 +248,8 @@ function selectDataset(uid, dataname, heading, radardirection) {
     var x=document.getElementById('UAVSAR-heading');
     x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
+
+    $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a>');
     
     //Turn off the radio buttons
 //    console.log(uid,dataname);
@@ -477,6 +479,7 @@ function displaySelectedImages(datasets,masterMap) {
     wmsgf9_samples = {};
     // clear uavsar dataset overlays
     mapA.overlayMapTypes.setAt(0, null);
+
     for (var index1 in datasets) {
         var uid_str = "'" + datasets[index1]['uid'] + "'";
         var dataname_str = "'" +datasets[index1]['dataname'] + "'";
