@@ -316,7 +316,7 @@ def lineofsight (ele,azi,radarWL,disO,url):
     #writer.writerows(datatable)
     #del writer
 
-    outputname = os.path.basename(disO)
+    outputname = os.path.basename(disO) + ".insar"
 
     drawimage(datatable,gridsize, outputname, url, params,colortable = True)
 
