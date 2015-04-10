@@ -257,6 +257,9 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
         //output file name for kml plotting
         $rootScope.globals.currentProject.projectOutputKMLFileName=$rootScope.globals.currentProject.projectName+".out.kml";
+        //output file name for SARImage plotting
+        $rootScope.globals.currentProject.projectOutputSARImageKMLFileName=$rootScope.globals.currentProject.projectName+".out.insar.kml";
+
         
         //Put the updated project in the DB.
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
