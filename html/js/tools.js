@@ -488,7 +488,7 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable='<div style="word-wrap:break-word;">';
         dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
         dynatable+='<tr>'; //Create row in embedded table
-        dynatable+='<th colspan="2">'+dataname_str+'</th>'; //Add header to table row
+        dynatable+='<th colspan="2">'+datasets[index1]['dataname']+'</th>'; //Add header to table row
         dynatable+='</tr>'; //Close embedded table's header row
         dynatable+='<tr>'; //Start second embedded table row
         dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
@@ -738,6 +738,8 @@ function closeDataPanel() {
     $('#FadeDisplay').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
     $('#uavsar-instructions').hide();
+    $('#QuakeTables-Link').hide();
+    $('#search-string-value').val("");
     deleteAllKml();
     clear_UAVSAR();
 }
