@@ -729,7 +729,6 @@ function updateMarkerFormFields() {
     setDistance();
 }
 
-
 function drawDygraphAjax(image_uid) {
 //    console.log("drawDygraphAjax called");
     if($('.extra-tools-panel').hasClass('inactive'))
@@ -743,9 +742,12 @@ function drawDygraphAjax(image_uid) {
     var lng2 = LOS_markers[1].getPosition().lng();
     var format = 'csv';
     var resolution = $('#resolution-value').val();
-    console.log("resultion value:", resolution);
     var method = 'native';
     var average = '10';
+    var downloadUrl="/los_query?image_uid="+image_uid+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average;
+    $("#LOS-Data-Download").html("<a href='"+downloadUrl+"' target='_blank'><b>Download LOS Data</b></a>");
+    
+
     $.ajax({        
         url:"/los_query",
         beforeSend:function() {if(dygraph1) {dygraph1.destroy(); };
@@ -762,7 +764,7 @@ function drawDygraphAjax(image_uid) {
             'method': method,
             'average': average
         },
-        async: true
+        async: false
     })
         .done(function(csv) {
             var csv2=csv.split("\n");

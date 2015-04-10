@@ -358,7 +358,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         var uploadUrl="/doUpload/anonymousKmlUser/"+projectName;
         UploadService.uploadFileToUrl2(file,uploadUrl);
         $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+file.name;
-        document.getElementById("kmlUrl").value=$scope.kmlUrl;
+        document.getElementById("kmlMapperUrl").value=$scope.kmlUrl;
     }
 
     //This version is integrated with Disloc/Simplex submission
