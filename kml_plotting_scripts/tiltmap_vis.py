@@ -244,7 +244,11 @@ def main():
     args = parser.parse_args()
     
     tiltmap_csv = args.tiltoutput
+
     nameprefix = tiltmap_csv
+    # get rid of csv
+    if nameprefix[-4:]==".csv":
+        nameprefix = tiltmap_csv[:-4]
 
     tiltmap_product(tiltmap_csv,nameprefix)
 
