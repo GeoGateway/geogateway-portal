@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 """
 tiltmap_vis.py
@@ -6,7 +7,8 @@ tiltmap_vis.py
 
 """
 
-import sys, string
+import sys, string, os
+import argparse # new parser module
 import zipfile
 
 try:
@@ -166,7 +168,7 @@ def generate_kml(kmlname,kmltemplate,imagelist):
     kmz =kmlname + ".kmz"
     with zipfile.ZipFile(kmz,'w',zipfile.ZIP_DEFLATED) as myzip:
         myzip.write(kml)
-        myzip.write("E-DECIDER_logo.png")
+        #myzip.write("E-DECIDER_logo.png")
         myzip.write(imagename)
         myzip.write(legendname)
         if extra_image:
@@ -194,29 +196,30 @@ def tiltmap_product(tiltoutput, nameprefix):
     # generate strainmag.kml
     kmlout = nameprefix + "_strainMag"
     kmltem = "strainmag_template.kml"
+    kmltem = os.path.dirname(os.path.realpath(__file__)) + os.path.sep + kmltem
     imagelist = [{"name":imname,"range":image_plot_range}]
     generate_kml(kmlout,kmltem,imagelist)
 
-    # slope plot
-    slopePercent = data['slopePercnt']
-    imname = nameprefix +'_slopePercent'
-    plot_image(slopePercent, imname, 'Slope Percent\n 100% = 45 degrees',imdim)
+    # # slope plot
+    # slopePercent = data['slopePercnt']
+    # imname = nameprefix +'_slopePercent'
+    # plot_image(slopePercent, imname, 'Slope Percent\n 100% = 45 degrees',imdim)
 
-    # arrow plot
-    # anglevector = {{lon[[#]], lat[[#]]}, {Cos[(90 - dnslope[[#]]) Degree], Sin[(90 - dnslope[[#]]) Degree]}} & /@ Range[Length[newslope]];
-    # update slopeangle to rad
-    slopeangle = np.radians(90.0 - data['dnSlopeAngle'])
-    U = np.cos(slopeangle)
-    V = np.sin(slopeangle)
-    imname_arrow = nameprefix + "_slopeAngle"
-    arrow_plot_range = plot_arrow([X,Y,U,V],imname_arrow,imdim)
+    # # arrow plot
+    # # anglevector = {{lon[[#]], lat[[#]]}, {Cos[(90 - dnslope[[#]]) Degree], Sin[(90 - dnslope[[#]]) Degree]}} & /@ Range[Length[newslope]];
+    # # update slopeangle to rad
+    # slopeangle = np.radians(90.0 - data['dnSlopeAngle'])
+    # U = np.cos(slopeangle)
+    # V = np.sin(slopeangle)
+    # imname_arrow = nameprefix + "_slopeAngle"
+    # arrow_plot_range = plot_arrow([X,Y,U,V],imname_arrow,imdim)
 
-    # generate slope.kml
-    kmlout = nameprefix + "_slope"
-    kmltem = "slope_template.kml"
-    imagelist = [{"name":imname,"range":image_plot_range}, {"name":imname_arrow,"range":arrow_plot_range}]
-    generate_kml(kmlout,kmltem,imagelist)
- 
+    # # generate slope.kml
+    # kmlout = nameprefix + "_slope"
+    # kmltem = "slope_template.kml"
+    # kmltem = os.path.dirname(os.path.realpath(__file__)) + os.path.sep + kmltem
+    # imagelist = [{"name":imname,"range":image_plot_range}, {"name":imname_arrow,"range":arrow_plot_range}]
+    # generate_kml(kmlout,kmltem,imagelist)
  
 
 def debug():
@@ -226,5 +229,25 @@ def debug():
     nameprefix = "usc000m1w9_Scenario_1"
     tiltmap_product(tiltmap_csv,nameprefix)
 
+def main():
+
+    if len(sys.argv) < 2:
+        print __doc__
+        sys.exit()
+
+    # sample:
+    # python updatemeta.py -f ann -d meta311/insar_311.sqlite -g thumbnail/boundary.geojson
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--tiltoutput", help="tiltoutput in CSV format", default = "")
+    #parser.add_argument("-r", "--JPL", help="jpl folder name, use 'infile' for multiple paths", default="")
+    
+    args = parser.parse_args()
+    
+    tiltmap_csv = args.tiltoutput
+    nameprefix = tiltmap_csv
+
+    tiltmap_product(tiltmap_csv,nameprefix)
+
+
 if __name__ == '__main__':
-    debug()
+    main()
