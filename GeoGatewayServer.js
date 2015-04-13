@@ -263,6 +263,18 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
             res.status(400).send(error);
         }
 
+        // run tilemap code
+        // run SARImage with the default parameter
+        theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
+        
+        //console.log("Execution path: "+theExec);
+
+        execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+
         // after every command is successfully executed
         fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,execResult.stdout);
         fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,execResult.stderr);
