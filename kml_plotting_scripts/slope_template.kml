@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+	<Folder>
+		<name>E-DECIDER TiltMap Products</name>
+		<description><![CDATA[More infromations on <a href="http://E-DECIDER.org">E-DECIDER products page</a>]]></description>
+		<!--
+		<Placemark>
+			<name>M7.7 Pakistan Epicenter</name>
+			<description>26.971°N 65.520°E depth=15.0km (9.3mi)</description>
+			<Style>
+				<IconStyle>
+					<scale>1.0</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/shapes/earthquake.png</href>
+					</Icon>
+					<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+				</IconStyle>
+			</Style>	
+			<Point>
+				<coordinates>65.520,26.971</coordinates>
+			</Point>
+		</Placemark>
+		-->
+		<GroundOverlay>
+			<name>Slope Percentage</name>
+			<description>E-DECIDER tiltmap product</description>
+			<color>bbffffff</color>
+			<Icon>
+				<href>%s</href>
+				<viewBoundScale>0.75</viewBoundScale>
+			</Icon>
+			<LatLonBox>
+				%s
+			</LatLonBox>
+		</GroundOverlay>
+		<GroundOverlay>
+			<name>Slope Angle</name>
+			<description>E-DECIDER tiltmap product</description>
+			<color>ffffffff</color>
+			<Icon>
+				<href>%s</href>
+				<viewBoundScale>0.75</viewBoundScale>
+			</Icon>
+			<LatLonBox>
+				%s
+			</LatLonBox>
+		</GroundOverlay>
+        <ScreenOverlay>
+          <name>Legend</name>
+          <visibility>1</visibility>
+          <Icon>
+            <href>%s</href>
+          </Icon>
+          <overlayXY x="0.98" y="0.2" xunits="fraction" yunits="fraction"/>
+          <screenXY x="0.98" y="0.2" xunits="fraction" yunits="fraction"/>
+          <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+          <size x="0" y="0" xunits="fraction" yunits="fraction"/>
+        </ScreenOverlay>
+        <ScreenOverlay>
+          <name>E-DECIDER Logo</name>
+          <visibility>1</visibility>
+          <Icon>
+            <href>E-DECIDER_logo.png</href>
+          </Icon>
+          <overlayXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
+          <screenXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
+          <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+          <size x="0" y="0" xunits="fraction" yunits="fraction"/>
+        </ScreenOverlay>
+	</Folder>
+</kml>
