@@ -141,6 +141,7 @@ function draw_marker(lat, lng, color) {
     var marker = new google.maps.Marker({
         position: myLatlng,
         map: mapA,
+        visible: true,
         title: LOS_markers.length.toString(),
         draggable: true,
         icon: icon
@@ -283,7 +284,9 @@ function selectDataset(uid, dataname, heading, radardirection) {
     UAVSARDrawingManager.setMap(null);
     deleteAllShape();
 
-    google.maps.event.addListener(wmsgf9_select[0], 'click', function(kmlEvent) {
+//    google.maps.event.addListener(wmsgf9_select[0], 'click', function(kmlEvent) {
+    google.maps.event.addListener(mapA, 'click', function(kmlEvent) {
+        console.log("Map click event");
         if(LOS_markers.length == 0)
         {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng(), 'blue');
@@ -583,6 +586,7 @@ function viewDataset(uid, dataname, show)
                 url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kml',
                 suppressInfoWindows: true,
                 preserveViewport: true,
+                clickable: false
             });
             wmsgf9_samples[uid] = [wmsgf9_temp, true, false];
         }

@@ -295,6 +295,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
         $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
         $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        $rootScope.globals.currentProject.appName=appName;
+
         //Put the updated project in the DB.
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
             success(function(data, status) { 
