@@ -663,6 +663,85 @@ function noImage(image) {
         <div class="divider"></div>
         <div class="tool-content">
           <div>
+            <input class="tools-checkbox" type="checkbox" name="active-tools" value="moment_magnitude_calc"/><span class="default-font">&nbsp;Moment Magnitude Calculator</span>
+            <div class="tools-box inactive" id="moment-magnitude-calc">
+              <table>
+                <tr>
+                  <td>
+                    <span class="default-font">Length:&nbsp;</span>
+                  </td>
+                  <td>
+                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="length" value="249"/></td>
+                  <td>
+                    <span class="default-font">&nbsp;km</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="default-font">Width:&nbsp;</span>
+                  </td>
+                  <td>
+                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="width" value="120.0"/>
+                  </td>
+                  <td>
+                    <span class="default-font">&nbsp;km</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="default-font">Slip:&nbsp;</span>
+                  </td>
+                  <td>
+                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="slip" value="23"/>
+                  </td>
+                  <td>
+                    <span class="default-font">&nbsp;m</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="default-font">Shear Modulus:&nbsp;</span>
+                  </td>
+                  <td>
+                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="shear-modulus" value="3"/>
+                  </td>
+                  <td>
+                    <span class="default-font">&nbsp;10^11 dyne/cm^2</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <button class="moment-magnitude-calc-btn">
+                      <span class="default-font">Calculate</span>
+                    </button>
+                  </td>
+                  <td></td>
+                </tr>
+              </table>
+              <table>
+                <tr>
+                  <td>
+                    <span class="default-font">Seismic Moment:&nbsp;</span>
+                  </td>
+                  <td class="moment-magnitude-calc-result" id="seismic">
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b><span class="default-font">Moment Magnitude:&nbsp;</span></b>
+                  </td>
+                  <td class="moment-magnitude-calc-result" id="moment">
+                    
+                  </td>
+                </tr>
+              </table>
+              <span class="small-note">Default values are approximate for 2011 M 9.0 Tohoku-Oki earthquake</span>
+            </div>
+          </div>
+          <p/>
+          <div>
             <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/><span class="default-font">&nbsp;UAVSAR</span>
             <div id="uavsar-instructions" style="display:none">
                 Use drawing tool on the map to select the region of interests.  
@@ -766,8 +845,7 @@ function noImage(image) {
                     <div id="LOS-Data-Download"/>
                   </td>
                 </tr>
-				  </table>
-              
+				  </table>              
             </div>
               <div id="uavsar" class="inactive">
                 <div class="tool-content" id="data-panel">
@@ -776,84 +854,6 @@ function noImage(image) {
           </div>
           <div>
             <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;UCERF3 Faults</span>
-          </div>
-          <div>
-            <input class="tools-checkbox" type="checkbox" name="active-tools" value="moment_magnitude_calc"/><span class="default-font">&nbsp;Moment Magnitude Calculator</span>
-            <div class="tools-box inactive" id="moment-magnitude-calc">
-              <table>
-                <tr>
-                  <td>
-                    <span class="default-font">Length:&nbsp;</span>
-                  </td>
-                  <td>
-                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="length" value="249"/></td>
-                  <td>
-                    <span class="default-font">&nbsp;km</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="default-font">Width:&nbsp;</span>
-                  </td>
-                  <td>
-                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="width" value="120.0"/>
-                  </td>
-                  <td>
-                    <span class="default-font">&nbsp;km</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="default-font">Slip:&nbsp;</span>
-                  </td>
-                  <td>
-                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="slip" value="23"/>
-                  </td>
-                  <td>
-                    <span class="default-font">&nbsp;m</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="default-font">Shear Modulus:&nbsp;</span>
-                  </td>
-                  <td>
-                    <input class="moment-magnitude-calc-input" type="text" name="active-tools" id="shear-modulus" value="3"/>
-                  </td>
-                  <td>
-                    <span class="default-font">&nbsp;10^11 dyne/cm^2</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>
-                    <button class="moment-magnitude-calc-btn">
-                      <span class="default-font">Calculate</span>
-                    </button>
-                  </td>
-                  <td></td>
-                </tr>
-              </table>
-              <table>
-                <tr>
-                  <td>
-                    <span class="default-font">Seismic Moment:&nbsp;</span>
-                  </td>
-                  <td class="moment-magnitude-calc-result" id="seismic">
-                    
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <b><span class="default-font">Moment Magnitude:&nbsp;</span></b>
-                  </td>
-                  <td class="moment-magnitude-calc-result" id="moment">
-                    
-                  </td>
-                </tr>
-              </table>
-              <span class="small-note">Default values are approximate for 2011 M 9.0 Tohoku-Oki earthquake</span>
-            </div>
           </div>
         </div>
       </div>

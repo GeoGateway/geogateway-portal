@@ -119,7 +119,7 @@ function setup_UAVSAR() {
 
 //Put user-supplied KML layer on the map
 function addKmlLayer(){
-    var theLayer=document.getElementById("kmlUrl").value;
+    var theLayer=document.getElementById("kmlMapperUrl").value;
     console.log("Adding layer:"+theLayer);
     kmlLayer = new google.maps.KmlLayer({
         url: theLayer,
