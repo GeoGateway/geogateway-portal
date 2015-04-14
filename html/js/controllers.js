@@ -259,7 +259,12 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.globals.currentProject.projectOutputKMLFileName=$rootScope.globals.currentProject.projectName+".out.kml";
         //output file name for SARImage plotting
         $rootScope.globals.currentProject.projectOutputSARImageKMLFileName=$rootScope.globals.currentProject.projectName+".out.insar.kml";
-
+        //output file name for tiltmap
+        $rootScope.globals.currentProject.projectOutputTiltCSVFileName=$rootScope.globals.currentProject.projectName+".out.tilt.csv";
+        //output file name for strainMag.kml plot
+        $rootScope.globals.currentProject.projectOutputStrainMagFileName = $rootScope.globals.currentProject.projectName + ".out.tilt_strainMag.kml";
+        //zip file name
+        $rootScope.globals.currentProject.projectZipFileName = $rootScope.globals.currentProject._id + ".zip";
         
         //Put the updated project in the DB.
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
