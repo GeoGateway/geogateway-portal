@@ -286,6 +286,16 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
             console.error(execResult.stderr);
             res.status(400).send(error);
         }
+
+        // zip the files for download
+        theExec= "zip -r " + obj.projectZipFileName + " .";
+        
+        execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+
         // after every command is successfully executed
         fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,execResult.stdout);
         fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,execResult.stderr);
