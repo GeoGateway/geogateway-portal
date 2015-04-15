@@ -117,10 +117,22 @@ function setup_UAVSAR() {
     });
 }
 
-//Put user-supplied KML layer on the map
+//Put user-supplied  layer on the map
 function addKmlLayer(){
     var theLayer=document.getElementById("kmlMapperUrl").value;
     console.log("Adding layer:"+theLayer);
+    kmlLayer = new google.maps.KmlLayer({
+        url: theLayer,
+         suppressInfoWindows: false,
+        map: mapA
+    });
+}
+
+//check out dislocKMLLayer
+function adddislocKmlLayer(kmlfile){
+    var theLayer=document.getElementById(kmlfile).href;
+    //alert(theLayer);
+    //console.log("Adding layer:"+theLayer);
     kmlLayer = new google.maps.KmlLayer({
         url: theLayer,
          suppressInfoWindows: false,

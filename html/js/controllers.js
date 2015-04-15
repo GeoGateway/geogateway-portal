@@ -278,6 +278,11 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
                 $scope.myproject=$rootScope.globals.currentProject;
+                // load kml files if successful
+                $("#DisplayOrNot_outputkml").show();
+                $("#DisplayOrNot_outputkml").prop("checked",true);
+                adddislocKmlLayer("disloc_outputkml");
+
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
