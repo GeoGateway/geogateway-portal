@@ -129,8 +129,9 @@ function addKmlLayer(){
 }
 
 //check out dislocKMLLayer
-function adddislocKmlLayer(kmlfile){
-    var theLayer=document.getElementById(kmlfile).href;
+function loaddislocKmlLayer(folderurl,kmlfile){
+    var theLayer=document.getElementById(folderurl).href;
+    theLayer = theLayer + kmlfile;
     //alert(theLayer);
     //console.log("Adding layer:"+theLayer);
     kmlLayer = new google.maps.KmlLayer({

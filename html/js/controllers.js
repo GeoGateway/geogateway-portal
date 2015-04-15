@@ -278,18 +278,14 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
                 $scope.myproject=$rootScope.globals.currentProject;
-                // load kml files if successful
-                $("#DisplayOrNot_outputkml").show();
-                $("#DisplayOrNot_outputkml").prop("checked",true);
-                adddislocKmlLayer("disloc_outputkml");
-
+                //alert("run loaddislocKmlLayer");
+                loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
                 $rootScope.globals.currentProject.status="Failed";
                 $scope.myproject=$rootScope.globals.currentProject;
             });
-
     }
     
     //This runs the blocking version of the executable wrapper
