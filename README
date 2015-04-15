@@ -40,5 +40,12 @@ To keep libraries up to date, periodically run the following:
 
 * bower update (from $INSTALL_PATH/geogateway/html)
 
-**note on python installation**
-Download and Install https://store.continuum.io/cshop/anaconda/   
+**note on python installation**  
+Download and Install https://store.continuum.io/cshop/anaconda/  
+verify the installation by /usr/bin/env pytho
+ 
+then in python, find out matplotlib configuration file:  
+>>> import matplotlib
+>>> matplotlib.matplotlib_fname()
+change the backend: 
+backend      : Qt4Agg  => backend      : Agg
