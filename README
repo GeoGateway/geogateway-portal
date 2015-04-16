@@ -31,6 +31,9 @@ Run the following commands
 
 * cd $INSTALL_PATH/geogateway
 
+* cp sample-config.js config.js
+   - Edit this file for your local installation.
+
 * node GeoGatewayServer.js
 
 UPDATING THIRD PARTY DEPENDENCIES

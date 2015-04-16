@@ -6,3 +6,4 @@ bower_components
 html/userUploads/*
 bin/simplex
 *.pyc
+config.js
