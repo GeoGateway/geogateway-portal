@@ -10,6 +10,7 @@ var ctaLayer;
 var all_overlays = [];
 var drawing_listener;
 var dygraph1;
+var dislockmls = [];
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
@@ -134,13 +135,26 @@ function loaddislocKmlLayer(folderurl,kmlfile){
     theLayer = theLayer + kmlfile;
     //alert(theLayer);
     //console.log("Adding layer:"+theLayer);
+    //turn on the checkbox
+    $("#display"+folderurl).prop("checked",true);
+    $("#display"+folderurl).show();
     kmlLayer = new google.maps.KmlLayer({
         url: theLayer,
          suppressInfoWindows: false,
         map: mapA
     });
+    dislockmls[folderurl]=kmlLayer;
 }
 
+function check_dislockml(element) {
+    if (element.checked) {
+        //alert("load:" + element.value);
+        dislockmls[element.value].setMap(mapA);
+    }else{
+        //alert("unload:" + element.value);
+        dislockmls[element.value].setMap(null);
+    }
+}
 // LOS TOOLS
 // DYGRAPHS IMPLEMENTATION
 var LOS_markers = [];
