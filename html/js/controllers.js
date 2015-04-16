@@ -280,8 +280,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 $scope.myproject=$rootScope.globals.currentProject;
                 //alert("run loaddislocKmlLayer");
                 loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
-                loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectSARImageKMLFileName);
-                loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectStrainMagFileName);
+                loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
+                loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
