@@ -19,6 +19,7 @@ var multiparty=require('multiparty');  //Form multipart form uploads.
 var util=require('util');
 var mkdirp=require('mkdirp');
 var RestClient=require('node-rest-client').Client;
+var GridStore=require('mongodb').GridStore;
 
 var restClient=new RestClient();
 
@@ -33,6 +34,12 @@ var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
 //Call or prepare constructors
 var app=express();
 var collectionUtils;
+var gridStore;
+
+//Use this to filter out empty data in the LOS query.
+var tofind='""';
+var regex=new RegExp(tofind,'g');
+
 
 //Set up MongoClient
 var url="mongodb://127.0.0.1:27017/geogatewaydb";  //This should not be hard coded?
@@ -519,11 +526,18 @@ app.get('/los_query/',function(req,res) {
     // Make the call to GeoServer.
 	 // GeoServer will return lines that should have the format "lon, lat, distance, value".  
     // We pass this directly back to the client.
+    
     restClient.get(query_url, function(data, response){
 //        console.log(data);
+//        data=data.replace(/""/g,'');
+        data=data.replace(regex,'');
         res.setHeader('Content-Type','text/csv');
-        res.setHeader('Content-Disposition','attachment; filename="LOS.csv"');
-        data="Lat, Lon, Distance (km), Displacement\n"+data;
+        res.setHeader('Content-Disposition','attachment; filename="'+image_uid+'".csv"');
+        data="Lat, Lon, Distance (km), Displacement\n"
+            +"#image uid:"+image_uid+"\n"
+            +"#start:"+lat1+","+lng1+"\n"
+            +"#end:"+lat2+","+lng2+"\n"
+            +data;
 //        console.log(data);
         res.status(200).send(data);
     });

@@ -219,7 +219,7 @@ function updateAzimuth() {
 
 //Uses the new distance to calculate the new ending lat,lon
 function updateDistance() {
-	 losLength=$("#losLength-value").val();
+	 length=$("#losLength-value").val();
 	 azimuth=$("#azimuth-value").val();
 	 setEndpointsFromAzimuthAndLength();
 }
@@ -576,32 +576,6 @@ function viewDataset(uid, dataname, show)
         if(uid in wmsgf9_samples)
         {
 
-        //  'image_uid': image_uid,
-        //  'lat1': lat1,
-        //  'lng1': lng1,
-        //  'lat2': lat2,
-        //  'lng2': lng2,
-        //  'format': format,
-        //  'resolution': resolution,
-        //  'method': method,
-        //  'average': average
-        // })
-        // .done(function(csv) {
-        //  //alert(csv);
-        //  var g2 = new Dygraph(
-        //      document.getElementById("dygraph-LOS"),
-        //      csv, { //dygraph can only use first column as xvalue 
-        //            // visibility: [false, false, true], 
-        //            width:590,height:140,
-        //            drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
-        //            titleHeight:20,
-        //            xLabelHeight:16,
-        //            yLabelWidth:16,
-        //            xlabel:'Distance (km)',
-        //            ylabel:'Ground Range Change (cm)'}
-        //  );
-        // });
-
             wmsgf9_samples[uid][1] = true;
         }
         else
@@ -669,9 +643,6 @@ function uavsarquery(querystr) {
     //console.log("uavsarquery() called with querystr "+querystr);
     $(".panel-close-button").click(function() {
         closeDataPanel();
-//        $("#UAVSAR-geometry").empty();
-//        $("#UAVSAR-heading").empty();
-//        $("#UAVSAR-markers").empty();
         deleteAllShape();
     });
 
@@ -679,62 +650,6 @@ function uavsarquery(querystr) {
         .done(function(datasetsStr) {
             var datasets=jQuery.parseJSON(datasetsStr);
             displaySelectedImages(datasets);
-
-//            if($('.panel-close-button').hasClass('inactive') && $('#uavsar').hasClass('inactive'))
-//            {
-//                $('.panel-close-button').removeClass('inactive').addClass('active');
-//                $('#uavsar').removeClass('inactive').addClass('active');
-//                $('#FadeDisplay').show();
-//            }
-            // else clear #uavsar
-//            else
-//                $('#uavsar').empty();
-            // clear wmsgf9_samples
-//            wmsgf9_samples = {};
-            // clear uavsar dataset overlays
-//            mapA.overlayMapTypes.setAt(0, null);
-//            for (var index1 in datasets) {
-//                var uid_str = "'" + datasets[index1]['uid'] + "'";
-//                var dataname_str = "'" +datasets[index1]['dataname'] + "'";
-//                var radarDirectionStr="'" +datasets[index1]['radardirection'] + "'";
-//                console.log(uid_str + " " + dataname_str);
-//                dynatable='<div style="word-wrap:break-word;">';
-//                dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
-//                dynatable+='<tr>'; //Create row in embedded table
-//                dynatable+='<th colspan="2">'+dataname_str+'</th>'; //Add header to table row
-//                dynatable+='</tr>'; //Close embedded table's header row
-//                dynatable+='<tr>'; //Start second embedded table row
-//                dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
-//                dynatable+='</tr>'; //Close embedded table's second row
-//                dynatable+='</table>'; //Close the embedded table
-//                dynatable+='</div>'
-//
-//                $('#uavsar').append('\
-//                    <div class="dataset">\
-//                        <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'"type="checkbox" name="dataset" value="' + datasets[index1]['uid'] + '" checked/>\
-//<a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
-//                            <span class="default-font">' + dynatable + '</span>\
-//                    </div>');
-//                viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
-//            };
-
-            // update displayed datasets
-//            updateVisibleDatasets();
-//            $("#data-panel").on('click', '.dataset-checkbox', function() {
-//                var uid = $(this).val();
-//                if(this.checked)
-//                {
-//                    console.log(uid);
-//                    viewDataset(uid, '', true);
-//                }
-//                else
-//                {
-//                    // console.log('hiding');
-//                    console.log(uid);
-//                    viewDataset(uid, '', false);
-//                }
-//                updateVisibleDatasets();
-//            });
     });
 }
 
