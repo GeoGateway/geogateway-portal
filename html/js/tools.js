@@ -279,7 +279,7 @@ function selectDataset(uid, dataname, heading, radardirection) {
 
     $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a>');
     
-    //Turn off the radio buttons
+    //Turn off the radio buttons and all the displays.
 //    console.log(uid,dataname);
     for(var uid1 in wmsgf9_samples) {
 		  $("#sarDisplayOrNot_"+uid1).prop('checked',false);	
@@ -287,6 +287,7 @@ function selectDataset(uid, dataname, heading, radardirection) {
         wmsgf9_samples[uid1][1]=false;
         wmsgf9_samples[uid1][2]=true;
     }
+    //Turn the display flags back on for te selected image.
 	 $("#sarDisplayOrNot_"+uid).prop('checked',true);	 
 	 $("#sarDisplayOrNot_"+uid).prop('disabled',true);
 	 wmsgf9_samples[uid][1]=true;
@@ -311,7 +312,6 @@ function selectDataset(uid, dataname, heading, radardirection) {
     UAVSARDrawingManager.setMap(null);
     deleteAllShape();
 
-//    google.maps.event.addListener(wmsgf9_select[0], 'click', function(kmlEvent) {
     google.maps.event.addListener(mapA, 'click', function(kmlEvent) {
         console.log("Map click event");
         if(LOS_markers.length == 0)
@@ -321,11 +321,6 @@ function selectDataset(uid, dataname, heading, radardirection) {
             connect_LOS_markers();
             updateToolPanelMarkerInfo();
             updateMarkerFormFields();
-//            var x=document.getElementById('UAVSAR-markers');
-//            x.innerHTML="<br/>";
-//            x.innerHTML+="<img src="+LOS_markers[0].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
-//            x.innerHTML+="<br/>"
-//            x.innerHTML+="<img src="+LOS_markers[1].getIcon()+">"+"&nbsp <b>Lat, Lon:</b>"+LOS_markers[0].getPosition();
             drawDygraphAjax(uid);
         }
     });
@@ -528,7 +523,7 @@ function displaySelectedImages(datasets,masterMap) {
         
         $('#uavsar').append('\
 <div class="dataset">\
-<input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'"type="checkbox" name="dataset" value="' + datasets[index1]['uid'] + '" checked/>\
+<input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'" type="checkbox" name="dataset" value="' + datasets[index1]['uid']+' " + onClick="sarCheckboxAction('+datasets[index1]['uid']+')" checked/>\
 <a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
 <span class="default-font">' + dynatable + '</span>\
 </div>');
@@ -670,6 +665,19 @@ function updateVisibleDatasets() {
         }
     }
 }
+
+function sarCheckboxAction(uid) {
+    if(wmsgf9_samples[uid][1]==false) {
+        wmsgf9_samples[uid][1]=true;
+        wmsgf9_samples[uid][2]=false;
+    }
+    else {
+        wmsgf9_samples[uid][1]=false;
+        wmsgf9_samples[uid][2]=true;
+    }
+    updateVisibleDatasets();
+}
+
 
 // script for closing the data panel
 // when the data panel is closed, all content in the data panel is removed
