@@ -4,7 +4,12 @@ body {
 
 a:link {
     color: black;
+    text-decoration:underline;
 }
+a:active {
+    text-decoration:underline;
+}
+
 a:visited {
     color: black;
 }
