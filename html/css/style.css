@@ -850,6 +850,9 @@ h1.hook {
     width:100%; 
     border: 1px solid black;
 }
+th, td {
+    border: 1px solid black;
+}
 .uavsar-table.selected {
     table-layout: fixed;
     width:100%; 
