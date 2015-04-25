@@ -181,7 +181,7 @@ a:visited {
 .intro-window-news {
     position: fixed;
     padding: 0;
-    top: calc(4% + 380px);
+    top: calc(4% + 350px);
     left: calc(50% - 470px);
     width: 940px;
     height: 420px;
