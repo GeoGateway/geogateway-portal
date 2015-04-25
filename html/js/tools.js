@@ -272,7 +272,9 @@ function connect_LOS_markers() {
 // script for loading a specific UAVSAR dataset
 var LOS_uid = null;
 
-function selectDataset(uid, dataname, heading, radardirection) {
+function selectDataset(row, uid, dataname, heading, radardirection) {
+    console.log(row);
+    
     var x=document.getElementById('UAVSAR-heading');
     x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
@@ -313,7 +315,7 @@ function selectDataset(uid, dataname, heading, radardirection) {
     deleteAllShape();
 
     google.maps.event.addListener(mapA, 'click', function(kmlEvent) {
-        console.log("Map click event");
+//        console.log("Map click event");
         if(LOS_markers.length == 0)
         {
             draw_marker(kmlEvent.latLng.lat(), kmlEvent.latLng.lng(), 'blue');
@@ -511,7 +513,7 @@ function displaySelectedImages(datasets,masterMap) {
         var radarDirectionStr="'" +datasets[index1]['radardirection'] + "'";
         //                console.log(uid_str + " " + dataname_str);
         dynatable='<div style="word-wrap:break-word;">';
-        dynatable+='<table class="sartable-inner" style="table-layout:fixed;width:100%" border="1">';  //Open table
+        dynatable+='<table class="uavsar-table">';  //Open table
         dynatable+='<tr>'; //Create row in embedded table
         dynatable+='<th colspan="2">'+datasets[index1]['dataname']+'</th>'; //Add header to table row
         dynatable+='</tr>'; //Close embedded table's header row
@@ -524,15 +526,16 @@ function displaySelectedImages(datasets,masterMap) {
         $('#uavsar').append('\
 <div class="dataset">\
 <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'" type="checkbox" name="dataset" value="' + datasets[index1]['uid']+' " + onClick="sarCheckboxAction('+datasets[index1]['uid']+')" checked/>\
-<a href="#" onClick="selectDataset(' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
+<a href="#" onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
 <span class="default-font">' + dynatable + '</span>\
 </div>');
         viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
-        //                console.log("Selected Dataset:",datasets[index1]);
-        //                console.log("Heading and direction:",datasets[index1]['heading'],datasets[index1]['radardirection']);
-        
     };
     updateVisibleDatasets();
+    
+
+/*
+  //Deprecated method below
     $("#data-panel").on('click', '.dataset-checkbox', function() {
         var uid = $(this).val();
         if(this.checked)
@@ -548,6 +551,7 @@ function displaySelectedImages(datasets,masterMap) {
         }
         updateVisibleDatasets();
     });
+*/
 }
 
 

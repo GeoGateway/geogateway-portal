@@ -178,7 +178,7 @@ a:visited {
     padding: 0;
     top: calc(4% + 380px);
     left: calc(50% - 470px);
-    width: 530px;
+    width: 940px;
     height: 350px;
     background-color: rgb(245, 245, 255);
     border-top-style: solid;
@@ -677,6 +677,12 @@ a:visited {
     padding: 1px;
 }
 
+.dataset.selected {
+    background-color: #FFCF8B;
+    margin: 1px;
+    padding: 1px;
+}
+
 /*****************************************************************************/
 
 /* MAIN MAP CANVAS */
@@ -835,8 +841,20 @@ h1.hook {
     margin: 5px auto;
     text-align: center;
 }
-
 /*****************************************************************************/
+
+/* UAVSAR Table*/
+/*****************************************************************************/
+.uavsar-table {
+    table-layout: fixed;
+    width:100%; 
+    border: 1px solid black;
+}
+.uavsar-table.selected {
+    table-layout: fixed;
+    width:100%; 
+    border: 1px solid black;
+}
 
 /* ALL PAGES */
 .inactive {
@@ -852,6 +870,7 @@ h1.hook {
     font-weight: 900;
     font-family: Arial, Helvetica, monospace;
 }
+
 
 /* default font weight */
 .default-font.large {
