@@ -514,10 +514,10 @@ function displaySelectedImages(datasets,masterMap) {
         //                console.log(uid_str + " " + dataname_str);
         dynatable='<div style="word-wrap:break-word;">';
         dynatable+='<table class="uavsar-table">';  //Open table
-        dynatable+='<tr>'; //Create row in embedded table
-        dynatable+='<th colspan="2">'+datasets[index1]['dataname']+'</th>'; //Add header to table row
+        dynatable+='<tr class="uavsar-tr">'; //Create row in embedded table
+        dynatable+='<th colspan="2" class="uavsar-th">'+datasets[index1]['dataname']+'</th>'; //Add header to table row
         dynatable+='</tr>'; //Close embedded table's header row
-        dynatable+='<tr>'; //Start second embedded table row
+        dynatable+='<tr class="uavsar-tr">'; //Start second embedded table row
         dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
         dynatable+='</tr>'; //Close embedded table's second row
         dynatable+='</table>'; //Close the embedded table
