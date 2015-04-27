@@ -274,7 +274,7 @@ function connect_LOS_markers() {
 var LOS_uid = null;
 
 function selectDataset(row, uid, dataname, heading, radardirection) {
-    console.log(row);
+//    console.log(row);
     if(rowSelected!=null){
         rowSelected.style.backgroundColor="white";
     }
