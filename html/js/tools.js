@@ -11,6 +11,7 @@ var all_overlays = [];
 var drawing_listener;
 var dygraph1;
 var dislockmls = [];
+var rowSelected=null;
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
@@ -274,7 +275,14 @@ var LOS_uid = null;
 
 function selectDataset(row, uid, dataname, heading, radardirection) {
     console.log(row);
-    
+    if(rowSelected!=null){
+        rowSelected.style.backgroundColor="white";
+    }
+    rowSelected=row;
+	 rowSelected.style.backgroundColor="lightgreen";
+//	 row.style.backgroundcolor="lightgreen";
+       
+
     var x=document.getElementById('UAVSAR-heading');
     x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
@@ -526,8 +534,8 @@ function displaySelectedImages(datasets,masterMap) {
         $('#uavsar').append('\
 <div class="dataset">\
 <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'" type="checkbox" name="dataset" value="' + datasets[index1]['uid']+' " + onClick="sarCheckboxAction('+datasets[index1]['uid']+')" checked/>\
-<a href="#" onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">\
-<span class="default-font">' + dynatable + '</span>\
+<!--<a href="#" onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">-->\
+<div onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">' + dynatable + '</div>\
 </div>');
         viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
     };
