@@ -242,7 +242,7 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
         //console.log("baseWorkDirPath:"+baseWorkDirPath);
         // output {stdout: '1\n', stderr: '', status: 0}
-        var execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        var execResult = syncExec(theExec,{"cwd":baseWorkDirPath,"maxBuffer":500*1024});
   
         if (execResult.status == 1) {
             console.error(execResult.stderr);
