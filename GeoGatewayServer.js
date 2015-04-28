@@ -260,8 +260,9 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
         }
 
         // run SARImage with the default parameter
-        theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+"  60 0 1.26 " + '""';
-        
+        //theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+"  60 0 1.26 " + '""';
+        theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+" "+obj.insarElevation + " " +obj.insarAzimuth+" "+obj.insarFrequency+" "+'""';
+
         //console.log("Execution path: "+theExec);
 
         execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
