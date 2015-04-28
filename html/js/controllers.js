@@ -244,7 +244,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
 
     //This runs the blocking version of the executable wrapper
     $scope.submitdisloc=function(appName){
-        console.log("appName:"+appName);
+        //console.log("appName:"+appName);
         //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
         //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
         //Note status is completed because we made a blocking call.
@@ -266,6 +266,11 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //zip file name
         $rootScope.globals.currentProject.projectZipFileName = $rootScope.globals.currentProject._id + ".zip";
         
+        //paramters
+        $rootScope.globals.currentProject.insarElevation = $("#disloc_elevation").val());
+        $rootScope.globals.currentProject.insarAzimuth = $("#disloc_azimuth").val();
+        $rootScope.globals.currentProject.insarFrequency = $("#disloc_frequency").val();
+
         //Put the updated project in the DB.
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
             success(function(data, status) { 
@@ -274,6 +279,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 console.log("Couldn't update the db");
             });
         
+        //disbale submit button
+
         $http.get('/execute_disloc/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
