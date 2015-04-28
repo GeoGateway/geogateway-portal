@@ -528,9 +528,10 @@ app.get('/los_query/',function(req,res) {
 	 // GeoServer will return lines that should have the format "lon, lat, distance, value".  
     // We pass this directly back to the client.
     
+//    console.log(query_url);
     restClient.get(query_url, function(data, response){
-//        console.log(data);
-//        data=data.replace(/""/g,'');
+//        console.log('response: %s',data);
+        data=data.toString();
         data=data.replace(regex,'');
         res.setHeader('Content-Type','text/csv');
         res.setHeader('Content-Disposition','attachment; filename="'+image_uid+'".csv"');
