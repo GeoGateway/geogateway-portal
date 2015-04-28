@@ -267,7 +267,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.globals.currentProject.projectZipFileName = $rootScope.globals.currentProject._id + ".zip";
         
         //paramters
-        $rootScope.globals.currentProject.insarElevation = $("#disloc_elevation").val());
+        $rootScope.globals.currentProject.insarElevation = $("#disloc_elevation").val();
         $rootScope.globals.currentProject.insarAzimuth = $("#disloc_azimuth").val();
         $rootScope.globals.currentProject.insarFrequency = $("#disloc_frequency").val();
 
