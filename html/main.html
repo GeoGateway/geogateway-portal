@@ -898,7 +898,7 @@ Initial model of the M 7.8 Nepal earthquake as may be seen by an Interferometric
                 <tbody>
                   <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
                     <td>{{uploadKmlFile.name}}</td>
-                    <td><input type="checkbox" checked/></td>
+                    <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)" checked>
                   </tr>
                 </tbody>
               </table>

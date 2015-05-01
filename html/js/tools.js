@@ -12,6 +12,7 @@ var drawing_listener;
 var dygraph1;
 var dislockmls = [];
 var rowSelected=null;
+var kmlLayerObj=[];
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
@@ -128,6 +129,20 @@ function addKmlLayer(){
          suppressInfoWindows: false,
         map: mapA
     });
+    kmlLayerObj[theLayer]=kmlLayer;
+}
+
+function toggleKmlDisplay(toggleLayer){
+    console.log(toggleLayer.id);
+    console.log(toggleLayer.checked);
+    //Note value of checked will have just changed.
+    if(toggleLayer.checked) {
+        kmlLayerObj[toggleLayer.id].setMap(mapA);
+    }
+    else {
+        console.log(kmlLayerObj[toggleLayer.id]);
+        kmlLayerObj[toggleLayer.id].setMap(null);
+    }
 }
 
 //check out dislocKMLLayer
