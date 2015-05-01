@@ -504,8 +504,8 @@ function noImage(image) {
 Initial model of the M 7.8 Nepal earthquake as may be seen by an Interferometric Synthetic Aperture (InSAR) spacecraft such as Sentinal-1 or ALOS-2 and GPS. The model is based on USGS mechanism of a near horizontal fault and the location of aftershocks. This image shows a synthetic interferogram for a descending pass of –168°, 24 cm wavelength, elevation of 40°. Fault is 11° dip striking 295°. Maximum displacement vector is about 2.3 m. Color wrap is 24 cm per fringe.
                 <p/>
                 <a href="images/GeoGatewayNepal2Solution.kmz" target="_blank">Solution KMZ</a>
-                <a href="images/DeformationModel20150429.jpg" target="_blank">
-                <img src="images/DeformationModel20150429.jpg" style="display:block;margin-left:auto;margin-right:auto;width:auto;height:auto;max-height:250px"/>
+                <a href="images/Deformation20150501a.jpeg" target="_blank">
+                <img src="images/Deformation20150501a.jpeg" style="display:block;margin-left:auto;margin-right:auto;width:auto;height:auto;max-height:250px"/>
                 </a>
 
                 </div>
@@ -885,16 +885,28 @@ Initial model of the M 7.8 Nepal earthquake as may be seen by an Interferometric
                 <button class="btn btn-sm btn-primary" ng-click="uploadFileForKml()">Upload File</button>
               </div> 
             </div>
-          <p>
-            KML URL:
-            <br>
-            <input type="text" size="50" id="kmlMapperUrl"/>
-            <button type="button" onclick="addKmlLayer()">Plot</button>
+            <p>
+              KML URL:
+              <br>
+              <input type="text" size="50" id="kmlMapperUrl"/>
+              <button type="button" onclick="addKmlLayer()">Plot</button>
+              <table class="table table-bordered table-responsive">
+                <thead>
+                  <th>KML File</th>
+                  <th>Display</th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
+                    <td>{{uploadKmlFile.name}}</td>
+                    <td><input type="checkbox" checked/></td>
+                  </tr>
+                </tbody>
+              </table>
           </div>
         </div>
       </div>
     </div>
-        
+    
     <!-- Simplex Tool -->
     <div class="tab-pane tool-tab-pane inactive" id="simplex">
       <div class="tool">

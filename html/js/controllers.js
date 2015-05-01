@@ -234,12 +234,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $scope.status=$rootScope.globals.currentProject.status;
         console.log("Ready to submit set to false; sanity:"+$scope.status);
         $scope.myproject=arg;        
-        //        $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id).success(function(data){
-        //            console.log("project data:"+JSON.stringify(data));
-        //            $scope.myproject=data;
-        
-        //});
-        
     });
 
     //This runs the blocking version of the executable wrapper
@@ -379,6 +373,11 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         UploadService.uploadFileToUrl2(file,uploadUrl);
         $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+file.name;
         document.getElementById("kmlMapperUrl").value=$scope.kmlUrl;
+        if($scope.uploadedKmlFiles == null) $scope.uploadedKmlFiles=[];
+        var uploadedFile={};
+        uploadedFile["name"]=file.name;
+        uploadedFile["url"]=$scope.kmlUrl;
+        $scope.uploadedKmlFiles.push(uploadedFile);
     }
 
     //This version is integrated with Disloc/Simplex submission
