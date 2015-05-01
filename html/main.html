@@ -889,8 +889,8 @@ Initial model of the M 7.8 Nepal earthquake as may be seen by an Interferometric
               KML URL:
               <br>
               <input type="text" size="50" id="kmlMapperUrl"/>
-              <button type="button" onclick="addKmlLayer()">Plot</button>
-              <table class="table table-bordered table-responsive">
+              <button type="button" onclick="addKmlLayer()">Plot</button> 
+              <table id="userKmlTable" class="table table-bordered table-responsive">
                 <thead>
                   <th>KML File</th>
                   <th>Display</th>
@@ -898,7 +898,7 @@ Initial model of the M 7.8 Nepal earthquake as may be seen by an Interferometric
                 <tbody>
                   <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
                     <td>{{uploadKmlFile.name}}</td>
-                    <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)" checked>
+                    <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)">
                   </tr>
                 </tbody>
               </table>

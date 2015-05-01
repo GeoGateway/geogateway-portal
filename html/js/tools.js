@@ -136,6 +136,14 @@ function toggleKmlDisplay(toggleLayer){
     console.log(toggleLayer.id);
     console.log(toggleLayer.checked);
     //Note value of checked will have just changed.
+    if(kmlLayerObj[toggleLayer.id]==null) {
+        kmlLayer = new google.maps.KmlLayer({
+            url: toggleLayer.id,
+            suppressInfoWindows: false,
+        });
+        kmlLayerObj[toggleLayer.id]=kmlLayer;
+    }
+    
     if(toggleLayer.checked) {
         kmlLayerObj[toggleLayer.id].setMap(mapA);
     }
