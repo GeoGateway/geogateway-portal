@@ -63,7 +63,6 @@ a:visited {
     top: calc(4% + 3px);
     width: 100%;
     height: calc(95% - 3px);
-    z-index: 10000;
 }
 
 .intro-window-welcome {
@@ -73,9 +72,6 @@ a:visited {
     top: 4%;
     width: 700px;
     text-align: center;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-color: rgb(235, 235, 255);
 }
 
 .welcome-text {
@@ -89,7 +85,6 @@ a:visited {
     margin-left: 150px;
     width: 300px;
 }
-
 .intro-window-content {
     position: fixed;
     left: calc(50% - 500px);
@@ -161,27 +156,26 @@ a:visited {
 
 .intro-window-about {
     position: fixed;
-    padding: 0;
-    top: calc(4% + 160px);
+    padding-left: 30px;
+    padding-right: 30px;
+    top: calc(4% + 140px);
     left: calc(50% - 470px);
     width: 940px;
-    height: 150px;
+    height: 80px;
     background-color: rgb(245, 245, 255);
     border-top-style: solid;
-    border-top-width:3px;
-    border-right-style: solid;
-    border-right-width: 3px;
-    border-left-style: solid;
-    border-left-width: 3px;
+    border-top-width:2px;
+    border-right: none;
+    border-left: none;
     border-bottom-style: solid;
-    border-bottom-width: 8px;
+    border-bottom-width: 2px;
     border-color: rgb(235, 235, 255);
 }
 
 .intro-window-news {
     position: fixed;
     padding: 0;
-    top: calc(4% + 350px);
+    top: calc(4% + 250px);
     left: calc(50% - 470px);
     width: 940px;
     height: 420px;
