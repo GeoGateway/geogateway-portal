@@ -373,12 +373,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         var uploadUrl="/doUpload/anonymousKmlUser/"+projectName;
         UploadService.uploadFileToUrl2(file,uploadUrl);
         $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+file.name;
-        document.getElementById("kmlMapperUrl").value=$scope.kmlUrl;
-        if($scope.uploadedKmlFiles == null) $scope.uploadedKmlFiles=[];
-        var uploadedFile={};
-        uploadedFile["name"]=file.name;
-        uploadedFile["url"]=$scope.kmlUrl;
-        $scope.uploadedKmlFiles.push(uploadedFile);
+        document.getElementById("kmlUrl").value=$scope.kmlUrl;
     }
     //This version uploads and plots KML file in the mapper tool embedded into main.html
     $scope.uploadFileForKml=function(){
