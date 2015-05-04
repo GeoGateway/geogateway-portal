@@ -177,8 +177,8 @@ a:visited {
     padding: 0;
     top: calc(4% + 250px);
     left: calc(50% - 470px);
-    width: 940px;
-    height: 420px;
+    width: 450px;
+    height: 350px;
     background-color: rgb(245, 245, 255);
     border-top-style: solid;
     border-top-width:3px;
@@ -194,9 +194,9 @@ a:visited {
 .intro-window-feedback {
     position: fixed;
     padding: 0;
-    top: calc(4% + 380px);
-    left: calc(50% + 80px);
-    width: 390px;
+    top: calc(4% + 250px);
+    left: calc(50% + 8px);
+    width: 450px;
     height: 350px;
     background-color: rgb(245, 245, 255);
     border-top-style: solid;

@@ -417,3 +417,39 @@ UserProjectApp.controller("LogoutController", ['$scope','$location','Authenticat
         $location.path('/login');    
     };
 }]);
+
+UserProjectApp.controller("FeedCtrl", ['$scope','FeedService', function ($scope,Feed) {    
+    $scope.loadButonText="Load";
+    $scope.loadFeed=function(e){        
+        Feed.parseFeed($scope.feedSrc).then(function(res){
+            $scope.loadButonText=angular.element(e.target).text();
+            $scope.feeds=res.data.responseData.feed.entries;
+        });
+    }
+}]);
+
+UserProjectApp.controller("FeedCtrlBlog", ['$scope','FeedService', function ($scope,Feed) {    
+    $scope.loadFeed=function(){   
+        var feedSrc='http://geo-gateway.blogspot.com/feeds/posts/default';
+        Feed.parseFeed(feedSrc).then(function(res){
+            $scope.feeds=res.data.responseData.feed.entries;
+        });
+    }
+}]);
+
+UserProjectApp.controller("FeedCtrlJira", ['$scope','FeedService', function ($scope,Feed) {    
+    $scope.loadFeed=function(){   
+        var feedSrc='https://gateways.atlassian.net/activity?maxResults=10&streams=key+IS+GEOG&providers=thirdparty+tempo-provider+dvcs-streams-provider+issues';
+        Feed.parseFeed(feedSrc).then(function(res){
+            $scope.feeds=res.data.responseData.feed.entries;
+        });
+    }
+}]);
+
+UserProjectApp.factory('FeedService',['$http',function($http){
+    return {
+        parseFeed : function(url){
+            return $http.jsonp('//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=50&callback=JSON_CALLBACK&q=' + encodeURIComponent(url));
+        }
+    }
+}]);
