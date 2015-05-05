@@ -9,6 +9,11 @@ UserProjectApp.config(['$routeProvider',function ($routeProvider) {
             templateUrl: 'Login.html',
             hideMenus: true
         })
+
+        .when('/loginGeo', {
+            controller: 'LoginController',
+            templateUrl: 'main.html'
+        })
     
         .when('/projects', {
             controller: 'UserProjectController',
@@ -62,6 +67,7 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
 }]);
 
 UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
+    $scope.authenticated=$rootScope.authenticated;
     $scope.login=function(){
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
@@ -75,6 +81,40 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
                 $scope.dataLoading = false;
             }
         });
+        $rootScope.authenticated=$scope.authenticated;
+    }
+
+    $scope.loginGeo=function(){
+        AuthenticationServices.clearCredentials2();
+        $scope.dataLoading=true;
+        AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
+            if(response.success) {
+                AuthenticationServices.setCredentials2($scope.username, $scope.password);
+                $scope.authenticated=true;
+            } else {
+                console.error("Authentication error");
+                $scope.error = response.message;
+                    $scope.dataLoading = false;
+            }
+        });
+        $rootScope.authenticated=$scope.authenticated;
+    };
+    
+    $scope.logoutGeo=function() {
+        AuthenticationServices.clearCredentials2();
+        console.log("LogoutGeo() called");
+        $scope.authenticated=false;
+        $rootScope.authenticated=$scope.authenticated;
+    };
+
+    $scope.isAuthenticated=function() {
+        $scope.authenticated=$rootScope.authenticated;
+        console.log($scope.authenticated);
+        if($scope.authenticated == null) {
+            $scope.authenticated=false;
+        }
+        $rootScope.authenticated=$scope.authenticated;
+        return $scope.authenticated;
     };
 }]);
                   
@@ -421,10 +461,16 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
     $scope.logout=function() {
-        console.log("form action");
+//        console.log("form action");
         AuthenticationServices.clearCredentials2();
         $location.path('/login');    
+    }
+    
+    $scope.logoutGeo=function() {
+        AuthenticationServices.clearCredentials2();
+        $scope.authenticated=false;
     };
+    
 }]);
 
 UserProjectApp.controller("FeedCtrl", ['$scope','FeedService', function ($scope,Feed) {    

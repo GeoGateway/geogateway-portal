@@ -104,6 +104,7 @@
     });
 });
 
+
 ///////////////////////////// NOTECARDS RELATED //////////////////////////
 
 // sends an ajax GET request to the view to retreive some of the NOTECARD
@@ -283,7 +284,6 @@ $(document).ready(function() {
                     });
     });
 });
-
 //////////////////////////// COLLEAGUES RELATED //////////////////////////
 
 // sends an ajax POST request that marks a COLLEAGUE as FOLLOWED by adding
@@ -475,9 +475,9 @@ function noImage(image) {
     
     <!-- set up tools panel and profile panel toggle -->
     <button class="panel-toggle" id="tools"><span class="glyphicon glyphicon-wrench"> </span></button>
-    <!-- Disable for now
+
     <button class="panel-toggle" id="profile"><span class="glyphicon glyphicon-user"> </span></button>
-    -->
+
   </div>
   
   <div class="navigation-shadow"></div>
@@ -547,14 +547,15 @@ GeoGateway is a data product search and analysis gateway for scientific discover
     </div>
   
   <!-- profile block -->
-  <!-- Disabled for now
+
   <div class="profile-panel closed">    
     <div class="tab-pane profile-tab-pane active" id="auth">
       <div class="tool">
         <div class="tool-title"><b>Login</b></div>
         <div class="divider"></div>
         <div class="tool-content">
-          <form class="auth-form" action="/login/" method="POST"> 
+          <form name="loginForm" ng-submit="loginGeo()" ng-controller="LoginController"
+                ng-hide='isAuthenticated()'>
             <fieldset>
               <table class="login-table">
                 <tr>
@@ -562,7 +563,8 @@ GeoGateway is a data product search and analysis gateway for scientific discover
                     <label class="control-label" for="username">Login:</label>
                   </td>
                   <td>
-                    <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
+                    <input type="text" ng-model="username" id="username" class="form-control" name="username" required/>
+                    <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
                   </td>
                 </tr>
                 <tr>
@@ -570,7 +572,8 @@ GeoGateway is a data product search and analysis gateway for scientific discover
                     <label class="control-label" for="password">Password:</label>
                   </td>
                   <td>
-                    <input class="form-control" id="id_password" name="password" placeholder="Password" type="password" />
+                    <input type="password" ng-model="password" id="password" class="form-control" name="password" required/>
+                    <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
                   </td>
                 </tr>
               </table>
@@ -580,8 +583,19 @@ GeoGateway is a data product search and analysis gateway for scientific discover
               <button type="submit" class="btn auth-btn">Log In</button>
             </div>
           </form>
+          <form name='logoutForm' 
+                ng-submit='logoutGeo()' 
+                ng-controller='LoginController'
+                ng-show='isAuthenticated()'>
+            
+            <div class="auth-btn-container">
+              <button type="submit" class="btn auth-btn">Log Out</button>
+            </div>
+          </form>
         </div>
       </div>
+
+      <!--
       <div class="tool">
         <div class="tool-title"><b>Sign Up</b></div>
         <div class="divider"></div>
@@ -650,8 +664,8 @@ GeoGateway is a data product search and analysis gateway for scientific discover
       </div>
     </div>
   </div>
-  -->
   
+-->
   <!-- tools block -->
   
   <div class="tools-panel blur open">
