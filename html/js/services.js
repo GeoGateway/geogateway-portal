@@ -26,15 +26,19 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
         callback(response);
     };
     service.setCredentials2=function(username, password){
-        console.log("Setting new credentials");
+        console.log("Setting new credentials for "+username);
         //This sets only the currentUser. The currentProject will be set later.
         $rootScope.globals = {
             currentUser: {
                 username: username,
                 password: password
+            },
+            currentProject: {
+                projectName: "anoymousProject",
+                status: "New",                
             }
         };
-        $cookieStore.put('globals', $rootScope.globals);
+//        $cookieStore.put('globals', $rootScope.globals);
     }
     return service;
 }]);

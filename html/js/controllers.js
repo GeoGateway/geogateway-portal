@@ -35,13 +35,16 @@ UserProjectApp.config(['$routeProvider',function ($routeProvider) {
 
 UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($rootScope, $location, $cookieStore, $http) {
     
-    $rootScope.globals = $cookieStore.get('globals') || {};
+    console.log("userProjectApp.run() called");
+//    $rootScope.globals = $cookieStore.get('globals') || {};
+    $rootScope.globals={};
     if ($rootScope.globals.currentUser) {
         //Current user is set
+        console.log("User is set:"+$rootScope.globals.currentUser.username);
     }
     else {
         $rootScope.globals = {
-            //User can still do stuff.
+            //Anonymous user can still do stuff.
             currentUser: {
                 username: "anonymous",
                 password: ""
@@ -52,13 +55,12 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
                 status: "New",
             }
         };
-        $cookieStore.put('globals', $rootScope.globals);        
+//        $cookieStore.put('globals', $rootScope.globals);        
     }
 
     // keep user logged in after page refresh
     
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        console.log("Globals:"+JSON.stringify($cookieStore.get('globals')));
         // redirect to login page if not logged in
         if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
             $location.path('/login');
@@ -68,6 +70,9 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
 
 UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
     $scope.authenticated=$rootScope.authenticated;
+    $scope.username=$rootScope.globals.currentUser.username;
+    
+    //Old code, worked with pre-main.html versions of the user interface.
     $scope.login=function(){
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
@@ -84,13 +89,16 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
         $rootScope.authenticated=$scope.authenticated;
     }
 
+    //This is the code that handles login for master.html.
     $scope.loginGeo=function(){
+        console.log("In loginGeo:"+$scope.username);
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
         AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
             if(response.success) {
                 AuthenticationServices.setCredentials2($scope.username, $scope.password);
                 $scope.authenticated=true;
+                $rootScope.$broadcast('loginEvent',$scope.username);
             } else {
                 console.error("Authentication error");
                 $scope.error = response.message;
@@ -105,17 +113,20 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
         console.log("LogoutGeo() called");
         $scope.authenticated=false;
         $rootScope.authenticated=$scope.authenticated;
+        $rootScope.$broadcast('loginEvent',$rootScope.globals.currentUser.username);
     };
 
     $scope.isAuthenticated=function() {
         $scope.authenticated=$rootScope.authenticated;
-        console.log($scope.authenticated);
+      //  console.log($scope.authenticated);
         if($scope.authenticated == null) {
             $scope.authenticated=false;
         }
         $rootScope.authenticated=$scope.authenticated;
         return $scope.authenticated;
     };
+    $scope.username=$rootScope.globals.currentUser.username;
+
 }]);
                   
 //TODO: consolidate this with the other controllers, or at least with EditProjectController
@@ -159,14 +170,20 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
 
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
     $scope.username=$rootScope.globals.currentUser.username;
+
+    $scope.$on('loginEvent', function(event,arg) {
+        console.log("Caught login event",event, arg);
+        $scope.username=$rootScope.globals.currentUser.username;
+    });
+    
     
     //This function is done to create a new anonymous project
     //TODO: Remove hard coding of string "anonymous"
-    if($scope.username="anonymous") {
+    if($scope.username=="anonymous") {
         var newProject={};
         newProject.projectName=$rootScope.globals.currentProject.projectName;
         //Need to see if necessary to stringify newProject or if it can be passed directly.
-        console.log("Creating anonymous project");
+//        console.log("Creating anonymous project");
         $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
             success(function(project){
                 console.log("Anon project created: "+project._id);
@@ -178,7 +195,21 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 console.error("Could not create the new project");
             });
     }
-    
+    else {
+        var newProject={};
+        newProject.projectName=$rootScope.globals.currentProject.projectName;
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+            success(function(project){
+                console.log("Anon project created: "+project._id);
+                //Set or update the current project
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.status="New"; 
+            }).
+            error(function(data){
+                console.error("Could not create the new project");
+            });
+    }
     //Set $scope's myproject. 
     //Note this will only be called if the project isn't anonymous.
     //TODO: Clean this up.  
