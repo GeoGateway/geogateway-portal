@@ -1,6 +1,6 @@
 var GeoGatewayServices=angular.module('GeoGatewayServices',['ngCookies']);
 
-GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore',function($rootScope,$cookieStore){
+GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore', '$http', function($rootScope,$cookieStore,$http){
     var service={};
     //Note this will also clear current project and anything else.
     service.clearCredentials2=function() {    
@@ -34,11 +34,26 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
                 password: password
             },
             currentProject: {
-                projectName: "anoymousProject",
+                projectName: username+"Project",
                 status: "New",                
             }
         };
-//        $cookieStore.put('globals', $rootScope.globals);
+        //Create a new project for the authenticated user.
+        var newProject={};
+        newProject.projectName=$rootScope.globals.currentProject.projectName;
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+            success(function(project){
+                console.log("Project created for "+$rootScope.globals.currentUser.username+": "+project._id);
+                //Set or update the current project
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.status="New"; 
+            }).
+            error(function(data){
+                console.error("Could not create the new project");
+            });
+        
+        //        $cookieStore.put('globals', $rootScope.globals);
     }
     return service;
 }]);

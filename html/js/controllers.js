@@ -55,6 +55,23 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
                 status: "New",
             }
         };
+        
+        //Create an anonymous project for unauthenticated users.
+        var newProject={};
+        newProject.projectName=$rootScope.globals.currentProject.projectName;
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        //        console.log("Creating anonymous project");
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+            success(function(project){
+                console.log("Anon project created: "+project._id);
+                //Set or update the current project
+                $rootScope.globals.currentProject=project;
+                $rootScope.globals.currentProject.status="New"; 
+            }).
+            error(function(data){
+                console.error("Could not create the new project");
+            });
+
 //        $cookieStore.put('globals', $rootScope.globals);        
     }
 
@@ -98,7 +115,6 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
             if(response.success) {
                 AuthenticationServices.setCredentials2($scope.username, $scope.password);
                 $scope.authenticated=true;
-                $rootScope.$broadcast('loginEvent',$scope.username);
             } else {
                 console.error("Authentication error");
                 $scope.error = response.message;
@@ -106,6 +122,9 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
             }
         });
         $rootScope.authenticated=$scope.authenticated;
+        $rootScope.$broadcast('loginEvent',$scope.username);
+        console.log("Login complete, status: "+$rootScope.authenticated);
+
     };
     
     $scope.logoutGeo=function() {
@@ -131,17 +150,26 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
                   
 //TODO: consolidate this with the other controllers, or at least with EditProjectController
 UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
-    $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
-        $scope.projects=data;
-    });
-    
+//    $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
+//        $scope.projects=data;
+//    });
+ 
+    $scope.orderProp="-creationTime";
+
     $scope.$on('refresh', function(event,arg) {
         $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
             $scope.projects=data;
         });
     });
     
-    $scope.orderProp='_id';
+    $scope.$on('loginEvent', function(event,arg) {
+        $scope.username=$rootScope.globals.currentUser.username;
+        $scope.authenticated=$rootScope.authenticated;
+        console.log("Getting all the projects for "+$rootScope.globals.currentUser.username);
+        $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
+            $scope.projects=data;
+        });
+    });
                
 });
 
@@ -172,44 +200,17 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     $scope.username=$rootScope.globals.currentUser.username;
 
     $scope.$on('loginEvent', function(event,arg) {
-        console.log("Caught login event",event, arg);
+//        console.log("Login event",arg, $rootScope.authenticated);
         $scope.username=$rootScope.globals.currentUser.username;
+        $scope.authenticated=$rootScope.authenticated;
+        $scope.viewList=true;
+    });
+  
+    $scope.$on('selectProjectEvent',function(event,arg) {
+        console.log("selectprojectevent",arg);
+        $scope.viewList=arg;
     });
     
-    
-    //This function is done to create a new anonymous project
-    //TODO: Remove hard coding of string "anonymous"
-    if($scope.username=="anonymous") {
-        var newProject={};
-        newProject.projectName=$rootScope.globals.currentProject.projectName;
-        //Need to see if necessary to stringify newProject or if it can be passed directly.
-//        console.log("Creating anonymous project");
-        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-            success(function(project){
-                console.log("Anon project created: "+project._id);
-                //Set or update the current project
-                $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.status="New"; 
-            }).
-            error(function(data){
-                console.error("Could not create the new project");
-            });
-    }
-    else {
-        var newProject={};
-        newProject.projectName=$rootScope.globals.currentProject.projectName;
-        //Need to see if necessary to stringify newProject or if it can be passed directly.
-        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-            success(function(project){
-                console.log("Anon project created: "+project._id);
-                //Set or update the current project
-                $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.status="New"; 
-            }).
-            error(function(data){
-                console.error("Could not create the new project");
-            });
-    }
     //Set $scope's myproject. 
     //Note this will only be called if the project isn't anonymous.
     //TODO: Clean this up.  
@@ -225,6 +226,10 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //Must be a new project
         $scope.status="New";
     }
+    
+    $scope.viewCompleteList=function(){
+        $rootScope.$broadcast("selectProjectEvent",true);
+    }
 
     //The following are functions that can be associated with submit actions.
     $scope.viewProject=function(projectId) {
@@ -233,13 +238,12 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 console.log("Got the project:"+JSON.stringify(project));
                 $rootScope.globals.currentProject=project;
                 $scope.myproject=$rootScope.globals.currentProject;
-                $location.path('/view');
+                $rootScope.$broadcast("selectProjectEvent",false);
             }).
             error(function(data){
                 console.log("Could not load the old project");
             });
     }
-    
     $scope.createProject=function(){
         var newProject={};
         newProject.projectName=$scope.projectName;
