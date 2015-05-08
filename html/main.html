@@ -921,26 +921,28 @@ function noImage(image) {
                 <button class="btn btn-sm btn-primary" ng-click="uploadFileForKml()">Upload File</button>
               </div> 
             </div>
-            <p>
-              <!--
-              KML URL:
-              <br>
-              <input type="text" size="50" id="kmlMapperUrl"/>
-              <button type="button" onclick="addKmlLayer()">Plot</button> 
-              -->
-              <table id="userKmlTable" class="table table-bordered table-responsive">
-                <caption>Click the checkbox to turn the display on/off</caption>
-                <thead>
-                  <th>KML File</th>
-                  <th>Display</th>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
-                    <td>{{uploadKmlFile.name}}</td>
-                    <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)">
-                  </tr>
-                </tbody>
-              </table>
+            <div ng-hide='uploadedKmlFiles == null'>
+              <p>
+                <!--
+                    KML URL:
+                    <br>
+                    <input type="text" size="50" id="kmlMapperUrl"/>
+                    <button type="button" onclick="addKmlLayer()">Plot</button> 
+                    -->
+                <table id="userKmlTable" class="table table-bordered table-responsive">
+                  <caption>Click the checkbox to turn the display on/off</caption>
+                  <thead>
+                    <th>KML File</th>
+                    <th>Display</th>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
+                      <td>{{uploadKmlFile.name}}</td>
+                      <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)">
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
           </div>
         </div>
       </div>
