@@ -1179,13 +1179,15 @@ function noImage(image) {
                 <tr>
                   <th>Project ID</th>
                   <th>Creation Time</th>
+                  <th>Project Type</th>
                   <th>View</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="project in projects | filter:query|orderBy:orderProp">
-                  <td>{{project._id}}</td>
-                  <td>{{project.creationTime}}</td>
+                  <td style="word-wrap:break-word;">{{project._id}}</td>
+                  <td style="word-wrap:break-word;">{{project.creationTime}}</td>
+                  <td style="word-wrap:break-word;">{{project.appName}}</td>
                   <td>
                       <button class="btn btn-info" ng-click="viewProject(project._id)">View</button>
                   </td>

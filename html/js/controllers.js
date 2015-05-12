@@ -35,7 +35,7 @@ UserProjectApp.config(['$routeProvider',function ($routeProvider) {
 
 UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($rootScope, $location, $cookieStore, $http) {
     
-    console.log("userProjectApp.run() called");
+//    console.log("userProjectApp.run() called");
 //    $rootScope.globals = $cookieStore.get('globals') || {};
     $rootScope.globals={};
     if ($rootScope.globals.currentUser) {
@@ -49,31 +49,32 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
                 username: "anonymous",
                 password: ""
             },
-            currentProject: {
-                //This is a barebones project
-                projectName: "anoymousProject",
-                status: "New",
-            }
-        };
+            currentProject:{}
+            //            currentProject: {
+            //                //This is a barebones project
+            //                projectName: "anoymousProject",
+            //                status: "New",
+        }
+    };
         
         //Create an anonymous project for unauthenticated users.
-        var newProject={};
-        newProject.projectName=$rootScope.globals.currentProject.projectName;
-        //Need to see if necessary to stringify newProject or if it can be passed directly.
-        //        console.log("Creating anonymous project");
-        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-            success(function(project){
-                console.log("Anon project created: "+project._id);
-                //Set or update the current project
-                $rootScope.globals.currentProject=project;
-                $rootScope.globals.currentProject.status="New"; 
-            }).
-            error(function(data){
-                console.error("Could not create the new project");
-            });
+//        var newProject={};
+//        newProject.projectName=$rootScope.globals.currentProject.projectName;
+//        //Need to see if necessary to stringify newProject or if it can be passed directly.
+//        //        console.log("Creating anonymous project");
+//        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+//            success(function(project){
+//                console.log("Anon project created: "+project._id);
+//                //Set or update the current project
+//                $rootScope.globals.currentProject=project;
+//                $rootScope.globals.currentProject.status="New"; 
+//            }).
+//            error(function(data){
+//                console.error("Could not create the new project");
+//            });
 
 //        $cookieStore.put('globals', $rootScope.globals);        
-    }
+//    }
 
     // keep user logged in after page refresh
     
@@ -247,16 +248,30 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     $scope.createProject=function(){
         var newProject={};
         newProject.projectName=$scope.projectName;
+        //        newProject.projectName=$rootScope.globals.currentProject.projectName;
         //Need to see if necessary to stringify newProject or if it can be passed directly.
+        //        console.log("Creating anonymous project");
         $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
             success(function(project){
+                console.log("Anon project created: "+project._id);
                 //Set or update the current project
                 $rootScope.globals.currentProject=project;
-                $location.path('/submit');
+                $rootScope.globals.currentProject.status="New"; 
             }).
             error(function(data){
                 console.error("Could not create the new project");
             });
+        
+        //Need to see if necessary to stringify newProject or if it can be passed directly.
+        //        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
+        //            success(function(project){
+//                //Set or update the current project
+        //                $rootScope.globals.currentProject=project;
+        //                $location.path('/submit');
+        //            }).
+        //            error(function(data){
+        //                console.error("Could not create the new project");
+        //            });
     }
 
     //User will review or edit a previous project
@@ -318,6 +333,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
         //Note status is completed because we made a blocking call.
         $rootScope.globals.currentProject.status="Completed";
+        $rootScope.globals.currentProject.appName=appName;
         $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
         $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
         $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
@@ -367,6 +383,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     }
     
     //This runs the blocking version of the executable wrapper
+    //TODO: this is not currently used, need to merge with other methods.
     $scope.submit=function(appName){
         console.log("appName:"+appName);
         //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
@@ -439,7 +456,12 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     
 
 }]);
-                       
+
+/**
+* The upload controller is used to upload files to the server.
+* TODO: We may want to merge this with UserProjectController.
+* TODO: Generalize the functions so that we don't need a specialized upload for each case
+*/                       
 UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$location','UploadService',function($scope, $rootScope, $http, $location, UploadService) {
     //This version is used to plot a KML file on KmlMapper (standalone version)
     $scope.uploadFileForKmlOld=function(){
@@ -450,6 +472,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+file.name;
         document.getElementById("kmlUrl").value=$scope.kmlUrl;
     }
+
     //This version uploads and plots KML file in the mapper tool embedded into main.html
     $scope.uploadFileForKml=function(){
         var file=$scope.myFile;
@@ -469,31 +492,49 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
     $scope.uploadFile=function(){
         //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
         var file=$scope.myFile;
-
-        //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
-        //Note: need to consolidate these naming conventions in some variable or function.
-        var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
-        console.log("Upload URL:"+uploadUrl);
-        UploadService.uploadFileToUrl2(file,uploadUrl);
         
-        $rootScope.globals.currentProject.projectInputFileName=file.name;
-        $rootScope.globals.currentProject.status="Ready";
-        //Now update the project object
-//        console.log("Here is the URL:"+"/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id);
-
-        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+        //Create a new project
+        //TODO: the user's project is set up here, which is awkward.  Should be able to call createProject().
+        var newProject={};
+        newProject.projectName=$rootScope.globals.currentUser.username+"Project";
+        newProject.projectInputFileName=file.name;
+        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
             success(function(project){
-                console.log("updated project:"+JSON.stringify(project));
-//                $rootScope.$broadcast('upload','done');
-                $rootScope.$broadcast('upload',project);
+                //Set the currentProject
+                console.log("Newly registered project:",project);
+                $rootScope.globals.currentProject=project;
+                //Notify other controllers that this is done.
+                console.log("Root scope project,",$rootScope.globals.currentProject);
+                
+                //Upload the file
+                //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
+                //Note: need to consolidate these naming conventions in some variable or function.
+                var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+                console.log("Upload URL:"+uploadUrl);
+                UploadService.uploadFileToUrl2(file,uploadUrl);
+
+                //Update the project
+                $rootScope.globals.currentProject.status="Ready";
+                $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+                    success(function(project){
+                        console.log("updated project:"+JSON.stringify(project));
+                        $rootScope.$broadcast('upload','done');
+                        $rootScope.$broadcast('upload',project);
+                    }).
+                    error(function(data){
+                        console.error("Could not update project: "+data);
+                    });
             }).
             error(function(data){
-                console.error("Could not update project: "+data);
+                console.error("Could not create the new project");
             });
     };
 }]);
 
-
+/**
+* This controller handles logouts.
+* TODO: merge into UserProjectController. Probably don't need to keep this separate.
+*/ 
 UserProjectApp.controller("LogoutController", ['$scope','$location','AuthenticationServices', function($scope,$location,AuthenticationServices){
     $scope.logout=function() {
 //        console.log("form action");
@@ -508,6 +549,10 @@ UserProjectApp.controller("LogoutController", ['$scope','$location','Authenticat
     
 }]);
 
+/**
+* This controller is used to display feeds.
+* TODO: merge
+*/ 
 UserProjectApp.controller("FeedCtrl", ['$scope','FeedService', function ($scope,Feed) {    
     $scope.loadButonText="Load";
     $scope.loadFeed=function(e){        
