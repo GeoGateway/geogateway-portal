@@ -366,7 +366,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         
         //disbale submit button
 
-        $http.get('/execute_disloc/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+        $http.get('/execute_disloc2/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
                 $scope.myproject=$rootScope.globals.currentProject;

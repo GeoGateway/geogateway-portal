@@ -231,6 +231,84 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 	 });
 });
 
+//This version uses exec and chains everything in a big if-else block.
+app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
+    collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+        console.log(obj);
+        var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+        var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+        var execResult = exec(theExec,{"cwd":baseWorkDirPath,"maxBuffer":500*1024});
+        
+        if (execResult.status == 1) {
+            console.error(execResult.stderr);
+            res.status(400).send(error);
+        }
+		  else {
+            //Write the disloc output and error
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,execResult.stdout);
+            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,execResult.stderr);
+            
+            //Make the KML
+            theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;             
+            execResult = exec(theExec,{"cwd":baseWorkDirPath});
+            if (execResult.status == 1) {
+                console.error(execResult.stderr);
+                res.status(400).send(error);
+            }
+            else {
+                // run SARImage with the default parameter
+                //theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+"  60 0 1.26 " + '""';
+                theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+" "+obj.insarElevation + " " +obj.insarAzimuth+" "+obj.insarFrequency+" "+'""';
+                if (execResult.status == 1) {
+                    console.error(execResult.stderr);
+                    res.status(400).send(error);
+                }
+                else {
+                    // run tilemap code
+                    // run qsxy2tilt with the default parameter
+                    theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
+                    execResult = exec(theExec,{"cwd":baseWorkDirPath});
+                    if (execResult.status == 1) {
+                        console.error(execResult.stderr);
+                        res.status(400).send(error);
+                    }
+                    else {
+                        // run tilemap vis code
+                        // run qsxy2tilt with the default parameter
+                        theExec=projectBinDir+"tiltmap_vis"+" -i " + obj.projectOutputTiltCSVFileName;
+                        execResult = exec(theExec,{"cwd":baseWorkDirPath});
+                        if (execResult.status == 1) {
+                            console.error(execResult.stderr);
+                            res.status(400).send(error);
+                        }
+                        else {
+                            // zip the files for download
+                            theExec= "zip -r " + obj.projectZipFileName + " .";
+                            
+                            execResult = exec(theExec,{"cwd":baseWorkDirPath});
+                            if (execResult.status == 1) {
+                                console.error(execResult.stderr);
+                                res.status(400).send(error);
+                            }
+                            else {
+                                //We are done.
+                                res.set('Content-Type','application/json');
+                                res.sendStatus(200);
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+            }
+            
+		  }
+        
+    });
+});
+
 //Runs the given executable in blocking (exec) mode.  This assumes that the project has 
 //been correctly created, with input and output files specfiied.  It will only execute
 //things in the project's bin directory, but we need to watch for semicolons.
@@ -277,7 +355,7 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
         
         //console.log("Execution path: "+theExec);
 
-        execResult = syncExec(theExec,{"cwd":baseWorkDirPath});
+        execResult = exec(theExec,{"cwd":baseWorkDirPath});
         if (execResult.status == 1) {
             console.error(execResult.stderr);
             res.status(400).send(error);
@@ -312,6 +390,15 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
 
      });
 });
+
+//Runs Disloc in spawn mode.
+//app.get('/spawn_disloc/:collection/:documentId',function(req,res) {
+//     collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
+//         var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+//         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
+//     });
+//});
+
 
 //Runs provided executable in non-blocking (spawn) mode. Should only run things project's
 //bin directory. This version requires the command line arguments to be set separately in the
