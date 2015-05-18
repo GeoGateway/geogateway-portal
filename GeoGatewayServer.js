@@ -234,78 +234,78 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 //This version uses exec and chains everything in a big if-else block.
 app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
     collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
-        console.log(obj);
+//        console.log(obj);
         var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
-        var execResult = exec(theExec,{"cwd":baseWorkDirPath,"maxBuffer":500*1024});
-        
-        if (execResult.status == 1) {
-            console.error(execResult.stderr);
-            res.status(400).send(error);
-        }
-		  else {
-            //Write the disloc output and error
-            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,execResult.stdout);
-            fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,execResult.stderr);
-            
-            //Make the KML
-            theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;             
-            execResult = exec(theExec,{"cwd":baseWorkDirPath});
-            if (execResult.status == 1) {
-                console.error(execResult.stderr);
+        exec(theExec,{"cwd":baseWorkDirPath,"maxBuffer":500*1024},function(error,stdout,stderr) {
+            if (error!==null) {
+                console.error(error);
                 res.status(400).send(error);
             }
-            else {
-                // run SARImage with the default parameter
-                //theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+"  60 0 1.26 " + '""';
-                theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+" "+obj.insarElevation + " " +obj.insarAzimuth+" "+obj.insarFrequency+" "+'""';
-                if (execResult.status == 1) {
-                    console.error(execResult.stderr);
-                    res.status(400).send(error);
-                }
-                else {
-                    // run tilemap code
-                    // run qsxy2tilt with the default parameter
-                    theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
-                    execResult = exec(theExec,{"cwd":baseWorkDirPath});
-                    if (execResult.status == 1) {
-                        console.error(execResult.stderr);
+		      else {
+                //Write the disloc output and error
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
+                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
+            
+                //Make the KML
+                theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;             
+                exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
+                    if (error!==null){
+                        console.error(error);
                         res.status(400).send(error);
                     }
                     else {
-                        // run tilemap vis code
-                        // run qsxy2tilt with the default parameter
-                        theExec=projectBinDir+"tiltmap_vis"+" -i " + obj.projectOutputTiltCSVFileName;
-                        execResult = exec(theExec,{"cwd":baseWorkDirPath});
-                        if (execResult.status == 1) {
-                            console.error(execResult.stderr);
-                            res.status(400).send(error);
-                        }
-                        else {
-                            // zip the files for download
-                            theExec= "zip -r " + obj.projectZipFileName + " .";
-                            
-                            execResult = exec(theExec,{"cwd":baseWorkDirPath});
-                            if (execResult.status == 1) {
-                                console.error(execResult.stderr);
+                        // run SARImage with the default parameter
+                        theExec=projectBinDir+"SARImage"+" "+obj.projectOutputFileName+" "+obj.insarElevation + " " +obj.insarAzimuth+" "+obj.insarFrequency+" "+'""';
+                        exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr) {
+                            if (error!==null){
+                                console.error(error);
                                 res.status(400).send(error);
                             }
                             else {
-                                //We are done.
-                                res.set('Content-Type','application/json');
-                                res.sendStatus(200);
-                                
+                                // run tilemap code
+                                // run qsxy2tilt with the default parameter
+                                theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
+                                exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr) {
+                                    if (error!==null){
+                                        console.error(error);
+                                        res.status(400).send(error);
+                                    }
+                                    else {
+                                        // run tilemap vis code
+                                        // run qsxy2tilt with the default parameter
+                                        theExec=projectBinDir+"tiltmap_vis"+" -i " + obj.projectOutputTiltCSVFileName;
+                                        exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
+                                            if (error!==null){
+                                                console.error(error);
+                                                res.status(400).send(error);
+                                            }
+                                            else {
+                                                // zip the files for download
+                                                theExec= "zip -r " + obj.projectZipFileName + " .";
+                                                exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
+                                                    if (error!==null){
+                                                        console.error(error);
+                                                        res.status(400).send(error);
+                                                    }
+                                                    
+                                                    else {
+                                                        //We are done.
+                                                        res.set('Content-Type','application/json');
+                                                        res.sendStatus(200);
+                                                        
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                             }
-                            
-                        }
-                        
+                        });
                     }
-                    
-                }
+                });
             }
-            
-		  }
-        
+		  });
     });
 });
 
