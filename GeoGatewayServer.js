@@ -21,6 +21,8 @@ var mkdirp=require('mkdirp');
 var RestClient=require('node-rest-client').Client;
 var GridStore=require('mongodb').GridStore;
 
+var Feed=require('feed');
+
 var restClient=new RestClient();
 
 //Place for uploading files.
@@ -312,6 +314,8 @@ app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
 //Runs the given executable in blocking (exec) mode.  This assumes that the project has 
 //been correctly created, with input and output files specfiied.  It will only execute
 //things in the project's bin directory, but we need to watch for semicolons.
+//TODO: Deprecate this
+/**
 app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
      collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
         //var theExec=projectBinDir+req.params.exec+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;
@@ -390,15 +394,7 @@ app.get('/execute_disloc/:exec/:collection/:documentId', function (req,res) {
 
      });
 });
-
-//Runs Disloc in spawn mode.
-//app.get('/spawn_disloc/:collection/:documentId',function(req,res) {
-//     collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
-//         var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
-//         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
-//     });
-//});
-
+*/ 
 
 //Runs provided executable in non-blocking (spawn) mode. Should only run things project's
 //bin directory. This version requires the command line arguments to be set separately in the
@@ -663,6 +659,46 @@ app.get('/hgt_query/',function(req,res) {
     });
 
 });
+
+/**
+* This method returns all of the public projects for a specific user.  Uses the 'feed' package.
+*/
+app.get('/rss/:collection',function(req,res) {
+    var feed=new Feed({
+        title: "GeoGateway Earthquake Model Feeds",
+        description: "Published models",
+        link: "http://geo-gateway.org",
+        image: "http://geo-gateway.org/images/logos/logo.png",
+        //Creative commons license.
+        author: {
+            name: req.params.collection
+        }
+    });
+    
+    //Get the items in the collection. This is returend as an array
+    collectionUtils.findAll(req.params.collection,function(error,obj) {
+        if(error) {
+            console.error(error);
+        }
+        else {
+            //The returned obj is an array with most recent entries last,
+            //so reverse the order.
+            for(var key=obj.length-1;key>=0;key--){
+                feed.addItem({
+                    title:obj[key].projectName,
+                    description: JSON.stringify(obj[key]),
+                    date: obj[key].creationTime,
+                    author:{
+                        name:req.params.collection
+                    }
+                });
+            }
+        }
+        res.set('Content-Type','text/xml');
+        res.send(feed.render('rss-2.0'));
+    });
+});
+
 
 //--------------------------------------------------
 

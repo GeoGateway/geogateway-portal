@@ -4,6 +4,7 @@
     "bower": "^1.3.12",
     "express": "^4.10.4",
     "express-generator": "^4.9.0",
+    "feed": "^0.2.6",
     "jade": "^1.8.2",
     "jasmine-core": "^2.1.3",
     "karma": "^0.12.31",
