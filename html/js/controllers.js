@@ -50,10 +50,6 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
                 password: ""
             },
             currentProject:{}
-            //            currentProject: {
-            //                //This is a barebones project
-            //                projectName: "anoymousProject",
-            //                status: "New",
         }
     };
         
@@ -260,20 +256,9 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
             }).
             error(function(data){
                 console.error("Could not create the new project");
-            });
-        
-        //Need to see if necessary to stringify newProject or if it can be passed directly.
-        //        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-        //            success(function(project){
-//                //Set or update the current project
-        //                $rootScope.globals.currentProject=project;
-        //                $location.path('/submit');
-        //            }).
-        //            error(function(data){
-        //                console.error("Could not create the new project");
-        //            });
+            });        
     }
-
+    
     //User will review or edit a previous project
     $scope.editProject=function(projectId) {
         console.log('Project GET request:'+'projects/'+$rootScope.globals.currentUser.username+"/"+projectId);
@@ -326,30 +311,59 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $scope.myproject=arg;        
     });
 
+    function urlify(filename){
+        var urlFilename=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/";
+        urlFilename+=$rootScope.globals.currentUser.username+"/";
+        urlFilename+=$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id+"/";
+        urlFilename+=filename;
+//        console.log(urlFilename);
+        return urlFilename;
+    }
     //This runs the blocking version of the executable wrapper
     $scope.submitdisloc=function(appName){
-        //console.log("appName:"+appName);
-        //        console.log("Current project:"+JSON.stringify($rootScope.globals.currentProject));
-        //        console.log("URL for exec:"+'/execute/simplex/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id);
         //Note status is completed because we made a blocking call.
         $rootScope.globals.currentProject.status="Completed";
         $rootScope.globals.currentProject.appName=appName;
-        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
-        $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
-        $rootScope.globals.currentProject.projectFaultFileName=$rootScope.globals.currentProject.projectName+".fault";
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+
+        //Input file
+        $rootScope.globals.currentProject.projectInputFileNameUrl=urlify($rootScope.globals.currentProject.projectInputFileName);
+
+        //Output file
+        $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
+        $rootScope.globals.currentProject.projectOutputFileNameUrl=urlify($rootScope.globals.currentProject.projectName+".out");
+
+        //Log file
+        $rootScope.globals.currentProject.projectLogFileName=$rootScope.globals.currentProject.projectName+".log";
+        $rootScope.globals.currentProject.projectLogFileNameUrl=urlify($rootScope.globals.currentProject.projectName+".log");
+
+        //Standard out
         $rootScope.globals.currentProject.projectStandardOut=$rootScope.globals.currentProject.projectName+".stdout";
+        $rootScope.globals.currentProject.projectStandardOutUrl=urlify($rootScope.globals.currentProject.projectName+".stdout");
+
+        //Standard error
         $rootScope.globals.currentProject.projectStandardError=$rootScope.globals.currentProject.projectName+".stderr";
+        $rootScope.globals.currentProject.projectStandardErrorUrl=urlify($rootScope.globals.currentProject.projectName+".stderr");
+
         //output file name for kml plotting
         $rootScope.globals.currentProject.projectOutputKMLFileName=$rootScope.globals.currentProject.projectName+".out.kml";
+        $rootScope.globals.currentProject.projectOutputKMLFileNameUrl=urlify($rootScope.globals.currentProject.projectName+".out.kml");
+
         //output file name for SARImage plotting
         $rootScope.globals.currentProject.projectOutputSARImageKMLFileName=$rootScope.globals.currentProject.projectName+".out.insar.kml";
+        $rootScope.globals.currentProject.projectOutputSARImageKMLFileNameUrl=urlify($rootScope.globals.currentProject.projectName+".out.insar.kml");
+
         //output file name for tiltmap
         $rootScope.globals.currentProject.projectOutputTiltCSVFileName=$rootScope.globals.currentProject.projectName+".out.tilt.csv";
+        $rootScope.globals.currentProject.projectOutputTiltCSVFileNameUrl=urlify($rootScope.globals.currentProject.projectName+".out.tilt.csv");
+
         //output file name for strainMag.kml plot
         $rootScope.globals.currentProject.projectOutputStrainMagFileName = $rootScope.globals.currentProject.projectName + ".out.tilt_strainMag.kml";
+        $rootScope.globals.currentProject.projectOutputStrainMagFileNameUrl = urlify($rootScope.globals.currentProject.projectName + ".out.tilt_strainMag.kml");
+
         //zip file name
         $rootScope.globals.currentProject.projectZipFileName = $rootScope.globals.currentProject._id + ".zip";
+        $rootScope.globals.currentProject.projectZipFileNameUrl = urlify($rootScope.globals.currentProject._id + ".zip");
         
         //paramters
         $rootScope.globals.currentProject.insarElevation = $("#disloc_elevation").val();
