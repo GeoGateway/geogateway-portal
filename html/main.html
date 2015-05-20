@@ -976,6 +976,10 @@ function noImage(image) {
                       <td>{{myproject.projectName}}</td>
                     </tr>
                     <tr>
+                      <td>Permission</td>
+                      <td>{{myproject.permission}}</td>
+                    </tr>
+                    <tr>
                       <td>Project ID</td>
                       <td>{{myproject._id}}</td>
                     </tr>
@@ -1067,11 +1071,18 @@ function noImage(image) {
             <div class="panel panel-default" ng-show='status == "Ready" || status == "Submitted"'>
               <div class="panel-body">
                 <h4>Your project's components</h4>
+                <div ng-show="myproject.status=='Completed'">
+                  <input type="checkbox"  ng-click="publishProject(myproject._id)" ng-checked="myproject.permission=='Published'" ng-model="publishCheckboxModel"> Publish Project
+                </div>
                 <table class="table table-striped table-bordered table-condensed table-responsive">
                   <tbody>
                     <tr>
                       <td>Project Name</td>
                       <td>{{myproject.projectName}}</td>
+                    </tr>
+                    <tr>
+                      <td>Permission</td>
+                      <td>{{myproject.permission}}</td>
                     </tr>
                     <tr>
                       <td>Project ID</td>
@@ -1229,12 +1240,19 @@ function noImage(image) {
             <div class="panel-body">
               <button class="btn btn-success" ng-click="viewCompleteList()">View List </button>             
               <h4>Your project's components</h4>
+                <div ng-show="myproject.status=='Completed'">
+                <input type="checkbox" ng-click="publishProject(myproject._id)" ng-checked="myproject.permission=='Published'" ng-model="publishCheckboxModel"> Publish Project  
+                </div>
               <table class="table table-striped table-bordered table-condensed table-responsive">
                 <tbody>
                   <tr>
                     <td>Project Name</td>
                     <td>{{myproject.projectName}}</td>
                   </tr>
+                    <tr>
+                      <td>Permission</td>
+                      <td>{{myproject.permission}}</td>
+                    </tr>
                   <tr>
                     <td>Project ID</td>
                     <td>{{myproject._id}}</td>

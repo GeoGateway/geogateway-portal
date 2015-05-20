@@ -228,6 +228,57 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.$broadcast("selectProjectEvent",true);
     }
 
+    //The project 
+    $scope.publishProject=function(projectId){
+        console.log("Making project public:"+projectId);
+        //This is the true case
+        if($scope.publishCheckboxModel) {
+            //Fetch the project with that ID from the DB.
+            //TODO: This and the false case have nearly identiccal code, so move to a private function.
+            $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+                success(function(project) {
+                    project.permission="Published";
+                    //Push it back to the DB
+                    $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+projectId,project).
+                        success(function(project){
+                            //Set the currentProject
+                            console.log("Newly registered project:",project);
+                            $rootScope.globals.currentProject=project;
+                            $scope.myproject=project;
+                        }).
+                        error(function(data){
+                            console.error("Could not update the project");
+                        });
+                }).
+                error(function(data){
+                    console.log("Could not load the project");
+                });
+        }
+        //This is the false case
+        else {
+            $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
+                success(function(project) {
+                    project.permission="Private";
+                    //Push it back to the DB
+                    $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+projectId,project).
+                        success(function(project){
+                            //Set the currentProject
+                            console.log("Newly registered project:",project);
+                            $rootScope.globals.currentProject=project;
+                            $scope.myproject=project;
+                        }).
+                        error(function(data){
+                            console.error("Could not update the project");
+                        });
+                }).
+                error(function(data){
+                    console.log("Could not load the old project");
+                });
+            
+        }
+    }
+    
+
     //The following are functions that can be associated with submit actions.
     $scope.viewProject=function(projectId) {
         $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
@@ -327,7 +378,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
 
         //Input file
-        $rootScope.globals.currentProject.projectInputFileNameUrl=urlify($rootScope.globals.currentProject.projectInputFileName);
+        //This is done separately during project creation.
+//        $rootScope.globals.currentProject.projectInputFileNameUrl=urlify($rootScope.globals.currentProject.projectInputFileName);
 
         //Output file
         $rootScope.globals.currentProject.projectOutputFileName=$rootScope.globals.currentProject.projectName+".out";
@@ -507,18 +559,20 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         //$scope.myfile must correspond to the value of the file-model attribute in the HTML.
         var file=$scope.myFile;
         
-        //Create a new project
+        //Create a new project and push to the DB.
         //TODO: the user's project is set up here, which is awkward.  Should be able to call createProject().
         var newProject={};
         newProject.projectName=$rootScope.globals.currentUser.username+"Project";
         newProject.projectInputFileName=file.name;
+        newProject.permission="Private";
+        //Push the project to the DB.
         $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
             success(function(project){
                 //Set the currentProject
                 console.log("Newly registered project:",project);
                 $rootScope.globals.currentProject=project;
                 //Notify other controllers that this is done.
-                console.log("Root scope project,",$rootScope.globals.currentProject);
+//                console.log("Root scope project,",$rootScope.globals.currentProject);
                 
                 //Upload the file
                 //doUpload is the REST method in GeoGatewayServer. The rest are parameters.
@@ -527,8 +581,11 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
                 console.log("Upload URL:"+uploadUrl);
                 UploadService.uploadFileToUrl2(file,uploadUrl);
 
-                //Update the project
+                //TODO: this should use the urlify() function.
+                $rootScope.globals.currentProject.projectInputFileNameUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id+"/"+file.name;
                 $rootScope.globals.currentProject.status="Ready";
+
+                //Update the project
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
                     success(function(project){
                         console.log("updated project:"+JSON.stringify(project));

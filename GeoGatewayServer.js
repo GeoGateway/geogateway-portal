@@ -684,14 +684,17 @@ app.get('/rss/:collection',function(req,res) {
             //The returned obj is an array with most recent entries last,
             //so reverse the order.
             for(var key=obj.length-1;key>=0;key--){
-                feed.addItem({
-                    title:obj[key].projectName,
-                    description: JSON.stringify(obj[key]),
-                    date: obj[key].creationTime,
-                    author:{
-                        name:req.params.collection
-                    }
-                });
+                if(obj[key].permission=="Published") {
+                    //TODO: need to format the description
+                    feed.addItem({
+                        title:obj[key].projectName,
+                        description: JSON.stringify(obj[key]),
+                        date: obj[key].creationTime,
+                        author:{
+                            name:req.params.collection
+                        }
+                    });
+                }
             }
         }
         res.set('Content-Type','text/xml');
