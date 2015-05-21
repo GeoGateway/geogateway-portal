@@ -2,7 +2,7 @@
 // http://gf4.ucs.indiana.edu/InSAR-LOS/SAR-LOS-Main2.faces
 //setting up Google Maps and all overlays
 var mapA;
-var wmsgf9;
+//var wmsgf9;
 var wmsgf9_select;
 var wmsgf9_samples = {};
 var UAVSARDrawingManager;
@@ -833,7 +833,7 @@ function draw_UAVSAR() {
 //    };
     $('#UAVSAR-geometry').empty();
     UAVSARDrawingManager.setMap(mapA);
-    wmsgf9 = loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
+    loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
     //mapA.overlayMapTypes.setAt(0, wmsgf9);
 }
 
