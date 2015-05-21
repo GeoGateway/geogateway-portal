@@ -142,10 +142,8 @@ function eqfeed_callback(data) {
 }
 
 function addLayerWo(){
-    mapA.data.setStyle(null);
     kml_ca.setMap(null);
     kml_wo.setMap(mapA);
-    mapA.data.setStyle(styleFeature);
 }
 
 function addLayerCa(){
@@ -177,32 +175,30 @@ function removeQuakes(){
 
 
 function styleFeature(feature) {
-  var low = [151, 83, 34];   // color of mag 1.0
-  var high = [5, 69, 54];    // color of mag 6.0 and above
-  var minMag = 3.5;
-  var maxMag = 6.0;
-
-// fraction represents where the value sits between the min and max
-
-  var fraction = (Math.min(feature.getProperty('mag'), maxMag) - minMag) /
-      (maxMag - minMag);
-
-  var time = feature.getProperty('time');
-
-  var color = interpolateHsl(low, high, fraction);
-
-  return {
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      strokeWeight: 0.5,
-      strokeColor: '#fff',
-      fillColor: color,
-      fillOpacity: 4 / feature.getProperty('mag'),
-      // while an exponent would technically be correct, quadratic looks nicer
-      scale: Math.pow(feature.getProperty('mag'), 1.25)
-    },
-    zIndex: Math.floor(feature.getProperty('mag'))
-  };
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];    // color of mag 6.0 and above
+    var minMag = 3.5;
+    var maxMag = 6.0;
+    
+    //Fraction represents where the value sits between the min and max.
+    //We just set it to 1.0 to make all earthquakes red.
+    // var fraction = (Math.min(feature.getProperty('mag'), maxMag) - minMag) /(maxMag - minMag);
+    var fraction=1.0;
+    var time = feature.getProperty('time');   
+    var color = interpolateHsl(low, high, fraction);
+    
+    return {
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeWeight: 0.5,
+            strokeColor: '#fff',
+            fillColor: color,
+            fillOpacity: 4 / feature.getProperty('mag'),
+            // while an exponent would technically be correct, quadratic looks nicer
+            scale: Math.pow(feature.getProperty('mag'), 1.25)
+        },
+        zIndex: Math.floor(feature.getProperty('mag'))
+    };
 }
 
 function interpolateHsl(lowHsl, highHsl, fraction) {
