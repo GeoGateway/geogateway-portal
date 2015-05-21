@@ -14,6 +14,18 @@ var dislockmls = [];
 var rowSelected=null;
 var kmlLayerObj=[];
 
+//OpenHazards/UCDavis KMZ Layers
+var kml_wo = new google.maps.KmlLayer({
+    url: 'http://www.openhazards.com/Tools/kml/wo-forecast.kmz',
+    preserveViewport: true
+  });
+
+var kml_ca = new google.maps.KmlLayer({
+    url: 'http://www.openhazards.com/Tools/kml/ca-forecast.kmz',
+    preserveViewport: true
+  });
+
+
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
 // deletes all geometry markings made for UAVSAR
@@ -119,6 +131,92 @@ function setup_UAVSAR() {
         uavsarquery(x.innerHTML);
     });
 }
+
+/**
+* These are UC Davis map layers
+*/ 
+
+function eqfeed_callback(data) {
+    mapA.data.addGeoJson(data);
+}
+
+function addLayerWo(){
+    mapA.data.setStyle(null);
+    kml_ca.setMap(null);
+    kml_wo.setMap(mapA);
+    mapA.data.setStyle(styleFeature);
+}
+
+function addLayerCa(){
+    kml_wo.setMap(null);
+    kml_ca.setMap(mapA);
+}
+
+function removeLayer(){
+    kml_ca.setMap(null);
+    kml_wo.setMap(null);
+}
+function addQuakesMonth(){
+
+  // Get the earthquake data (JSONP format) from the USGS: M>4.5, Last Month
+
+    var script = document.createElement('script');
+
+    script.setAttribute('src',
+       'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/4.5/month'); 
+
+    mapA.data.setStyle(styleFeature);
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+}
+
+function removeQuakes(){
+    mapA.data.setStyle({visible: false});
+}
+
+
+function styleFeature(feature) {
+  var low = [151, 83, 34];   // color of mag 1.0
+  var high = [5, 69, 54];    // color of mag 6.0 and above
+  var minMag = 3.5;
+  var maxMag = 6.0;
+
+// fraction represents where the value sits between the min and max
+
+  var fraction = (Math.min(feature.getProperty('mag'), maxMag) - minMag) /
+      (maxMag - minMag);
+
+  var time = feature.getProperty('time');
+
+
+  var color = interpolateHsl(low, high, fraction);
+
+  return {
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      strokeWeight: 0.5,
+      strokeColor: '#fff',
+      fillColor: color,
+      fillOpacity: 4 / feature.getProperty('mag'),
+      // while an exponent would technically be correct, quadratic looks nicer
+      scale: Math.pow(feature.getProperty('mag'), 1.25)
+    },
+    zIndex: Math.floor(feature.getProperty('mag'))
+  };
+}
+
+function interpolateHsl(lowHsl, highHsl, fraction) {
+  var color = [];
+  for (var i = 0; i < 3; i++) {
+    // Calculate color based on the fraction.
+    color[i] = (highHsl[i] - lowHsl[i]) * fraction + lowHsl[i];
+  }
+
+  return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
+}
+//--------------------------------------------------
+//End of UCDavis stuff
+//--------------------------------------------------
 
 //Put user-supplied  layer on the map
 function addKmlLayer(){

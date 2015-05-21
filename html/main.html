@@ -696,8 +696,8 @@ function noImage(image) {
         </button>
       </li>
       <li>
-        <button class="tab-button tool-tab-button" value="about">
-          Help
+        <button class="tab-button tool-tab-button" value="Forecast">
+          Forecast
         </button>
       </li>
     </ul>
@@ -1341,6 +1341,28 @@ function noImage(image) {
               </td>
             </tr>
           </table>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tab-pane tool-tab-pane inactive" id="Forecast">
+      <div class="tool">
+        <div class="tool-title"><b>Global Earthquake Forecast Heat Map</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
+          <p>Global: M &gt; 6.5, 1 Year.   &nbsp; &nbsp; California: M &gt; 5, 1 Year</p> 
+          <div id="panel_forecast">
+            
+            <button class="btn btn-small btn-info" onclick="addLayerWo()"> Display Global Forecast</button>
+            
+            <button class="btn btn-small btn-info" onclick="addLayerCa()">Display Calif Forecast</button>
+            <button class="btn btn-small btn-info" onclick="removeLayer()"> Remove Forecast</button>
+          </div>
+          <p/>
+          <div id="panel_quakes">
+            <button class="btn btn-small btn-primary" onclick="addQuakesMonth()">Display Earthquakes Last Month M &gt; 4.5</button>
+            <button class="btn btn-small btn-primary" onclick="removeQuakes()">Remove Earthquakes</button>
+          </div>
         </div>
       </div>
     </div>
