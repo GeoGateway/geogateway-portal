@@ -68,6 +68,7 @@ function setup_UAVSAR() {
     wmsgf9 = new google.maps.ImageMapType(wmsOptions3);
 
     //Controling the Layers that appear in Map A.  You can set certain maps to appear in Map A or in Map B.  In this example they appear in both maps.
+    //TODO: These need to be unified with mapA's other option settings in initialize().
     mapA.setOptions({
         mapTypeControlOptions: {
             mapTypeIds: [
@@ -187,7 +188,6 @@ function styleFeature(feature) {
       (maxMag - minMag);
 
   var time = feature.getProperty('time');
-
 
   var color = interpolateHsl(low, high, fraction);
 
@@ -1082,9 +1082,12 @@ function initialize() {
         zoom: 6,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         MapTypeControl: true,
-        mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
-        navigationControl: true,
-        navigationControlOptions: { style: google.maps.NavigationControlStyle.ZOOM_PAN },
+        scaleControl:true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+//        navigationControl: true,
+//        navigationControlOptions: {style: google.maps.NavigationControlStyle.ZOOM_PAN},
+        panControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
+        zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
         backgroundColor: 'White',
         scrollwheel: false,
         maxZoom: 17,
