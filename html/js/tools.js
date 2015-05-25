@@ -420,10 +420,17 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     // var querystr = uid + "/" + dataname;
     wmsgf9_select = wmsgf9_samples[uid];
 
-//    console.log(wmsgf9_select);
+
 
     // zoom to the kmllayer
     mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
+
+    // check wms layer -- disabled for check-in
+    //var has_wms = checkwmslayer(uid);
+    //if (has_wms) {
+    //    var wmsoverlay = loadWMS(mapA, "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+    //}
+
 
     if(wmsgf9_select[2]) {
         viewDataset(uid, dataname, false);

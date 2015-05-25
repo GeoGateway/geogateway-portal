@@ -582,6 +582,24 @@ app.get('/uavsar_query/',function(req,res){
 
 });
 
+// has_wms query, this is the temporary solution, shall be removed later
+app.get('/has_wms/', function(req,res) {
+    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
+    var wmsParams = [
+        "version=1.1.1",
+        "request=DescribeLayer",
+        "outputFormat=application/json",
+        "exceptions=application/json"
+    ];
+    var layername = req.query.layername;
+    var queryUrl = geoServerUrl + wmsParams.join("&") + "&layers=" + "InSAR:" + layername;
+    //console.log(queryUrl);
+    
+    restClient.get(queryUrl, function(data, response){
+        res.status(200).send(data);
+    });
+});
+
 app.get('/los_query/',function(req,res) {
 	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid'
     image_uid=req.query.image_uid;

@@ -61,6 +61,25 @@ MercatorProjection.prototype.fromDivPixelToSphericalMercator = function(pixel, z
     return new google.maps.Point(x,y);
 };
 
+//test if the layer exist 
+function checkwmslayer(uid) {
+    var layername = "uid" + uid + "_unw";
+    
+    var results=$.ajax({url:'has_wms',data:{'layername':layername},async:false}).responseText;
+    var datajson=jQuery.parseJSON(results);
+
+
+    if(datajson.hasOwnProperty('layerDescriptions')) {
+        //alert("layer is found")
+        return true;
+    }
+    if(datajson.hasOwnProperty('exceptions')) {
+        //alert("layer is not found");
+        return false;
+    }
+}
+
+
 function loadWMS(map, baseURL, layername){
 
     var tileHeight = 256;
