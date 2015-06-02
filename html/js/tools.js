@@ -13,6 +13,7 @@ var dygraph1;
 var dislockmls = [];
 var rowSelected=null;
 var kmlLayerObj=[];
+var markers=[];
 
 //OpenHazards/UCDavis KMZ Layers
 var kml_wo = new google.maps.KmlLayer({
@@ -133,80 +134,286 @@ function setup_UAVSAR() {
 /**
 * These are UC Davis map layers
 */ 
-
-function eqfeed_callback(data) {
-    mapA.data.addGeoJson(data);
+function loadQuakes(){
+    window.eqfeed_callback = function(results) {
+        numberEQs = results.features.length;
+        for (var i = 0; i < results.features.length; i++) {
+            var infowindow = new google.maps.InfoWindow({content: contentString});
+          
+            //    ---------------------------------------------------------------------
+            //
+            //    Information for the Pop Up Info Windows when you click on the earthquakes
+            //
+            var eq_mag        = results.features[i].properties.mag;
+            var mag_string    = eq_mag.toFixed(1);
+            
+            var timestamp     = results.features[i].properties.time;
+            timestamp         = timestamp * 1  // converts string to integer
+            var eq_date_time  = new Date(timestamp);
+            
+            var eq_place      = results.features[i].properties.place;
+            
+            var eq_url        = results.features[i].properties.url;
+            
+            //    --------------------------------------------------------------------
+            var coords = results.features[i].geometry.coordinates;
+            var depth  = coords[2].toFixed(1);
+            longitude = coords[0].toFixed(3);
+            latitude  = coords[1].toFixed(3);
+            var latLng = new google.maps.LatLng(coords[1],coords[0]);
+            
+            // Define colors of events: Hottest colors are most recent
+            
+            var low = [151, 83, 34];   // color of mag 1.0
+            var high = [5, 69, 54];    // color of mag 6.0 and above
+            var eq_fraction = (numberEQs + 30. - i)/numberEQs;  // Most recent earthquakes are the hottest colors
+            var fraction = Math.pow(eq_fraction,0.5); 
+            var color = interpolateHsl(low, high, fraction);
+            
+            //  This is the content string for the Info Windows
+            
+            var contentString = 
+                '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h3 id="firstHeading" class="firstHeading">'+ ' Magnitude: ' + mag_string + '</h3>'+
+                '<h4 id="firstHeading" class="firstHeading">'+ ' Date/Time: ' + eq_date_time + '</h4>'+
+                '<h4 id="firstHeading" class="firstHeading">'+ '  Location: ' + eq_place  + '</h4>'+
+                '<h4 id="firstHeading" class="firstHeading">'+ 'Hypocenter:  &nbsp; &nbsp; Latitude: ' + latitude + '<sup>o</sup>' +
+                ' &nbsp; &nbsp; Longitude: ' + longitude + '<sup>o</sup>' +  ' &nbsp; &nbsp; Depth: ' + depth + ' km' + '</h4>'+
+                '<h4 id="firstHeading" class="firstHeading">'+ '      URL: ' + '<a href='+ '"' + eq_url +'"' + '>' + eq_url + '</a></h4>'+
+                '<div id="bodyContent">'+ 
+                '</div>'+
+                '</div>';
+            
+            //  Define the earthquake markers
+            
+            var marker = new google.maps.Marker({
+                position: latLng,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    strokeWeight: 0.2,
+                    strokecolor: 'black',
+                    fillColor: color,       
+                    fillOpacity: 4 / eq_mag,  
+                    scale: Math.pow(eq_mag, 1.6)
+                },
+                zIndex: Math.floor(eq_mag),
+                title: 'Mag='+ mag_string +' ' +' Depth='+ depth.toString() +' km',
+                map: mapA
+            });
+            
+            //  Put the markers into an array markers[]
+            markers.push(marker);
+            
+            //  Listen for clicks on the earthquakes
+            google.maps.event.addListener(marker, 'click', getInfoCallback(mapA, contentString));
+            
+            //  Start with the earthquakes on the mapm since you just loaded them
+            setAllMap(mapA);
+        }
+    }
 }
 
-function addLayerWo(){
+function setAllMap(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+function calcwo(){    
     kml_ca.setMap(null);
-    kml_wo.setMap(mapA);
+    document.getElementById("California Forecast").checked = false;
+    
+    if (document.getElementById("Global Forecast").checked == false){
+        kml_wo.setMap(null);
+    }
+    if (document.getElementById("Global Forecast").checked == true){
+        kml_wo.setMap(mapA);
+    }
 }
 
-function addLayerCa(){
+//  Display the California Forecast in response to clicking the box
+function calcca(){
     kml_wo.setMap(null);
-    kml_ca.setMap(mapA);
+    document.getElementById("Global Forecast").checked = false;
+    
+    if (document.getElementById("California Forecast").checked == false){
+        kml_ca.setMap(null);
+    }
+    if (document.getElementById("California Forecast").checked == true){
+        kml_ca.setMap(mapA);
+    }
 }
 
-function removeLayer(){
-    kml_ca.setMap(null);
-    kml_wo.setMap(null);
-}
-function addQuakesMonth(){
-
-  // Get the earthquake data (JSONP format) from the USGS: M>4.5, Last Month
-
+function loadQuakesDay(){
+    // Get the earthquake data (JSONP format) from the USGS: M>1.0, Last Day
     var script = document.createElement('script');
-
-    script.setAttribute('src',
-       'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/4.5/month'); 
-
-    mapA.data.setStyle(styleFeature);
+    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/1.0/day';
+    script.id="QuakesDay";
     document.getElementsByTagName('head')[0].appendChild(script);
-
 }
 
-function removeQuakes(){
-    mapA.data.setStyle({visible: false});
+function loadQuakesWeek(){
+  // Get the earthquake data (JSONP format) from the USGS: M>2.5, Last Week
+    var script = document.createElement('script');
+    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/2.5/week'; 
+    script.id="QuakesWeek";
+    document.getElementsByTagName('head')[0].appendChild(script);
+} 
+
+function loadQuakesMonth(){
+  // Get the earthquake data (JSONP format) from the USGS: M>2.5, Last Week
+    var script = document.createElement('script');
+    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/4.5/month'; 
+    script.id="QuakesMonth";
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+ 
+//  Display the earthquakes in response to clicking the box
+function eqDay(){
+    if (document.getElementById("EQDay").checked == false){
+        document.getElementById("EQToggle").checked = false;
+        removeChildElement("QuakesDay");
+        deleteMarkers();
+    }
+    
+    if (document.getElementById("EQDay").checked == true){
+        document.getElementById("EQToggle").checked = true;  
+        //Turn off weeks and months
+        document.getElementById("EQWeek").checked = false;
+        document.getElementById("EQMonth").checked = false;
+        
+//        removeChildElement("QuakesDay");
+        removeChildElement("QuakesWeek");
+        removeChildElement("QuakesMonth");
+
+        deleteMarkers();
+        loadQuakesDay();
+        loadQuakes();
+        eqToggle();
+    }
 }
 
+function eqWeek(){
+    if (document.getElementById("EQWeek").checked == false){
+        document.getElementById("EQToggle").checked = false;
+        removeChildElement("QuakesWeek");
+        deleteMarkers();
+    }
+    if (document.getElementById("EQWeek").checked == true){
+        document.getElementById("EQToggle").checked = true;  
+        document.getElementById("EQDay").checked = false;
+        document.getElementById("EQMonth").checked = false;
+        
+//        removeChildNodes();
+        removeChildElement("QuakesDay");
+        removeChildElement("QuakesMonth");
 
-function styleFeature(feature) {
-    var low = [151, 83, 34];   // color of mag 1.0
-    var high = [5, 69, 54];    // color of mag 6.0 and above
-    var minMag = 3.5;
-    var maxMag = 6.0;
+        deleteMarkers();
+        loadQuakesWeek();
+        loadQuakes();
+        eqToggle();
+    }
+}
+
+function eqMonth(){
+    if (document.getElementById("EQMonth").checked == false){
+        document.getElementById("EQToggle").checked = false;
+        removeChildElement("QuakesMonth");
+        deleteMarkers();
+    }
     
-    //Fraction represents where the value sits between the min and max.
-    //We just set it to 1.0 to make all earthquakes red.
-    // var fraction = (Math.min(feature.getProperty('mag'), maxMag) - minMag) /(maxMag - minMag);
-    var fraction=1.0;
-    var time = feature.getProperty('time');   
-    var color = interpolateHsl(low, high, fraction);
+    if (document.getElementById("EQMonth").checked == true){
+        document.getElementById("EQToggle").checked = true;  
+        document.getElementById("EQDay").checked = false;
+        document.getElementById("EQWeek").checked = false;
+        
+//        removeChildNodes();
+        removeChildElement("QuakesDay");
+        removeChildElement("QuakesWeek");
+        deleteMarkers();
+        loadQuakesMonth();
+        loadQuakes();
+        eqToggle();
+    }
+}
+
+function eqToggle(){
     
-    return {
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            strokeWeight: 0.5,
-            strokeColor: '#fff',
-            fillColor: color,
-            fillOpacity: 4 / feature.getProperty('mag'),
-            // while an exponent would technically be correct, quadratic looks nicer
-            scale: Math.pow(feature.getProperty('mag'), 1.25)
-        },
-        zIndex: Math.floor(feature.getProperty('mag'))
+    if (document.getElementById("EQDay").checked == false               &&
+        +   document.getElementById("EQWeek").checked == false      &&
+        +   document.getElementById("EQMonth").checked == false){
+        document.getElementById("EQToggle").checked = false
+        
+    }
+    
+    if (document.getElementById("EQToggle").checked == false){
+        setAllMap(null);
+    }
+    
+    if (document.getElementById("EQToggle").checked == true){
+        setAllMap(mapA);
+    }
+}
+
+//  Used in computing the markers and placing on the map
+function getInfoCallback(map, content) {
+    var infowindow = new google.maps.InfoWindow({content: content});
+    return function() {
+        infowindow.setContent(content); 
+        infowindow.open(map, this);
     };
 }
 
+//  Used in the color assignments for the earthquakes
 function interpolateHsl(lowHsl, highHsl, fraction) {
-  var color = [];
-  for (var i = 0; i < 3; i++) {
-    // Calculate color based on the fraction.
-    color[i] = (highHsl[i] - lowHsl[i]) * fraction + lowHsl[i];
-  }
-
-  return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
+    var color = [];
+    for (var i = 0; i < 3; i++) {
+        // Calculate color based on the fraction.
+        color[i] = (highHsl[i] - lowHsl[i]) * fraction + lowHsl[i];
+    }
+    return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
 }
+
+// Sets the map on all markers in the array.
+function setAllMap(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+    setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+
+function deleteMarkers() {
+    clearMarkers();
+    markers = [];
+}
+
+function removeChildElement(childId) {
+    childElem=document.getElementById(childId);
+    if(childElem !== null) {
+        childElem.parentNode.removeChild(childElem);
+    }
+
+    // Get the element with id='head'
+    //    var list = document.getElementsByTagName('head')[0];
+    // As long as elemsnt has a child node, remove it
+    //    while (list.hasChildNodes()) {  
+    //        list.removeChild(list.firstChild);
+    //    }
+}
+
 //--------------------------------------------------
 //End of UCDavis stuff
 //--------------------------------------------------
