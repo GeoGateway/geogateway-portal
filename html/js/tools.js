@@ -176,12 +176,12 @@ function loadQuakes(){
                 '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
-                '<h3 id="firstHeading" class="firstHeading">'+ ' Magnitude: ' + mag_string + '</h3>'+
-                '<h4 id="firstHeading" class="firstHeading">'+ ' Date/Time: ' + eq_date_time + '</h4>'+
-                '<h4 id="firstHeading" class="firstHeading">'+ '  Location: ' + eq_place  + '</h4>'+
-                '<h4 id="firstHeading" class="firstHeading">'+ 'Hypocenter:  &nbsp; &nbsp; Latitude: ' + latitude + '<sup>o</sup>' +
-                ' &nbsp; &nbsp; Longitude: ' + longitude + '<sup>o</sup>' +  ' &nbsp; &nbsp; Depth: ' + depth + ' km' + '</h4>'+
-                '<h4 id="firstHeading" class="firstHeading">'+ '      URL: ' + '<a href='+ '"' + eq_url +'"' + '>' + eq_url + '</a></h4>'+
+                '<p>'+ ' Magnitude: ' + mag_string + '</p>'+
+                '<p>'+ ' Date/Time: ' + eq_date_time + '</p>'+
+                '<p">'+ '  Location: ' + eq_place  + '</p>'+
+                '<p>'+ 'Hypocenter:  &nbsp; &nbsp; Latitude: ' + latitude + '<sup>o</sup>' +
+                ' &nbsp; &nbsp; Longitude: ' + longitude + '<sup>o</sup>' +  ' &nbsp; &nbsp; Depth: ' + depth + ' km' + '</p>'+
+                '<p>'+ '      URL: ' + '<a href='+ '"' + eq_url +'"' + '>' + eq_url + '</a></p>'+
                 '<div id="bodyContent">'+ 
                 '</div>'+
                 '</div>';
