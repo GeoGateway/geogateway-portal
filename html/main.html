@@ -673,9 +673,14 @@ function noImage(image) {
   <div class="tools-panel blur open" ng-controller="UserProjectController">
     <ul type="none" class="tool-tabs">
       <li class="active">
-        <button class="tab-button tool-tab-button" value="tools">
-          UAVSAR
+        <button class="tab-button tool-tab-button" value="maptools">
+          Map Tools
         </button>
+      </li>
+      <li>
+        <button class="tab-button tool-tab-button" value="momentMagCalc">
+          Magnitude
+        </button>        
       </li>
       <li>
         <button class="tab-button tool-tab-button" value="disloc">
@@ -703,14 +708,17 @@ function noImage(image) {
         </button>
       </li>
     </ul>
-    <div class="tab-pane tool-tab-pane active" id="tools">
+
+    <div class="tab-pane tool-tab-pane inactive" id="momentMagCalc">
       <div class="tool">
-        <div class="tool-title"><b>Tools</b></div>
+        <div class="tool-title"><b>Moment Magnitude Calculator</b></div>
         <div class="divider"></div>
         <div class="tool-content">
           <div>
+<!--
             <input class="tools-checkbox" type="checkbox" name="active-tools" value="moment_magnitude_calc"/><span class="default-font">&nbsp;Moment Magnitude Calculator</span>
-            <div class="tools-box inactive" id="moment-magnitude-calc">
+-->
+            <div class="tools-box active" id="moment-magnitude-calc">
               <table>
                 <tr>
                   <td>
@@ -786,7 +794,14 @@ function noImage(image) {
               <span class="small-note">Default values are approximate for 2011 M 9.0 Tohoku-Oki earthquake</span>
             </div>
           </div>
-          <p/>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane tool-tab-pane active" id="maptools">
+      <div class="tool">
+        <div class="tool-title"><b>Map Tools</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
           <div>
             <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;UCERF3 Faults</span>
           </div>
