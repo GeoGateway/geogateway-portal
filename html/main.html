@@ -793,7 +793,7 @@ function noImage(image) {
           <p/>
           <div>
             <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/>
-            <span class="default-font">&nbsp;UAVSAR</span>
+            <span class="default-font">UAVSAR</span>
             <div id="uavsar-instructions" style="display:none">
                 Use drawing tool on the map to select the region of interests.  
                 <br/>You can also search by flight name or flight path:
@@ -1100,9 +1100,6 @@ function noImage(image) {
                     </tr>
                     <tr>
                       <td>Input File</td>
-                      <!--
-                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
-                      -->
                       <td><a href="{{myproject.projectInputFileNameUrl}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
                     </tr>
                     <tr ng-show="myproject.status == 'Completed'">

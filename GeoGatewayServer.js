@@ -697,15 +697,21 @@ app.get('/rss/:collection',function(req,res) {
         //The following is specific to Disloc. We will need a way to generalize this.
         //One way is to give more structure to the output to identify what should 
         //be publisehd. 
-        var desc="Input File: "+entry.projectInputFileNameUrl+"<br>";
-        desc+="Output File:"+entry.projectOutputFileNameUrl+"<br>";
-        desc+="KML File:"+entry.projectOutputKmlFileNameUrl+"<br>";
-        desc+="SAR KML:"+entry.projectOutputSARImageKmlFileNameUrl+"<br>";
-        desc+="Tilt Map KML:"+entry.projectOutputTiltCSVFileNameUrl+"<br>";
-        desc+="Strain Map KML:"+entry.projectOutputStrainMagFileNameUrl+"<br>";
-        desc+="Project Zip:"+projectZipFileNameUrl+"<br>";
+        var desc="Input File: "+makeAnchor(entry.projectInputFileNameUrl)+"<br>";
+        desc+="Output File: "+makeAnchor(entry.projectOutputFileNameUrl)+"<br>";
+        desc+="KML File: "+makeAnchor(entry.projectOutputKmlFileNameUrl)+"<br>";
+        desc+="SAR KML: "+makeAnchor(entry.projectOutputSARImageKmlFileNameUrl)+"<br>";
+        desc+="Tilt Map KML: "+makeAnchor(entry.projectOutputTiltCSVFileNameUrl)+"<br>";
+        desc+="Strain Map KML : "+makeAnchor(entry.projectOutputStrainMagFileNameUrl)+"<br>";
+        desc+="Project Zip: "+makeAnchor(entry.projectZipFileNameUrl)+"<br>";
+        return desc;
     }
     
+    function makeAnchor(someUrl){
+        return "<a href='"+someUrl+"'>"+someUrl+"</a>";
+        
+    }
+
     //Get the items in the collection. This is returend as an array
     collectionUtils.findAll(req.params.collection,function(error,obj) {
         if(error) {
