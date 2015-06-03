@@ -249,7 +249,8 @@ function calcca(){
 function loadQuakesDay(){
     // Get the earthquake data (JSONP format) from the USGS: M>1.0, Last Day
     var script = document.createElement('script');
-    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/1.0/day';
+//    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/1.0/day';
+    script.src='http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojsonp';
     script.id="QuakesDay";
     document.getElementsByTagName('head')[0].appendChild(script);
 }
@@ -257,7 +258,8 @@ function loadQuakesDay(){
 function loadQuakesWeek(){
   // Get the earthquake data (JSONP format) from the USGS: M>2.5, Last Week
     var script = document.createElement('script');
-    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/2.5/week'; 
+//    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/2.5/week'; 
+    script.src='http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp';
     script.id="QuakesWeek";
     document.getElementsByTagName('head')[0].appendChild(script);
 } 
@@ -265,7 +267,8 @@ function loadQuakesWeek(){
 function loadQuakesMonth(){
   // Get the earthquake data (JSONP format) from the USGS: M>2.5, Last Week
     var script = document.createElement('script');
-    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/4.5/month'; 
+//    script.src = 'http://earthquake.usgs.gov/earthquakes/feed/geojsonp/4.5/month'; 
+    script.src='http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojsonp';
     script.id="QuakesMonth";
     document.getElementsByTagName('head')[0].appendChild(script);
 }
