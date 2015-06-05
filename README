@@ -36,6 +36,9 @@ Run the following commands
 
 * node GeoGatewayServer.js
 
+USING THE INTERFACE
+Point your browser to http://localhost:3000/main.html
+
 UPDATING THIRD PARTY DEPENDENCIES
 To keep libraries up to date, periodically run the following:
 
@@ -43,9 +46,12 @@ To keep libraries up to date, periodically run the following:
 
 * bower update (from $INSTALL_PATH/geogateway/html)
 
-## **note on python installation** ##    
+
+## **Optioanl note on python installation** ##    
+This is needed to run external application scripts.
+
 Download and Install https://store.continuum.io/cshop/anaconda/  
-verify the installation by /usr/bin/env pytho
+verify the installation by /usr/bin/env python
  
 then in python, find out matplotlib configuration file:  
 >>> import matplotlib

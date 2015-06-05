@@ -1319,39 +1319,47 @@ $(document).ready(function() {
         var type = $(this).val();
         switch(type) {
             // UAVSAR
-            case 'uavsar':
-                if(checked) {
-                    draw_UAVSAR();
-                    $('#uavsar-instructions').show();
-                }
-                else {
-                    closeDataPanel();
-                    wmsgf9_select={};
-                    //clear_UAVSAR();
-//                    if(typeof wmsgf9_select != 'undefined') {
-//                        wmsgf9_select.setMap(null);
-//                    }
-                    $('#UAVSAR-geometry').empty();
-                }
-                break;
+        case 'uavsar':
+            if(checked) {
+                draw_UAVSAR();
+                $('#uavsar-instructions').show();
+            }
+            else {
+                closeDataPanel();
+                wmsgf9_select={};
+                //clear_UAVSAR();
+                //                    if(typeof wmsgf9_select != 'undefined') {
+                //                        wmsgf9_select.setMap(null);
+                //                    }
+                $('#UAVSAR-geometry').empty();
+            }
+            break;
             // MOMENT MAGNITUDE CALCULATOR
-            case 'moment_magnitude_calc':
-                if (checked) {
-                    show_MMCalc();
-                }
-                else {
-                    hide_MMCalc();
-                }
-                break;
+        case 'moment_magnitude_calc':
+            if (checked) {
+                show_MMCalc();
+            }
+            else {
+                hide_MMCalc();
+            }
+            break;
             // FAULT LAYER
-            case 'fault-layer':
-                if(checked) {
-                    draw_FAULT_LAYER();
-                }
-                else {
-                    clear_FAULT_LAYER();
-                }
-                break;
+        case 'fault-layer':
+            if(checked) {
+                draw_FAULT_LAYER();
+            }
+            else {
+                clear_FAULT_LAYER();
+            }
+            break;
+        case 'kml-layer':
+            if(checked) {
+                $('#KmlMapperDiv').show();
+            }
+            else {
+                $('#KmlMapperDiv').empty();
+            }
+            break;
         }
     });
 });

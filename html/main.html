@@ -462,7 +462,7 @@ function noImage(image) {
 }
 </script>
 
-<title>GeoGateway | GUEST</title>
+<title>GeoGateway</title>
 </head>
 
 <body>
@@ -797,23 +797,61 @@ function noImage(image) {
         </div>
       </div>
     </div>
+
     <div class="tab-pane tool-tab-pane active" id="maptools">
       <div class="tool">
         <div class="tool-title"><b>Map Tools</b></div>
         <div class="divider"></div>
         <div class="tool-content">
+
           <div>
-            <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/><span class="default-font">&nbsp;UCERF3 Faults</span>
+            <input class="tools-checkbox" type="checkbox" name="KMLMapper-active-tools" value="kml-layer"/>
+            <span class="default-font">KML Mapper</span>  
+            <div id="KmlMapperDiv" style="display:none">
+              Upload a KML (&lt; 200 KB) from your local file system.
+              <div ng-controller="UploadController">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="file" file-model="myFile">
+                  </div>
+                  <div class="col-md-12 form-group">
+                    <button class="btn btn-sm btn-primary" ng-click="uploadFileForKml()">Upload File</button>
+                  </div> 
+                </div>
+                <div ng-hide='uploadedKmlFiles == null'>
+                  <p>
+                    <table id="userKmlTable" class="table table-bordered table-responsive">
+                      <caption>Click the checkbox to turn the display on/off</caption>
+                      <thead>
+                        <th>KML File</th>
+                        <th>Display</th>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="uploadKmlFile in uploadedKmlFiles">
+                          <td>{{uploadKmlFile.name}}</td>
+                          <td><input type="checkbox" id="{{uploadKmlFile.url}}" onclick="toggleKmlDisplay(this)">
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p/>
+          <div>
+            <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/>
+            <span class="default-font">UCERF3 Faults</span>
           </div>
           <p/>
           <div>
             <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/>
             <span class="default-font">UAVSAR</span>
             <div id="uavsar-instructions" style="display:none">
-                Use drawing tool on the map to select the region of interests.  
-                <br/>You can also search by flight name or flight path:
-                <input type="text" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')">
-             </div>
+              Use drawing tool on the map to select the region of interests.  
+              <br/>You can also search by flight name or flight path:
+              <input type="text" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')">
+            </div>
             <p/>
             <button class="panel-close-button inactive">X</button>
             <div id="FadeDisplay" style="display:none">
