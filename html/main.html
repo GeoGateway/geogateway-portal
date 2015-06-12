@@ -1399,11 +1399,12 @@ function noImage(image) {
     
     <div class="tab-pane tool-tab-pane inactive" id="Forecast">
       <div class="tool">
-        <div class="tool-title">Global Earthquake Forecast Heat Map <br/> </div>
+        <div class="tool-title">Global Natural Hazard Viewer <br/> </div>
         <div class="divider"></div>
         <div class="tool-content">
           <div id="panel_forecast" style="margin-top: 10px; margin-bottom:10px;">
-            <h5>Global: M &gt; 6.5, 1 Year.   &nbsp; &nbsp; California: M &gt; 5, 1 Year </h5>
+            <h5>Global Forecast Heat Map: M &gt; 6.5, 1 Year.   &nbsp; &nbsp; California Forecast Heat Map: M &gt; 5, 1 Year (Open Hazards Group)</h5>
+            Earthquake magnitude shown by circle size. Hotter colors are more recent events. Click on earthquake markers for event data. (USGS).<p/>
             <label for="Global Forecast">Global Forecast</label>
             <input id="Global Forecast" type="checkbox" value="false" onclick="calcwo()"><br/>
             <label for="California Forecast">California Forecast</label>
@@ -1419,6 +1420,19 @@ function noImage(image) {
             <input id="EQMonth" value = false type="checkbox" onclick="eqMonth();"/><br/>
             <label for="EQToggle">Show or Hide Earthquakes</label>
             <input id="EQToggle" value = false type="checkbox" onclick="eqToggle();"/><br/>
+            <h5>Filter Earthquakes</h5>
+            <label for="M5">M &gt; 5</label>
+            <input id="M5" value = false type="checkbox" onclick="filterM5()"/><br/>
+            <label for="M65">M &gt; 6.5</label>
+            <input id="M65" value = false type="checkbox" onclick="filterM65()"/><br/>
+            <label for="Depth30">Depth &le; 30 km</label>
+            <input id="Depth30" value = false type="checkbox" onclick="filterDepth30()"/><br/>            
+          </div>
+          <div>
+            <h5>Other Hazards</h5>
+            <label for"GDACS">Show GDACS Data:</label>
+            <input id="GDACS" type="checkbox" onclick="showGDACS()"><br/>
+            <label>Get a Space-Time Earthquake Forecast from the <a href="http://www.openhazards.com/viewer">Open Hazards Site</a></label>            
           </div>
         </div>
       </div>
