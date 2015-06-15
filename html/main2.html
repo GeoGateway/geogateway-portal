@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="UserProjectApp">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="shortcut icon" href="images/favicon/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/qtip2/jquery.qtip.min.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">  
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Local themes -->
+    <link rel="stylesheet" href="css/basic-styles.css">
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- AngularJS core JavaScript
+    ================================================== -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+    <script type="text/javascript" src="js/wms.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+
+    <!-- dygraphs -->
+    <script type="text/javascript" src="js/dygraph-combined.js"></script>
+    
+    <!-- ajaxForm jquery plugin -->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+
+  </head>
+  <body>
+      <div ng-include="'navigation-bar-include.html'"></div>
+      <div ng-include="'intro-window-include.html'"></div>
+      <div ng-include="'profile-block-include.html'"></div>
+      <div ng-include="'tools-block-include.html'"></div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<script>
+// listener for PROFILE PANEL TABS
+$(document).ready(function() {
+    $('.tab-button').click(function() {
+        if($(this).hasClass('tool-tab-button'))
+        {
+console.log("Clicking a tab-button");
+            $(this).parent().parent().children().removeClass('active');
+            $(this).parent().addClass('active');
+            updateTabPanel();
+        }
+    });
+});
+
+function updateTabPanel() {
+   var active_tab = $('.tool-tabs').children('.active').children().val();
+   $('.tools-panel').children('.active').removeClass('active').addClass('inactive');
+   $('.tools-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
+};
+
+</script>
+
+<div class="tools-panel blur open" ng-controller="UserProjectController">
+  <ul type="none" class="tool-tabs">
+    <li class="active">
+      <button class="tab-button tool-tab-button" value="maptools">
+        Map Tools
+      </button>
+    </li>
+    <li>
+      <button class="tab-button tool-tab-button" value="momentMagCalc">
+        Magnitude
+      </button>        
+    </li>
+    <li>
+      <button class="tab-button tool-tab-button" value="disloc">
+        Disloc
+      </button>
+    </li>
+    <!--
+        <li>
+          <button class="tab-button tool-tab-button" value="simplex"> 
+            Simplex
+          </button>
+          
+        </li>
+        -->
+    <li>
+      <button class="tab-button tool-tab-button" value="myprojects" ng-show='authenticated'>
+        My Projects
+      </button>
+    </li>
+    <li>
+      <button class="tab-button tool-tab-button" value="Forecast">
+        Forecast
+      </button>
+    </li>
+  </ul>
+  
+  <div class="tab-pane tool-tab-pane active" id="maptools">  
+    <div ng-include="'maptools-include.html'"></div>
+  </div>
+  
+  <div class="tab-pane tool-tab-pane inactive" id="momentMagCalc">
+    <div ng-include="'momentMagCalc-include.html'"></div>
+  </div>
+  
+  <div class="tab-pane tool-tab-pane inactive" id="disloc" ng-controller="EditProjectController">
+    <div ng-include="'disloc-include.html'"></div>
+  </div>
+
+  <div class="tab-pane tool-tab-pane inactive" id="simplex">  
+    <div ng-include="'simplex-include.html'"></div>
+  </div>
+
+  <!--MyProjects Tabe -->
+  <div class="tab-pane tool-tab-pane inactive" id="myprojects" ng-controller="EditProjectController">  
+    <div ng-include="'myprojects-include.html'"></div>
+  </div>
+
+  <!--Forecast tab -->
+  <div class="tab-pane tool-tab-pane inactive" id="Forecast">
+    <div ng-include="'forecast-include.html'"></div>
+  </div>
+
+</div>
+
+<div class="extra-tools-panel inactive">
+  <div class="extra-tool">
+    <!-- get rid of title
+         <div class="extra-tool-title">PLOT</div>
+         <div class="divider"></div>
+         -->
+    <div class="extra-tool-content" id="dygraph-LOS"></div>
+    <div class="extra-tool-content" id="dygraph-HGT"></div>
+  </div>
+</div>
+
+<!-- Initialize the  map -->
+<script>
+  initialize();
+</script>

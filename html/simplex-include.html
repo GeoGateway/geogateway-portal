@@ -1,0 +1,100 @@
+    <!-- Simplex Tool -->
+
+      <div class="tool">
+        <div class="tool-title"><b>Simplex</b></div>
+        <div class="divider"></div>
+        <div class="tool-content">
+          <h4>Upload your Simplex input file</h4>
+          <div ng-controller="UploadController">
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <input type="file" file-model="myFile">
+              </div>
+              <div class="col-md-12 form-group">
+                <button class="btn btn-sm btn-primary" ng-click="uploadFile()">Upload File</button>
+              </div>
+            </div>
+          </div>
+          <div ng-controller="EditProjectController">
+            <div class="panel panel-default" ng-show='status == "Ready" || status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Your project's components</h4>
+                <table class="table table-striped table-bordered table-condensed table-responsive">
+                  <tbody>
+                    <tr>
+                      <td>Project Name</td>
+                      <td>{{myproject.projectName}}</td>
+                    </tr>
+                    <tr>
+                      <td>Permission</td>
+                      <td>{{myproject.permission}}</td>
+                    </tr>
+                    <tr>
+                      <td>Project ID</td>
+                      <td>{{myproject._id}}</td>
+                    </tr>
+                    <tr>
+                      <td>Creation Time</td>
+                      <td>{{myproject.creationTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Update Time</td>
+                      <td>{{myproject.updateTime}}</td>
+                    </tr>
+                    <tr>
+                      <td>Input File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectInputFileName}}" target="_blank" type="text/plain">{{myproject.projectInputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Output File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectOutputFileName}}" target="_blank" type="text/plain">{{myproject.projectOutputFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Log File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectLogFileName}}" target="_blank" type="text/plain">{{myproject.projectLogFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Fault File</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectFaultFileName}}" target="_blank" type="text/plain">{{myproject.projectFaultFileName}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Stdout</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardOut}}" target="_blank" type="text/plain">{{myproject.projectStandardOut}}</td>
+                    </tr>
+                    <tr>
+                      <td>Stderr</td>
+                      <td><a href="userUploads/{{username}}/{{myproject.projectName}}-{{myproject._id}}/{{myproject.projectStandardError}}" target="_blank" type="text/plain">{{myproject.projectStandardError}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{myproject.status}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="panel panel-default" ng-show='myproject.status == "Ready"'>
+              <div class="panel-body">
+                <h4>Click the button to submit.</h4>
+                <form role="form" ng-submit="submitNonblocking('simplex')">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="submitSimplex" value="Submit"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="panel panel-default" ng-show='myproject.status == "Submitted"'>
+              <div class="panel-body">
+                <h4>Click the button to refresh.</h4>
+                <form role="form" ng-submit="refreshView()">
+                  <div class="form-group">
+                    <input class="btn btn-sm btn-primary" type="submit" id="refreshSimplex" value="Refresh"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
