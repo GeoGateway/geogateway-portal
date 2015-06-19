@@ -277,6 +277,7 @@ function calcwo(){
         kml_wo.setMap(null);
     }
     if (document.getElementById("Global Forecast").checked == true){
+        showFaults();       // Faults should be top layer
         kml_wo.setMap(mapA);
     }
 }
@@ -290,9 +291,18 @@ function calcca(){
         kml_ca.setMap(null);
     }
     if (document.getElementById("California Forecast").checked == true){
+        showFaults();       // Faults should be top layer
         kml_ca.setMap(mapA);
     }
 }
+
+function showFaults(){
+    kml_faults.setMap(null);    
+    if (document.getElementById("Faults").checked == true){
+    kml_faults.setMap(mapA);
+    }
+}
+
 
 function loadQuakesDay(){
     // Get the earthquake data (JSONP format) from the USGS: M>1.0, Last Day
