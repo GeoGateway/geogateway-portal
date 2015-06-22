@@ -373,7 +373,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     //This runs the blocking version of the executable wrapper
     $scope.submitdisloc=function(appName){
         //Note status is completed because we made a blocking call.
-        //$rootScope.globals.currentProject.status="Completed";
+        $rootScope.globals.currentProject.status="Running";
         $rootScope.globals.currentProject.appName=appName;
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
 
