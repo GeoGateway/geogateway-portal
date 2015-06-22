@@ -714,18 +714,18 @@ function toggleKmlDisplay(toggleLayer){
 
 //check out dislocKMLLayer
 function loaddislocKmlLayer(folderurl,kmlfile){
-    var theLayer=document.getElementById(folderurl).href;
-    theLayer = theLayer + kmlfile;
+    //var theLayer=document.getElementById(folderurl).href;
+    //theLayer = theLayer + kmlfile;
     //alert(theLayer);
     //console.log("Adding layer:"+theLayer);
     //turn on the checkbox
-    $("#display"+folderurl).prop("checked",true);
-    $("#display"+folderurl).show();
-    kmlLayer = new google.maps.KmlLayer({
-        url: theLayer,
-         suppressInfoWindows: false,
-        map: mapA
-    });
+    //$("#display"+folderurl).prop("checked",true);
+    //$("#display"+folderurl).show();
+    //kmlLayer = new google.maps.KmlLayer({
+    //    url: theLayer,
+    //     suppressInfoWindows: false,
+    //    map: mapA
+    //});
     //dislockmls[folderurl]=kmlLayer;
     dislockmls[folderurl]="";
 }
