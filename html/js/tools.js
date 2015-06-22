@@ -726,12 +726,24 @@ function loaddislocKmlLayer(folderurl,kmlfile){
          suppressInfoWindows: false,
         map: mapA
     });
-    dislockmls[folderurl]=kmlLayer;
+    //dislockmls[folderurl]=kmlLayer;
+    dislockmls[folderurl]="";
 }
 
 function check_dislockml(element) {
     if (element.checked) {
         //alert("load:" + element.value);
+        if (dislockmls[element.value] == "") {
+            var theLayer = document.getElementById(element.value).href;            
+            //alert(theLayer);
+            kmlLayer = new google.maps.KmlLayer({
+                url: theLayer,
+                suppressInfoWindows: false,
+                map: null
+            });
+        dislockmls[element.value]=kmlLayer;
+        }
+
         dislockmls[element.value].setMap(mapA);
     }else{
         //alert("unload:" + element.value);
