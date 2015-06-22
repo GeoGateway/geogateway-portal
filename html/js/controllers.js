@@ -373,7 +373,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     //This runs the blocking version of the executable wrapper
     $scope.submitdisloc=function(appName){
         //Note status is completed because we made a blocking call.
-        $rootScope.globals.currentProject.status="Completed";
+        //$rootScope.globals.currentProject.status="Completed";
         $rootScope.globals.currentProject.appName=appName;
         $rootScope.globals.currentProject.projectWorkDir=$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
 
@@ -435,6 +435,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         $http.get('/execute_disloc2/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
             success(function(data){
                 console.log("Successful exec:"+JSON.stringify(data));
+                $rootScope.globals.currentProject.status="Completed";
+
                 $scope.myproject=$rootScope.globals.currentProject;
                 //alert("run loaddislocKmlLayer");
                 loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
