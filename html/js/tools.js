@@ -906,10 +906,16 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
 
     // check wms layer -- disabled for check-in
-    //var has_wms = checkwmslayer(uid);
-    //if (has_wms) {
-    //    var wmsoverlay = loadWMS(mapA, "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
-    //}
+    alert(wmsgf9_select[3]);
+    if (wmsgf9_select[3] == 0) {
+        var has_wms = checkwmslayer(uid);
+        if (has_wms) {wmsgf9_select[3] =1;wmsgf9_samples[uid] = 1;}
+        else {wmsgf9_select[3] = -1;wmsgf9_samples[uid] = -1;}
+    }
+    
+    if (wmsgf9_select[3] == 1) {
+        var wmsoverlay = loadWMS(mapA, "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+    }
 
 
     if(wmsgf9_select[2]) {
@@ -1171,11 +1177,11 @@ function displaySelectedImages(datasets,masterMap) {
 // does not require the dataname argument so it can be left as a empty string
     // NOTE!!!!!
     // wmsgf9_samples stores each kml layer in a list of:
-    // [kml layer, setToState, currentState]
+    // [kml layer, setToState, currentState, wmslayer]
     // setToState can be changed if the visibility state of the layer is to
     // be changed
-    // currentState will automatically update when the visible layers are
-    // updated
+    // currentState will automatically update when the visible layers are updated
+    // add onemore state: wmslayer, -1 no wms layer, 0 not checked, 1 has wms layer
 function viewDataset(uid, dataname, show)
 {
 //    console.log("View Dataset: ", uid,dataname);
@@ -1197,7 +1203,8 @@ function viewDataset(uid, dataname, show)
                 preserveViewport: true,
                 clickable: false
             });
-            wmsgf9_samples[uid] = [wmsgf9_temp, true, false];
+            // wms layer is not checked 
+            wmsgf9_samples[uid] = [wmsgf9_temp, true, false, 0];
         }
     }
     // it is assumed that type = hide is only called for wmsgf9s already visible
