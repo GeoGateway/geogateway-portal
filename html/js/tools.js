@@ -4,6 +4,7 @@
 var mapA;
 //var wmsgf9;
 var wmsgf9_select;
+var wmsgf9_select_direction_kml;
 var wmsgf9_samples = {};
 var UAVSARDrawingManager;
 var ctaLayer;
@@ -65,6 +66,7 @@ function deleteAllKml() {
 //        wmsgf9_samples.length = 0;
         wmsgf9_samples={};
     }
+
 }
 
 //START UAVSAR
@@ -882,7 +884,22 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
 
     $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a>');
-    
+
+    var direction_kml = (heading.toString()).split(".")[0];
+    direction_kml = "http://gf1.ucs.indiana.edu/direction_kml/"+direction_kml+"_left.kmz";
+    //alert(direction_kml);
+    //revmoe the previous one
+    if (typeof wmsgf9_select_direction_kml !== 'undefined') {
+        wmsgf9_select_direction_kml.setMap(null);
+        }
+        wmsgf9_select_direction_kml =  new google.maps.KmlLayer({
+        url: direction_kml,
+        preserveViewport:true,
+        screenOverlays:true
+        });
+    wmsgf9_select_direction_kml.setMap(mapA);
+
+
     //Turn off the radio buttons and all the displays.
 //    console.log(uid,dataname);
     for(var uid1 in wmsgf9_samples) {
@@ -906,7 +923,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
 
     // check wms layer -- disabled for check-in
-    alert(wmsgf9_select[3]);
+    //alert(wmsgf9_select[3]);
     if (wmsgf9_select[3] == 0) {
         var has_wms = checkwmslayer(uid);
         if (has_wms) {wmsgf9_select[3] =1;wmsgf9_samples[uid] = 1;}
