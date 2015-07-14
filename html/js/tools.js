@@ -60,12 +60,15 @@ function deleteAllShape() {
 function deleteAllKml() {
     if (wmsgf9_samples != null) {
         for ( var uid in wmsgf9_samples) {
-            console.log(wmsgf9_samples[uid]);
+            //console.log(wmsgf9_samples[uid]);
             wmsgf9_samples[uid][0].setMap(null);
         }
 //        wmsgf9_samples.length = 0;
         wmsgf9_samples={};
     }
+    // remove direction kml if loaded
+    if (typeof wmsgf9_select_direction_kml !== 'undefined') {
+        wmsgf9_select_direction_kml.setMap(null); }
 
 }
 
