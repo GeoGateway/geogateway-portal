@@ -59,9 +59,9 @@ function deleteAllShape() {
 // delete all UAVSAR kml layers
 function deleteAllKml() {
     if (wmsgf9_samples != null) {
-        for (i in wmsgf9_samples) {
-//            console.log(wmsgf9_samples[i]);
-            wmsgf9_samples[i][0].setMap(null);
+        for ( var uid in wmsgf9_samples) {
+            console.log(wmsgf9_samples[uid]);
+            wmsgf9_samples[uid][0].setMap(null);
         }
 //        wmsgf9_samples.length = 0;
         wmsgf9_samples={};
@@ -926,8 +926,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     //alert(wmsgf9_select[3]);
     if (wmsgf9_select[3] == 0) {
         var has_wms = checkwmslayer(uid);
-        if (has_wms) {wmsgf9_select[3] =1;wmsgf9_samples[uid] = 1;}
-        else {wmsgf9_select[3] = -1;wmsgf9_samples[uid] = -1;}
+        if (has_wms) {wmsgf9_select[3] =1;wmsgf9_samples[uid][3] = 1;}
+        else {wmsgf9_select[3] = -1;wmsgf9_samples[uid][3] = -1;}
     }
     
     if (wmsgf9_select[3] == 1) {
