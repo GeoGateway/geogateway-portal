@@ -47,7 +47,7 @@ To keep libraries up to date, periodically run the following:
 * bower update (from $INSTALL_PATH/geogateway/html)
 
 
-## **Optioanl note on python installation** ##    
+## **Optional note on python installation** ##    
 This is needed to run external application scripts.
 
 Download and Install https://store.continuum.io/cshop/anaconda/  
