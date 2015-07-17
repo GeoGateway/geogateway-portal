@@ -6,7 +6,7 @@ Run the following commands at the shell prompt:
 * cd $INSTALL_PATH
    - You don't need this environment variable set, but we will use it for clarity.
 
-* git clone https://marpierc_iu@bitbucket.org/marpierc_iu/geogateway.git
+* git clone https://github.com/GeoGateway/geogateway-portal.git
 
 * cd $INSTALL_PATH/geogateway
 
