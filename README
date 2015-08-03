@@ -65,4 +65,9 @@ modify startup.sh
 #!bash
 if [ -z "$JAVA_OPTS" ]; then
 export JAVA_OPTS="-XX:MaxPermSize=128m -DENABLE_JSONP=true"
-```
+```   
+
+##  Sample IPython Notebook for APIs:
+
+  
+
