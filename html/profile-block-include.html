@@ -68,13 +68,14 @@
 </script>
     
 <div class="profile-panel closed" ng-controller="LoginController">    
-  <div class="tab-pane profile-tab-pane active" id="auth">
+  <!--This is the login/signup stuff -->
+  <div class="tab-pane profile-tab-pane active" id="auth" ng-hide='isAuthenticated()'>
     <div class="tool">
       <div class="tool-title"><b>Login</b></div>
       <div class="divider"></div>
       <div class="tool-content">
-        <form name="loginForm" ng-submit="loginGeo()"
-              ng-hide='isAuthenticated()'>
+        <form name="loginForm" ng-submit="loginGeo()">
+<!--              ng-hide='isAuthenticated()'>-->
           <fieldset>
             <table class="login-table">
               <tr>
@@ -102,6 +103,7 @@
             <button type="submit" class="btn auth-btn">Log In</button>
           </div>
         </form>
+        <!--
         <form name='logoutForm' 
               ng-submit='logoutGeo()' 
               ng-show='isAuthenticated()'>
@@ -110,78 +112,219 @@
             <button type="submit" class="btn auth-btn">Log Out</button>
           </div>
         </form>
+        -->
       </div>
     </div>
     
-    <!--
-        <div class="tool">
-          <div class="tool-title"><b>Sign Up</b></div>
-          <div class="divider"></div>
-          <div class="tool-content">
-            <form class="auth-form" action="/signup/" method="POST" enctype="multipart/form-data"> 
-              <fieldset>
-                <table class="signup-table">
-                  <tr>
-                    <td>
-                      <label class="control-label" for="username">User Name: <span class="required">*</span></label>
-                    </td>
-                    <td>
-                      <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
-                      <span class="form-error"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                  <td>
-                    <label class="control-label" for="email">Email <span class="required">*</span></label>
-                  </td>
-                  <td>
-                    <input class="form-control" id="id_name" maxlength="30" name="name" placeholder="Joe Schmo" type="text" />
-                    <span class="form-error"></span>
-                  </td>
-                  </tr>
-                  <tr>
-                  <td>
-                    <label class="control-label" for="name">Name: <span class="required">*</span></label>
-                  </td>
-                  <td>
-                    <input class="form-control" id="id_name" maxlength="30" name="name" placeholder="Joe Schmo" type="text" />
-                    <span class="form-error"></span>
-                  </td>
-                  </tr>
-                <tr>
-                  <td>
-                    <label class="control-label" for="password">Password: <span class="required">*</span></label>
-                  </td>
-                  <td>
-                    <input class="form-control" id="id_password" name="password" placeholder="Password" type="password" />
-                    <span class="form-error"></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label class="control-label" for="password_conf">Confirm Password:<span class="required">*</span></label>
-                  </td>
-                  <td>
-                    <input class="form-control" id="id_password_conf" name="password_conf" placeholder="Password (repeat)" type="password" />
-                    <span class="form-error"></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>
-                    <span class="required">*</span> required fields
-                  </td>
-                </tr>
-              </table>
-            </fieldset>
-            <div class="auth-btn-container">
-              <button type="submit" class="btn auth-btn">SIGN UP</button>
-            </div>
-          </form>
-        </div>
+    <div class="tool">
+      <div class="tool-title"><b>Sign Up</b></div>
+      <div class="divider"></div>
+      <div class="tool-content">
+        <form class="auth-form" action="/signup/" method="POST" enctype="multipart/form-data"> 
+          <fieldset>
+            <table class="signup-table">
+              <tr>
+                <td>
+                  <label class="control-label" for="username">User Name: <span class="required">*</span></label>
+                </td>
+                <td>
+                  <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
+                  <span class="form-error"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="control-label" for="email">Email <span class="required">*</span></label>
+                </td>
+                <td>
+                  <input class="form-control" id="id_name" maxlength="30" name="name" placeholder="Joe Schmo" type="text" />
+                  <span class="form-error"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="control-label" for="name">Name: <span class="required">*</span></label>
+                </td>
+                <td>
+                  <input class="form-control" id="id_name" maxlength="30" name="name" placeholder="Joe Schmo" type="text" />
+                  <span class="form-error"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="control-label" for="password">Password: <span class="required">*</span></label>
+                </td>
+                <td>
+                  <input class="form-control" id="id_password" name="password" placeholder="Password" type="password" />
+                  <span class="form-error"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="control-label" for="password_conf">Confirm Password:<span class="required">*</span></label>
+                </td>
+                <td>
+                  <input class="form-control" id="id_password_conf" name="password_conf" placeholder="Password (repeat)" type="password" />
+                  <span class="form-error"></span>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <span class="required">*</span> required fields
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+          <div class="auth-btn-container">
+            <button type="submit" class="btn auth-btn">SIGN UP</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
--->
+
+  <!--User sees these tabs after logging in -->
+  <div class="user-info-box" ng-show="isAuthenticated()">
+    <div class="user-identification">
+      <img class="prof-pic" src="{{ MEDIA_URL }}{{ user.profile_pic }}" alt="prof_pic" onError="noImage(this);">
+      <div>{{ auth_user.first_name }}</div>
+    </div>
+    <div class="user-info">
+      <form name='logoutForm' 
+            ng-submit='logoutGeo()' 
+            ng-show='isAuthenticated()'>
+        Hello, {{username}}
+        <div class="auth-btn-container">
+          <button type="submit" class="btn auth-btn">Log Out</button>
+        </div>
+      </form>
+      <!--
+          <form action="/logout/">
+            <button type="submit" class="profile-tab-button">
+              <span class="glyphicon glyphicon-log-out"> Logout
+            </button>
+          </form>
+          -->
+    </div>
+  </div>
+  <!-- profile-panel tabs -->
+  <ul type="none" class="profile-tabs">
+    <li class="active">
+      <button class="tab-button profile-tab-button" value="notecards">
+        <span class="glyphicon glyphicon-file"> 
+      </button>
+    </li>
+    <li>
+      <button class="tab-button profile-tab-button" value="colleagues">
+        <span class="glyphicon glyphicon-user"> 
+      </button>
+    </li>
+    <li>
+      <button class="tab-button profile-tab-button" value="newsfeed">
+        <span class="glyphicon glyphicon-globe"> 
+      </button>
+    </li>
+    <li>
+      <button class="tab-button profile-tab-button" value="settings">
+        <span class="glyphicon glyphicon-cog"> 
+      </button>
+    </li>
+  </ul>
+  
+  <div class="tab-pane profile-tab-pane active" id="notecards">
+    <div class="profile-tab-panel-header">
+      Notecards
+    </div>
+    <div class="profile-panel-divider"></div>
+    <!--TODO: This method needs updating-->
+    <form class="new-notecard-form" action="/gguser/userid/post_notecard" method="POST" enctype="multipart/form-data"> 
+      <!--
+          {% csrf_token %}
+          {{ notecard_form.title }}
+          {{ notecard_form.content }}
+        -->
+      <div class="log-tools">
+        <!--                {{ notecard_form.image }}-->
+        <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
+      </div>
+    </form>
+    <div class="profile-panel-divider"></div>
+    <div class="notecard-container"></div>
+    <button class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
+  </div>
+  <div class="tab-pane profile-tab-pane inactive" id="colleagues">
+    <div class="profile-tab-panel-header">
+      Colleagues
+    </div>
+    <div class="profile-panel-divider"></div>
+    <div class="colleague-container"></div>
+  </div>
+  <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
+    <div class="profile-tab-panel-header">
+      News Feed
+    </div>
+    <div class="profile-panel-divider"></div>
+    <div class="newsfeed-container"></div>
+    <button class="load-more-notecards" value=".newsfeed-container">Load more Notecards</button>
+  </div>
+  <div class="tab-pane profile-tab-pane inactive" id="feedback">
+    <div class="profile-tab-panel-header">
+      Feedback
+    </div>
+    <div class="profile-panel-divider"></div>
+  </div>
+  <div class="tab-pane profile-tab-pane inactive" id="settings">
+    <div class="profile-tab-panel-header">
+      General Account Settings <a class="settings-change" id="general">Change</a>
+    </div>
+    <div class="profile-panel-divider"></div>
+    <form class="settings-change-form" id="general" action="/settings_submit/" type="POST"> {% csrf_token %}
+      <table class="setting-table" id="general">
+        <tr>
+          <td>Name:</td>
+          <td class="active">
+            <!--{{ auth_user.first_name }}-->
+          </td>
+          <td class="inactive">
+            <!--{{ settings_form.new_name }}-->
+          </td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td>email! <!--{{ auth_user.email }}--></td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td class="active">********</td>
+          <td class="inactive">
+            <!--{{ settings_form.new_password }}-->
+            <!--{{ settings_form.new_password_conf }}-->
+          </td>
+        </tr>
+        <tr>
+          <td>Profile Picture:</td>
+          <td>
+            PICTURE!
+            <!--
+            <img class="prof-pic" src="{{ MEDIA_URL }}{{ user.profile_pic }}" alt="prof_pic" onError="noImage(this);">
+            -->
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="inactive">
+            <!--{{ settings_form.new_prof_pic }}-->
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="inactive">
+            <button type="submit" class="btn btn-default new-notecard-submit-btn">Submit</button>
+          </td>
+          <td></td>
+        </tr>
+      </table>
+    </form>
   </div>
 </div>

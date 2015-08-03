@@ -74,9 +74,9 @@
                 //This doesn't work for some reason
                 google.maps.event.trigger(mapA,'resize',{});
             }
-            // loadNotecards('.notecard-container', {{ user.id }}, 0, 5, 'append');
-            // loadNotecards('.newsfeed-container', -1, 0, 5, 'append');
-            // getColleagues();
+             loadNotecards('.notecard-container', user.id, 0, 5, 'append');
+             loadNotecards('.newsfeed-container', -1, 0, 5, 'append');
+             getColleagues();
         }
         else {
             if($('.profile-panel').hasClass('open'))
@@ -99,8 +99,8 @@
                 new_width = $('.extra-tools-panel').width() - 250;
                 $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
             }
-            // $('.notecard-container').empty();
-            // $('.colleague-container').empty();
+             $('.notecard-container').empty();
+             $('.colleague-container').empty();
         }
     });
 });
@@ -200,24 +200,25 @@ $(document).ready(function() {
 });
 
 // script for posting a new NOTECARD
-//$(document).ready(function() {
-//    var options = {
+$(document).ready(function() {
+    var options = {
 //        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-//        success: function(response) {
-//            if(response == 'SUCCESS')
-//            {
+        success: function(response) {
+            if(response == 'SUCCESS')
+            {
 //                loadNotecards('.notecard-container', {{ user.id }}, 0, 1, 'prepend');
-//                $('.new-notecard-form').clearForm();
-//                // console.log('log posted');
-//            }
-//            else
-//            {
-//                $('.new-notecard-form').prepend('<div class="required">* title and content are both required and only images can be attached<div>');
-//            }
-//        }
-//    };
-//    $('.new-notecard-form').ajaxForm(options);
-//});
+                loadNotecards('.notecard-container', user.id, 0, 1, 'prepend');
+              $('.new-notecard-form').clearForm();
+                // console.log('log posted');
+            }
+            else
+            {
+                $('.new-notecard-form').prepend('<div class="required">* title and content are both required and only images can be attached<div>');
+            }
+        }
+    };
+    $('.new-notecard-form').ajaxForm(options);
+});
 
 $(document).on('submit', '.new-notecard-form', function (event) {
     event.stopPropagation();
@@ -226,14 +227,14 @@ $(document).on('submit', '.new-notecard-form', function (event) {
 });
 
 // script for editing a NOTECARD
-/*
+
 $(document).ready(function() {
     var options = {
         data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(response) {
             if(response == 'SUCCESS')
             {
-                loadNotecards('.notecard-container', {{ user.id }}, 0, 1, 'prepend');
+                loadNotecards('.notecard-container',  user.id, 0, 1, 'prepend');
                 $('.new-notecard-form').clearForm();
                 // console.log('log posted');
             }
@@ -244,7 +245,7 @@ $(document).ready(function() {
         }
     };
     $('.notecard-edit-form').ajaxForm(options);
-});*/
+});
 
 // script for deleting a NOTECARD
 $(document).ready(function() {
@@ -595,7 +596,6 @@ function noImage(image) {
         </div>
       </div>
       
-      <!--
       <div class="tool">
         <div class="tool-title"><b>Sign Up</b></div>
         <div class="divider"></div>
@@ -664,7 +664,7 @@ function noImage(image) {
       </div>
     </div>
   </div>
-  -->
+
     </div>
   </div>
   <!-- tools block -->
