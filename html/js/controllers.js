@@ -440,6 +440,10 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 $scope.myproject=$rootScope.globals.currentProject;
                 //Put the updated project in the DB. 
                 //This is repeated alot, need to make more efficient.
+                //alert("run loaddislocKmlLayer");
+                loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
+                loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
+                loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
                     success(function(data, status) { 
                     }).
@@ -447,10 +451,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                         console.log("Couldn't update the db");
                     });
 
-                //alert("run loaddislocKmlLayer");
-                loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
-                loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
-                loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
+
             }).
             error(function(data){
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
