@@ -438,21 +438,20 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 $rootScope.globals.currentProject.status="Completed";
 
                 $scope.myproject=$rootScope.globals.currentProject;
-                //Put the updated project in the DB. 
-                //This is repeated alot, need to make more efficient.
                 //alert("run loaddislocKmlLayer");
                 loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
                 loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
                 loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
-                /*
+                //Put the updated project in the DB. 
+                //This is repeated alot, need to make more efficient.
+
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
                     success(function(data, status) { 
+                        console.log("Updated the project",data,status);
                     }).
                     error(function(data){
                         console.log("Couldn't update the db");
                     });
-                */
-
 
             }).
             error(function(data){
