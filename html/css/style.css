@@ -542,7 +542,7 @@ a:visited {
 }
 
 .tools-tab-pane {
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .tool {

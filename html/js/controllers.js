@@ -52,25 +52,6 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
             currentProject:{}
         }
     };
-        
-        //Create an anonymous project for unauthenticated users.
-//        var newProject={};
-//        newProject.projectName=$rootScope.globals.currentProject.projectName;
-//        //Need to see if necessary to stringify newProject or if it can be passed directly.
-//        //        console.log("Creating anonymous project");
-//        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-//            success(function(project){
-//                console.log("Anon project created: "+project._id);
-//                //Set or update the current project
-//                $rootScope.globals.currentProject=project;
-//                $rootScope.globals.currentProject.status="New"; 
-//            }).
-//            error(function(data){
-//                console.error("Could not create the new project");
-//            });
-
-//        $cookieStore.put('globals', $rootScope.globals);        
-//    }
 
     // keep user logged in after page refresh
     
@@ -147,9 +128,6 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
                   
 //TODO: consolidate this with the other controllers, or at least with EditProjectController
 UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
-//    $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
-//        $scope.projects=data;
-//    });
  
     $scope.orderProp="-creationTime";
 
@@ -227,8 +205,15 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     $scope.viewCompleteList=function(){
         $rootScope.$broadcast("selectProjectEvent",true);
     }
+    
+    $scope.getAllProjects=function(){
+        console.log("Getting all projects.");
+        $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
+            $scope.projects=data;
+        });
+    }
 
-    //The project 
+    //The project should be public.
     $scope.publishProject=function(projectId){
         console.log("Making project public:"+projectId);
         //This is the true case
@@ -254,7 +239,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                     console.log("Could not load the project");
                 });
         }
-        //This is the false case
+        //The project is not public.
         else {
             $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
                 success(function(project) {
@@ -458,14 +443,12 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
                 console.error("Unsuccessful exec:"+JSON.stringify(data));
                 $rootScope.globals.currentProject.status="Failed";
                 $scope.myproject=$rootScope.globals.currentProject;
-                /*
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
                     success(function(data, status) { 
                     }).
                     error(function(data){
                         console.log("Couldn't update the db");
                     });
-                    */
             });
     }
     
