@@ -1280,6 +1280,10 @@ function uavsarquery(querystr) {
         closeDataPanel();
         deleteAllShape();
     });
+    var eventDateString = $.trim($("#event_date").val());
+    if (eventDateString != ""){
+       // alert(eventDateString);
+      querystr+="&eventtime=" + eventDateString };
 
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
