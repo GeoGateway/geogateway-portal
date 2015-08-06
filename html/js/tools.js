@@ -736,6 +736,9 @@ function loaddislocKmlLayer(folderurl,kmlfile){
 }
 
 function check_dislockml(element) {
+    if(dislockmls[element.value]==null) {
+        dislockmls[element.value]="";
+    }
     if (element.checked) {
         //alert("load:" + element.value);
         if (dislockmls[element.value] == "") {
