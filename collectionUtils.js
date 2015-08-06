@@ -54,7 +54,7 @@ CollectionUtils.prototype.save = function(collectionName, obj, callback) {
     this.getCollection(collectionName, function(error, the_collection) { 
         if( error ) callback(error)
         else {
-				obj.creationTime = new Date(); 
+				obj.creationTime = (new Date()).toString(); 
             obj.status="New";
 				the_collection.insert(obj, function() { 
 					 callback(null, obj);
@@ -80,7 +80,7 @@ CollectionUtils.prototype.update = function(collectionName, entityId, obj, callb
                     //TODO: this is saved in Mongo as an ISODate object, which is not
                     //easily readable. The native JS date is in an easier format, so
                     //see if we can preseve this.
-						  obj.updateTime = new Date(); 
+						  obj.updateTime = (new Date()).toString(); 
 						  the_collection.save(obj, function(error,doc) {
             				if (error) callback(error)
             				else callback(null, obj);

@@ -343,7 +343,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     $scope.$on('upload', function (event, arg) {
         //        console.log('Got the message:'+event+" "+arg);
         $scope.status=$rootScope.globals.currentProject.status;
-        console.log("Ready to submit set to false; sanity:"+$scope.status);
+//        console.log("Ready to submit set to false; sanity:"+$scope.status);
         $scope.myproject=arg;        
     });
 
@@ -593,7 +593,7 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
                 $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
                     success(function(project){
                         console.log("updated project:"+JSON.stringify(project));
-                        $rootScope.$broadcast('upload','done');
+                        //$rootScope.$broadcast('upload','done');
                         $rootScope.$broadcast('upload',project);
                     }).
                     error(function(data){
