@@ -308,7 +308,6 @@ function showFaults(){
     }
 }
 
-
 function loadQuakesDay(){
     // Get the earthquake data (JSONP format) from the USGS: M>1.0, Last Day
     var script = document.createElement('script');
@@ -1237,41 +1236,6 @@ function viewDataset(uid, dataname, show)
         wmsgf9_samples[uid][1] = false;
     }
 }
-
-//The code that reads in the WMS file.  To change the WMS layer the user would update the layers line.  As this is constructed now you need to have this code for each WMS layer.
-//Check with your Web Map Server to see what are the required components of the address.  You may need to add a couple of segements.  For example, the ArcServer WMS requires
-//a CRS value which is tacked on to the end of the url.  For an example visit http://www.gisdoctor.com/v3/arcserver_wms.html 
-// function WMSGetTileUrl2(tile, zoom) {
-//     var projection = window.mapA.getProjection();
-//     var zpow = Math.pow(2, zoom);
-//     var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
-//     var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
-//     var ulw = projection.fromPointToLatLng(ul);
-//     var lrw = projection.fromPointToLatLng(lr);
-//     //The user will enter the address to the public WMS layer here.  The data must be in WGS84
-//     //var baseURL = "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?";
-//     var baseURL = "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?";
-//     var version = "1.3.0";
-//     var request = "GetMap";
-//     var format = "image%2Fpng"; //type of image returned  or image/jpeg
-//     //The layer ID.  Can be found when using the layers properties tool in ArcMap or from the WMS settings
-//     var layers = "InSAR:thumbnailmosaic";
-//     //projection to display. This is the projection of google map. Don't change unless you know what you are doing.  
-//     //Different from other WMS servers that the projection information is called by crs, instead of srs
-//     var crs = "EPSG:4326";
-//     //With the 1.3.0 version the coordinates are read in LatLon, as opposed to LonLat in previous versions
-//     var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
-//     var service = "WMS";
-//     //the size of the tile, must be 256x256
-//     var width = "256";
-//     var height = "256";
-//     //Some WMS come with named styles.  The user can set to default.
-//     var styles = "";
-//     //Establish the baseURL.  Several elements, including &EXCEPTIONS=INIMAGE and &Service are unique to openLayers addresses.
-//     var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
-//     url = url + "&TRANSPARENT=true"
-//     return url;
-// }
 
 // use no cross-domain query at this time
 // script for calling UAVSAR layer tiles
