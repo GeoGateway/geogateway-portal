@@ -1,15 +1,29 @@
 'use strict'; 
 
-var UserProjectApp=angular.module('UserProjectApp',['ngRoute','ngCookies','GeoGatewayServices']);
+var UserProjectApp=angular.module('UserProjectApp',[
+    'auth0',
+    'angular-storage',
+    'angular-jwt',
+    'ngRoute',
+    'ngCookies',
+    'GeoGatewayServices']);
 
-UserProjectApp.config(['$routeProvider',function ($routeProvider) {
+UserProjectApp.config(function (authProvider, $routeProvider, $httpProvider, jwtInterceptorProvider) {
+    authProvider.init({
+        domain:'geogateway.auth0.com',
+        clientID:'cmdnHgIkY60zgrNJsD93hIhiWo26XuqQ'
+    });
+    
+    jwtInterceptorProvider.tokenGetter = function(store) {
+        return store.get('token');
+    };
+    
     $routeProvider
         .when('/login', {
             controller: 'LoginController',
             templateUrl: 'Login.html',
             hideMenus: true
         })
-
         .when('/loginGeo', {
             controller: 'LoginController',
             templateUrl: 'main.html'
@@ -31,7 +45,7 @@ UserProjectApp.config(['$routeProvider',function ($routeProvider) {
         })
     
         .otherwise({ redirectTo: '/login' });
-}]);
+    });
 
 UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($rootScope, $location, $cookieStore, $http) {
     
@@ -63,10 +77,31 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     });
 }]);
 
-UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices',function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
+//UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices', function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
+UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
     $scope.authenticated=$rootScope.authenticated;
     $scope.username=$rootScope.globals.currentUser.username;
-    
+  
+    $scope.auth0Login=function(){
+        auth.signin({}, function(profile, token) {
+            //Turn this off for now.
+            store.set('profile', profile);
+            store.set('token', token);
+            AuthenticationServices.clearCredentials2();
+            $scope.username=profile.email;
+            $scope.password=profile.user_id;
+            $scope.authenticated=true;
+            AuthenticationServices.setCredentials2($scope.username, $scope.password);
+            $rootScope.authenticated=$scope.authenticated;
+            $rootScope.$broadcast('loginEvent',$scope.username);
+            console.log("Login complete, status: "+$rootScope.authenticated);
+            
+//            $location.path("/");
+        }, function(error) {
+            console.log("There was an error logging in", error);
+        });
+    } 
+  
     //Old code, worked with pre-main.html versions of the user interface.
     $scope.login=function(){
         AuthenticationServices.clearCredentials2();
@@ -124,7 +159,7 @@ UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','
     };
     $scope.username=$rootScope.globals.currentUser.username;
 
-}]);
+});
                   
 //TODO: consolidate this with the other controllers, or at least with EditProjectController
 UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$http) {
@@ -149,6 +184,7 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
     $scope.resetAll=function(){
         initialize();
     }
+//}]);
 });
 
 
