@@ -1581,6 +1581,7 @@ function initialize() {
     setup_UAVSAR();
     setup_FAULT_LAYER();
 }
+google.maps.event.addDomListener(window, "load", initialize);
 
 // setup checkbox map overlay toggles
 $(document).ready(function() {
