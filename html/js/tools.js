@@ -1106,6 +1106,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
  	 //Show results from calling the search REST service.
 	 //--------------------------------------------------
 	 function showSearchResults(tableDivName) {
+        deleteAllShape();
+        deleteAllKml();
 		  //See which data sets area available at the selected point
 		  var theSearchString=$("#search-string-value").val();
 		  var searchUrl="/uavsar_flight_search/?searchstring="+theSearchString;
