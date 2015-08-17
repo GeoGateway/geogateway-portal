@@ -74,17 +74,6 @@ function deleteAllKml() {
 
 //START UAVSAR
 function setup_UAVSAR() {
-//     var wmsOptions3 = {
-//         alt: "GeoServer",
-//         getTileUrl: WMSGetTileUrl2,
-//         isPng: true,
-//         maxZoom: 17,
-//         name: "Geoserver",
-//         tileSize: new google.maps.Size(256, 256),
-//         opacity:0.6,
-//         credit: 'Image Credit: QuakeSim'
-//     };
-
 
     //Controling the Layers that appear in Map A.  You can set certain maps to appear in Map A or in Map B.  In this example they appear in both maps.
     //TODO: These need to be unified with mapA's other option settings in initialize().
@@ -1431,8 +1420,6 @@ function drawDygraph(image_uid) {
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
-//        var new_height = $('#map-canvas').height() - 160;
-//        $('#map-canvas').animate({height: new_height + "px"}, 50);
         $('.extra-tools-panel').animate({height: "160px"}, 50);
     }
     var lat1 = LOS_markers[0].getPosition().lat();

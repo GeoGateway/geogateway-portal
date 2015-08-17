@@ -1,37 +1,39 @@
 <script type="text/javascript">
-      // PROFILE-PANEL-RIGHT contains all of the profile tab panels
-      // this includes Notecards, Colleagues, Settings, Logout button, etc
-      
-      // script for animated PROFILE-PANEL OPENING functionality
-      $(document).ready(function() {
-      // open up profile panel
-      $('.panel-toggle').click(function() {
-      if($(this).is('#tools')) {
-      if($('.tools-panel').hasClass('open'))
-      {
-      $('.tools-panel').removeClass('open');
-      $('.tools-panel').addClass('closed');
-      $('.tools-panel').animate({width: "0px"}, 50);
-      $('#map-canvas').animate({left: "0px"}, 50);
-      var new_width = $('#map-canvas').width() + 450;
-      $('#map-canvas').animate({width: new_width + "px"}, 50);
+//TODO: This should not be here. Should be in tools.js
+//BIG TODO: Use a better approach.
+// PROFILE-PANEL-RIGHT contains all of the profile tab panels
+// this includes Notecards, Colleagues, Settings, Logout button, etc
+
+// script for animated PROFILE-PANEL OPENING functionality
+$(document).ready(function() {
+console.log($('#map-canvas').width(), $('#map-canvas').parent().width());
+    // open up profile panel
+    $('.panel-toggle').click(function() {
+        if($(this).is('#tools')) {
+            if($('.tools-panel').hasClass('open')) {
+                $('.tools-panel').removeClass('open');
+                $('.tools-panel').addClass('closed');
+                $('.tools-panel').animate({width: "0px"}, 50);
+                $('#map-canvas').animate({left: "0px"}, 50);
+                var new_width = $('#map-canvas').width() + 450;
+                $('#map-canvas').width('100%');
+//                $('#map-canvas').animate({width: new_width + "px"}, 50);
                 new_width = $('.extra-tools-panel').width() + 450;
-      $('.extra-tools-panel').animate({left: "0px",
-      width: new_width + "px"}, 50);
+                $('.extra-tools-panel').animate({left: "0px",width: new_width + "px"}, 50);
                 //This doesn't work for some reason
-      google.maps.event.trigger(mapA,'resize',{});
-      }
-      else
-            {
+                google.maps.event.trigger(mapA,'resize',{});
+            }
+            else {
                 $('.tools-panel').removeClass('closed');
                 $('.tools-panel').addClass('open');
                 $('.tools-panel').animate({width: "450px"}, 50);
                 $('#map-canvas').animate({left: "450px"}, 50);
                 var new_width = $('#map-canvas').width() - 450;
-                $('#map-canvas').animate({width: new_width + "px"}, 50);
+//                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                $('#map-canvas').width('-=450px');
                 new_width = $('.extra-tools-panel').width() - 450;
                 $('.extra-tools-panel').animate({left: "450px",
-                                                width: new_width + "px"}, 50);
+                                                 width: new_width + "px"}, 50);
                 //This doesn't work for some reason
                 google.maps.event.trigger(mapA,'resize',{});
             }
@@ -39,9 +41,9 @@
             // loadNotecards('.newsfeed-container', -1, 0, 5, 'append');
             // getColleagues();
         }
-        else {
-            if($('.profile-panel').hasClass('open'))
-            {
+        //Must be the profile event, right?
+        else {  
+            if($('.profile-panel').hasClass('open')) {
                 $('.profile-panel').removeClass('open');
                 $('.profile-panel').addClass('closed');
                 $('.profile-panel').animate({width: "0px"}, 50);
@@ -50,8 +52,7 @@
                 new_width = $('.extra-tools-panel').width() + 250;
                 $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
             }
-            else
-            {
+            else {
                 $('.profile-panel').removeClass('closed');
                 $('.profile-panel').addClass('open');
                 $('.profile-panel').animate({width: "250px"}, 50);
@@ -65,6 +66,7 @@
         }
     });
 });
+
 </script>
     
 <div class="profile-panel closed" ng-controller="LoginController">    

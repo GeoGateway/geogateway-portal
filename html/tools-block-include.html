@@ -5,7 +5,6 @@ $(document).ready(function() {
     $('.tab-button').click(function() {
         if($(this).hasClass('tool-tab-button'))
         {
-console.log("Clicking a tab-button");
             $(this).parent().parent().children().removeClass('active');
             $(this).parent().addClass('active');
             updateTabPanel();
