@@ -48,7 +48,8 @@ console.log($('#map-canvas').width(), $('#map-canvas').parent().width());
                 $('.profile-panel').addClass('closed');
                 $('.profile-panel').animate({width: "0px"}, 50);
                 var new_width = $('#map-canvas').width() + 250;
-                $('#map-canvas').animate({width: new_width + "px"}, 50);
+//                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                $('#map-canvas').width('100%');
                 new_width = $('.extra-tools-panel').width() + 250;
                 $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
             }
@@ -57,7 +58,8 @@ console.log($('#map-canvas').width(), $('#map-canvas').parent().width());
                 $('.profile-panel').addClass('open');
                 $('.profile-panel').animate({width: "250px"}, 50);
                 var new_width = $('#map-canvas').width() - 250;
-                $('#map-canvas').animate({width: new_width + "px"}, 50);
+//                $('#map-canvas').animate({width: new_width + "px"}, 50);
+                $('#map-canvas').width('-=250px');
                 new_width = $('.extra-tools-panel').width() - 250;
                 $('.extra-tools-panel').animate({width: new_width + "px"}, 50);
             }
