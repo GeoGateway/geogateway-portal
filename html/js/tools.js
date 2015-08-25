@@ -18,6 +18,7 @@ var markers=[];
 var mag_limit=0.0;
 var quakes_loaded=false;
 var depth_limit=1000.0;
+var userPositionMarker;
 
 //OpenHazards/UCDavis KMZ Layers
 var kml_wo = new google.maps.KmlLayer({
@@ -1628,14 +1629,37 @@ $(document).ready(function() {
 // This function fades and restores the SAR image
 //--------------------------------------------------
 $(document).ready(function(){
-$(".faderButton").click(function() {
-//updated the source to usercontent
-//$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
-$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
+    $(".faderButton").click(function() {
+        //updated the source to usercontent
+        //$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
+        $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
+    });
+    
+    $(".resetButton").click(function() {
+        //$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
+        $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
+    });
 });
 
-$(".resetButton").click(function() {
-//$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
-$("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
-});
-});
+function showUserLocation(){
+    if(document.getElementById("userPositionMarker").checked==true) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+        removeUserPositionMarker();
+    }
+};
+
+function showPosition(myPosition) {
+    var myLatLng={lat: myPosition.coords.latitude, lng: myPosition.coords.longitude};
+    console.log(myLatLng);
+    userPositionMarker=new google.maps.Marker({
+        position:myLatLng,
+        map:mapA
+    });
+};
+
+function removeUserPositionMarker() {
+    console.log("Remove marker");
+    userPositionMarker.setMap(null);
+}

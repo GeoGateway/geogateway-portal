@@ -47,6 +47,7 @@
   <div class="tool-title"><b>Map Tools</b></div>
   <div class="divider"></div>
   <div class="tool-content">
+       
     
     <div>
       <input class="tools-checkbox" type="checkbox" name="KMLMapper-active-tools" value="kml-layer"/>
@@ -81,13 +82,18 @@
         </div>
       </div>
     </div>
-    
     <p/>
+
+    <!--------------------------------------------------->    
+
     <div>
       <input class="tools-checkbox" type="checkbox" name="active-tools" value="fault-layer"/>
       <span class="default-font">UCERF3 Faults</span>
     </div>
     <p/>
+
+    <!--------------------------------------------------->
+
     <div>
       <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/>
       <span class="default-font">UAVSAR</span>
@@ -202,5 +208,15 @@
         </div>
       </div>
     </div>
+    <p/>
+
+    <!--------------------------------------------------->
+
+    <div>
+      <!-- We'll use onclick instead of ng-click because we need to acces the map object. -->
+      <input class="tools-checkbox" id="userPositionMarker" type="checkbox" onclick="showUserLocation()" name="active-tools" value="user-location"/>
+      <span class="default-font">Show Your Location</span>
+    </div>
+
   </div>
 </div>

@@ -183,8 +183,8 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
                
     $scope.resetAll=function(){
         initialize();
-    }
-//}]);
+    };
+
 });
 
 

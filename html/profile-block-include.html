@@ -6,8 +6,10 @@
 
 // script for animated PROFILE-PANEL OPENING functionality
 $(document).ready(function() {
-console.log($('#map-canvas').width(), $('#map-canvas').parent().width());
     // open up profile panel
+    //Note: Panels don't listen for window resize events, so the tools will
+    //need to be toggled to correct sizing in this case. A better way to 
+    //handle would be to use $(window).resize(function()), but this is overkill, I think.
     $('.panel-toggle').click(function() {
         if($(this).is('#tools')) {
             if($('.tools-panel').hasClass('open')) {
