@@ -588,8 +588,9 @@ UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$l
         var projectName="anonymousKmlProject-"+Math.floor(Math.random()*100000000)+"/";
         var uploadUrl="/doUpload/anonymousKmlUser/"+projectName;
         UploadService.uploadFileToUrl2(file,uploadUrl);
-        $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+file.name;
+        $scope.kmlUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/anonymousKmlUser/"+projectName+escape(file.name);
         //document.getElementById("kmlMapperUrl").value=$scope.kmlUrl;
+//        console.log($scope.kmlUrl);
         if($scope.uploadedKmlFiles == null) $scope.uploadedKmlFiles=[];
         var uploadedFile={};
         uploadedFile["name"]=file.name;
