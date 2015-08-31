@@ -19,6 +19,8 @@ var mag_limit=0.0;
 var quakes_loaded=false;
 var depth_limit=1000.0;
 var userPositionMarker;
+var stateKml;
+var coastlineKml;
 
 //OpenHazards/UCDavis KMZ Layers
 var kml_wo = new google.maps.KmlLayer({
@@ -1641,6 +1643,39 @@ $(document).ready(function(){
     });
 });
 
+
+//--------------------------------------------------
+// These are miscellaneous functions for loading KMLs on the map tools page.
+//--------------------------------------------------
+function showStateBoundaries() {
+    if(document.getElementById("maptools.stateBoundaries").checked==true) {
+            stateKml=new google.maps.KmlLayer({
+                //url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_500k.kml",
+//                url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_5m.kml",
+                url: "http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_20m.kml",
+                preserveViewport:true,
+                map:mapA
+            });
+    }
+    else {
+        stateKml.setMap(null);
+    }
+}
+
+function showCoastlines() {
+    if(document.getElementById("maptools.coastlines").checked==true) {
+        coastlineKml=new google.maps.KmlLayer({
+            url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_outline_500k.kml",
+//            url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_outline_20m.kml",
+            preserveViewport:true,
+            map: mapA
+        });
+    }
+    else {
+        coastlineKml.setMap(null);
+    }
+}
+
 function showUserLocation(){
     if(document.getElementById("userPositionMarker").checked==true) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -1662,4 +1697,18 @@ function showPosition(myPosition) {
 function removeUserPositionMarker() {
     console.log("Remove marker");
     userPositionMarker.setMap(null);
+}
+
+function showUCERF3FaultLayer() {
+    if(document.getElementById("maptools.UCERF3FaultLayer").checked==true) {
+        ctaLayer = new google.maps.KmlLayer({
+            url: 'http://gf2.ucs.indiana.edu/ucerf3_black.kml',
+            preserveViewport:true,
+            map:mapA
+        });
+    }
+    else {
+        ctaLayer.setMap(null);
+    }
+    
 }
