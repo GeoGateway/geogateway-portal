@@ -19,7 +19,7 @@ function updateTabPanel() {
 };
 
 </script>
-
+<div class="blur" id="map-canvas"></div>
 <div class="tools-panel blur open" ng-controller="UserProjectController">
   <ul type="none" class="tool-tabs">
     <li class="active">
@@ -73,16 +73,16 @@ function updateTabPanel() {
   <div class="tab-pane tool-tab-pane inactive" id="disloc" ng-controller="EditProjectController">
     <div ng-include="'disloc-include.html'"></div>
   </div>
-
+  
   <div class="tab-pane tool-tab-pane inactive" id="simplex">  
     <div ng-include="'simplex-include.html'"></div>
   </div>
-
+  
   <!--MyProjects Tabe -->
   <div class="tab-pane tool-tab-pane inactive" id="myprojects" ng-controller="EditProjectController">  
     <div ng-include="'myprojects-include.html'"></div>
   </div>
-
+  
   <!--Forecast tab -->
   <div class="tab-pane tool-tab-pane inactive" id="Forecast">
     <div ng-include="'forecast-include.html'"></div>
@@ -99,7 +99,6 @@ function updateTabPanel() {
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="extra-tools-panel inactive">
@@ -113,9 +112,3 @@ function updateTabPanel() {
   </div>
 </div>
 
-<!-- Initialize the  map -->
-<!--
-<script>
-  initialize();
-</script>
--->

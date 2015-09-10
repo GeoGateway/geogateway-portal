@@ -686,9 +686,10 @@ a:visited {
 
 /* MAIN MAP CANVAS */
 #map-canvas {
-    position: absolute;
-    overflow: hidden;
-    display: block;
+   position: absolute;
+   overflow: hidden;
+   display: block;
+//    display: inline;
     top: 4%;
     left: 450px;
     height: 100%;
@@ -697,6 +698,12 @@ a:visited {
     padding: 0px;
     z-index: -1000;
 }
+/* This may be useful for googlemap resizing. See http://tutsme-webdesign.info/add-a-google-map-to-a-bootstrap-3-contact-page/
+@media all and {max-width:1000px) {
+    #map-canvas {height: 50px}
+}
+*/
+
 
 /*****************************************************************************/
 
