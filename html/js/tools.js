@@ -928,13 +928,6 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         else {wmsgf9_select[3] = -1;wmsgf9_samples[uid][3] = -1;}
     }
     
-    if (wmsgf9_select[3] == 1) {
-        // remove the previsous high res overlat if loaded
-        if (typeof highresoverlay !== 'undefined') {
-              mapA.overlayMapTypes.setAt(0, null); }
-
-        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
-    }
 
 
     if(wmsgf9_select[2]) {
@@ -943,6 +936,16 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     viewDataset(uid, dataname, true);
     updateVisibleDatasets();
     $("input:checkbox[value="+uid+"]").prop("checked", true);
+
+    if (wmsgf9_select[3] == 1) {
+        // remove the previsous high res overlat if loaded
+        if (typeof highresoverlay !== 'undefined') {
+              mapA.overlayMapTypes.setAt(0, null); }
+
+        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        wmsgf9_samples[uid][0].setMap(null);
+        wmsgf9_samples[uid][1]=false;
+    }
 
     //Turn everything off
     UAVSARDrawingManager.setMap(null);
