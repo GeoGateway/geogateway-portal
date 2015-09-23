@@ -5,6 +5,7 @@ var mapA;
 //var wmsgf9;
 var wmsgf9_select;
 var wmsgf9_select_direction_kml;
+var highresoverlay
 var wmsgf9_samples = {};
 var UAVSARDrawingManager;
 var ctaLayer;
@@ -928,7 +929,11 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     }
     
     if (wmsgf9_select[3] == 1) {
-        var wmsoverlay = loadWMS(mapA, "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        // remove the previsous high res overlat if loaded
+        if (typeof highresoverlay !== 'undefined') {
+              mapA.overlayMapTypes.setAt(0, null); }
+
+        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
     }
 
 
