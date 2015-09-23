@@ -34,6 +34,9 @@ var baseDestDir=config.baseDestDir; //'html/userUploads/';
 var projectBinDir=config.bin; //geogatewayHomeDir+"/bin/";
 var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
 
+var uavsarSearchUrl=config.uavsarSearchUrl;
+var wmsUrl=config.wmsUrl;
+var losQueryUrl=config.losQueryUrl;
 
 //Call or prepare constructors
 var app=express();
@@ -544,7 +547,8 @@ app.get('/execute/spawn-test', function(req, res) {
 app.get('/uavsar_flight_search/',function(req,res) {
     //TODO: need to do a better job of constructing this URL
     var queryStr=req.query.searchstring;
-    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?searchstring=';
+//    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?searchstring=';
+    var geoServerUrl=uavsarSearchUrl+'searchstring=';
     restClient.get(geoServerUrl+queryStr, function(data, response){
         res.status(200).send(data);
     });
@@ -552,7 +556,8 @@ app.get('/uavsar_flight_search/',function(req,res) {
         
 app.get('/uavsar_query/',function(req,res){
 //    console.log("Query: ",req.query);
-    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
+//    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
+    var geoServerUrl=uavsarSearchUrl+'geometry=';
     var queryStr=req.query.querystr;
 //    console.log(JSON.stringify(queryStr));
 
@@ -564,7 +569,8 @@ app.get('/uavsar_query/',function(req,res){
 
 // has_wms query, this is the temporary solution, shall be removed later
 app.get('/has_wms/', function(req,res) {
-    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
+//    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
+    var geoServerUrl = wmsUrl;
     var wmsParams = [
         "version=1.1.1",
         "request=DescribeLayer",
@@ -581,7 +587,8 @@ app.get('/has_wms/', function(req,res) {
 });
 
 app.get('/los_query/',function(req,res) {
-	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid'
+//	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
+	 var base_url = losQueryUrl;
     image_uid=req.query.image_uid;
     lat1=req.query.lat1;
     lat2=req.query.lat2;
@@ -628,7 +635,8 @@ app.get('/los_query/',function(req,res) {
 });
 
 app.get('/hgt_query/',function(req,res) {
-	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid'
+//	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
+	 var base_url = losQueryUrl;
     image_uid=req.query.image_uid;
     lat1=req.query.lat1;
     lat2=req.query.lat2;
