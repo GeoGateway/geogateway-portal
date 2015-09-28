@@ -1,6 +1,7 @@
 //var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json";
+var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json";
 //var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json";
-var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json";
+//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json";
 var gpsNetwork;
 var gspStations;
 var iconDefImgUrl = "http://maps.google.com/mapfiles/ms/micons/green.png"; 
@@ -11,8 +12,8 @@ var iconOrigin = new google.maps.Point(0, 0);
 var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
 
-
 function loadGpsStations() {
+    //Set the network and markers to empty or null values.
     //Need to make sure memory is managed well.
     gpsNetwork=null;
     gpsStations=null;
@@ -27,67 +28,10 @@ function loadGpsStations() {
             console.log(gpsNetwork.Filters);
             console.log("Center latitude:"+gpsNetwork.center_latitude);
             gpsStations=gpsNetwork.stations;
+            var theDate=new Date(gpsNetwork.end_date);
             
-            $.each(gpsStations, function(i, gpsStation) {
-                //          console.log(gpsStation.lat,gpsStation.long);
-                var myLatLng=new google.maps.LatLng(gpsStation.lat,gpsStation.long);
-                var theDate=new Date();
-                var stationState=getStationState(theDate,gpsStation);
-                var iconImgUrl=iconBaseUrl+stationState+".png";
-                var icon=new google.maps.MarkerImage(iconImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);                
-                marker[i]=new google.maps.Marker({
-                    position:myLatLng,
-                    icon: icon,
-                    clickable: true,
-                    title:gpsStation.id,
-                    map:mapA
-                });
-                
-                marker[i].addListener('click',function(){
-                    var dygraphsHtml="<html><body>";
-		              dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+gpsStation.id+" <b>Lat:</b> "+(new Number(gpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(gpsStation.long)).toFixed(5)+"<\/div>";
-		              dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
-		              dygraphsHtml+="<br/>";
-                    dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
-		              dygraphsHtml+="<\/script>";
-		              dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+gpsStation.pro_dir+"/"+gpsStation.DygraphsInputFile+"'><\/script>";
-		              dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
-		              dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
-		              dygraphsHtml+="<br/>";
-		              dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
-		              dygraphsHtml+="<br/>";
-		              dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
-		              //Use mm displacements for UNAVCO data types.  Note significant figures change from below
-		              dygraphsHtml+="<script type='text/javascript'>";
-		              dygraphsHtml+="var graphs=[]\;"
-		              dygraphsHtml+="var plot1, plot2, plot3\;";
-		              if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
-		                  dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-		                  dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-		                  dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
-		              }
-		              else {
-		                  //The other cases
-			               dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-			               dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-			               dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
-		              }
-		              dygraphsHtml+="graphs.push(plot1)\;";
-		              dygraphsHtml+="graphs.push(plot2)\;";
-		              dygraphsHtml+="graphs.push(plot3)\;";
-		              dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
-		              dygraphsHtml+="<\/script>";
-                    
-                    dygraphsHtml+="</body></html>";
-                    
-             	     var windowName=gpsStation.id+"-Dygraphs";
-		              var newWin = window.open("", windowName, "width=850,height=750");
-		              newWin.document.writeln(dygraphsHtml);
-		              newWin.document.title = gpsStation.id;
-		              newWin.document.close();
-                });
-                
-            });
+            createMarkers(theDate);
+            
         })
         .fail(function(data){
             console.log("Failed:");
@@ -96,28 +40,173 @@ function loadGpsStations() {
         .always(function(){
             console.log("Completed one way or the other");
         });
+    
+}
+function createMarkers(theDate) { //,gpsNetwork) {
+    gpsStations=gpsNetwork.stations;
+    $.each(gpsStations, function(i, gpsStation) {
+        //          console.log(gpsStation.lat,gpsStation.long);
+        var myLatLng=new google.maps.LatLng(gpsStation.lat,gpsStation.long);
+        var stationState=getStationState(theDate,gpsStation);
+        var iconImgUrl=iconBaseUrl+stationState+".png";
+        var icon=new google.maps.MarkerImage(iconImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);                
+        //Remove any old marker from the map.
+        //This is a simple test to make sure the marker isn't null at the given index.
+        if(i<marker.length) {
+            marker[i].setMap(null);
+        }
 
-    function getStationState(date,gpsStation) {
-        var theState=gpsStationState[0];  //This is the default.
-        var lastMonth=new Date();
-        var dayBefore=new Date();
-        lastMonth.setDate(date.getDate()-30);
-        dayBefore.setDate(date.getDate()-1);
-        var statusChanges=gpsStation.status_changes;
-        var noDataDates=gpsStation.time_nodata;
-        if(statusChanges.length > 0) {
-            stateLastDate=new Date(statusChanges[statusChanges.length-1].date);
-//            console.log(stateLastDate);
-//            console.log("Today?",stateLastDate==date);
-//            console.log("30 days ago?",date,lastMonth.getTime(),stateLastDate.getTime(),stateLastDate>=lastMonth);
-            if(stateLastDate.getTime() >= dayBefore.getTime() ) {
-                theState=gpStationState[1];  //red
+        //Add the marker
+        marker[i]=new google.maps.Marker({
+            position:myLatLng,
+            icon: icon,
+            clickable: true,
+            title:gpsStation.id,
+            map:mapA
+        });
+        
+        marker[i].addListener('click',function(){
+            var dygraphsHtml="<html><body>";
+		      dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+gpsStation.id+" <b>Lat:</b> "+(new Number(gpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(gpsStation.long)).toFixed(5)+"<\/div>";
+		      dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
+		      dygraphsHtml+="<br/>";
+            dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
+		      dygraphsHtml+="<\/script>";
+		      dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+gpsStation.pro_dir+"/"+gpsStation.DygraphsInputFile+"'><\/script>";
+		      dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
+		      dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
+		      dygraphsHtml+="<br/>";
+		      dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
+		      dygraphsHtml+="<br/>";
+		      dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
+		      //Use mm displacements for UNAVCO data types.  Note significant figures change from below
+		      dygraphsHtml+="<script type='text/javascript'>";
+		      dygraphsHtml+="var graphs=[]\;"
+		      dygraphsHtml+="var plot1, plot2, plot3\;";
+		      if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
+		          dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+		          dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+		          dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
+		      }
+		      else {
+		          //The other cases
+			       dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+			       dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+			       dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
+		      }
+		      dygraphsHtml+="graphs.push(plot1)\;";
+		      dygraphsHtml+="graphs.push(plot2)\;";
+		      dygraphsHtml+="graphs.push(plot3)\;";
+		      dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
+		      dygraphsHtml+="<\/script>";
+            
+            dygraphsHtml+="</body></html>";
+            
+            var windowName=gpsStation.id+"-Dygraphs";
+		      var newWin = window.open("", windowName, "width=850,height=750");
+		      newWin.document.writeln(dygraphsHtml);
+		      newWin.document.title = gpsStation.id;
+		      newWin.document.close();
+        });
+        
+    });
+}
+
+function getStationState(date,gpsStation) {
+    var theState=gpsStationState[0];  //This is the default.
+    var lastMonth=new Date();
+    var dayBefore=new Date();
+    lastMonth.setDate(date.getDate()-30);
+    dayBefore.setDate(date.getDate()-1);
+    var statusChanges=gpsStation.status_changes;
+    var noDataDates=gpsStation.time_nodata;
+
+    if(statusChanges.length > 0) {
+
+        //Get nearest preceding state change date.
+        stateLastDate=getPrecedingStateChange(date,statusChanges);
+
+        noDataLastDate=getPrecedingNoDataDate(date,noDataDates);//new Date(noDataDates[noDataDates.length-1].from); //Note json error
+
+        if(stateLastDate.getTime() >= dayBefore.getTime() ) {
+            theState=gpsStationState[1];  //red
+        }
+        //Station has changed state recently. We may also have no
+        //data on the current day.
+        else if(stateLastDate.getTime() >= lastMonth.getTime()) {
+            //The last element of the array has the most recent change.
+            //This assumes the date is today, which is only for testing.
+            if(noDataLastDate.getTime() >= dayBefore.getTime()) {
+                theState=gpsStationState[4];  //blue
             }
-            if(stateLastDate.getTime() >= lastMonth.getTime()) {
+            else {
                 theState=gpsStationState[2]; //yellow
             }
         }
-        return theState;
-    };
-}
+        //No data is available on selected date
+        else if(noDataLastDate.getTime()>dayBefore.getTime()) {
+            theState=gpsStationState[3];  //light blue
+        }
+    }
+    return theState;
+};
 
+function getNetworkStateOnDate(selectedDate){
+    createMarkers(selectedDate);
+};
+
+//Would be nice to throw an exception here 
+function getPrecedingStateChange(selectedDate,statusChanges) {
+    var stateLastDate;
+    var latestPossibleDate=new Date(statusChanges[statusChanges.length-1].date);
+    var earliestPossibleDate=new Date(statusChanges[0].date);
+    if(selectedDate.getTime() < earliestPossibleDate.getTime()) {
+        stateLastDate=earliestPossibleDate;
+    }
+    else if(selectedDate.getTime() > latestPossibleDate.getTime()) {
+        stateLastDate=latestPossibleDate;
+    }
+    else {
+        for(var i=0; i<statusChanges.length-1; i++) {
+            var stateChangeDate1=new Date(statusChanges[i].date);
+            var stateChangeDate2=new Date(statusChanges[i+1].date);
+            if(selectedDate.getTime() > stateChangeDate1.getTime() 
+               && selectedDate.getTime() < stateChangeDate2.getTime()) {
+                stateLastDate=stateChangeDate1;
+                //Dates are in order, so we can stop
+                break;
+            }
+        }
+    }
+//    console.log(selectedDate,stateLastDate,earliestPossibleDate,latestPossibleDate);
+    return stateLastDate;
+};
+
+//Logic is the same as the previous function but arrays are a little different. Combine?
+function getPrecedingNoDataDate(selectedDate,noDataDates) {
+    var noDataLastDate;
+    var latestPossibleDate=new Date(noDataDates[noDataDates.length-1].from);
+    var earliestPossibleDate=new Date(noDataDates[0].from);
+    if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
+        noDataLastDate=earliestPossibleDate;
+    }
+    else if(selectedDate.getTime() >= latestPossibleDate.getTime()) {
+        noDataLastDate=latestPossibleDate;
+    }
+    else {
+        //This loop requires at least two entries. 
+        //Single element arrays should be handled previously.
+        for(var i=0; i<noDataDates.length-1; i++) {
+            var noDataDate1=new Date(noDataDates[i].from);
+            var noDataDate2=new Date(noDataDates[i+1].from);
+            if(selectedDate.getTime() > noDataDate1.getTime() 
+               && selectedDate.getTime() < noDataDate2.getTime()) {
+                noDataLastDate=noDataDate1;
+                //Dates are in order, so we can stop
+                break;
+            }
+        }
+    }
+//    console.log(noDataLastDate);
+    return noDataLastDate;
+};
