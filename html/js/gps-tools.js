@@ -20,17 +20,13 @@ function loadGpsStations() {
     marker=[];
     
     $.getJSON(gpsUrl, function(){
-        console.log("Started");
     })
         .done(function(data) {
             gpsNetwork=data;
-            console.log("Done");
-            console.log(gpsNetwork.Filters);
-            console.log("Center latitude:"+gpsNetwork.center_latitude);
             gpsStations=gpsNetwork.stations;
-            var theDate=new Date(gpsNetwork.end_date);
+           // var theDate=new Date(gpsNetwork.end_date);
             
-            createMarkers(theDate);
+            createMarkers(gpsNetwork.end_date);
             
         })
         .fail(function(data){
@@ -38,14 +34,14 @@ function loadGpsStations() {
             console.log(data);
         })
         .always(function(){
-            console.log("Completed one way or the other");
         });
-    
 }
-function createMarkers(theDate) { //,gpsNetwork) {
+
+//Pass the date in as a string so that we have control over how the date objects are created.
+function createMarkers(theDateString) {
+    var theDate=new Date(theDateString);
     gpsStations=gpsNetwork.stations;
     $.each(gpsStations, function(i, gpsStation) {
-        //          console.log(gpsStation.lat,gpsStation.long);
         var myLatLng=new google.maps.LatLng(gpsStation.lat,gpsStation.long);
         var stationState=getStationState(theDate,gpsStation);
         var iconImgUrl=iconBaseUrl+stationState+".png";
@@ -114,8 +110,8 @@ function createMarkers(theDate) { //,gpsNetwork) {
 
 function getStationState(date,gpsStation) {
     var theState=gpsStationState[0];  //This is the default.
-    var lastMonth=new Date();
-    var dayBefore=new Date();
+    var lastMonth=new Date(date.toString());
+    var dayBefore=new Date(date.toString());
     lastMonth.setDate(date.getDate()-30);
     dayBefore.setDate(date.getDate()-1);
     var statusChanges=gpsStation.status_changes;
@@ -124,30 +120,37 @@ function getStationState(date,gpsStation) {
     if(statusChanges.length > 0) {
 
         //Get nearest preceding state change date.
-        stateLastDate=getPrecedingStateChange(date,statusChanges);
+        stateLastDate=getPrecedingStateChange(gpsStation.id,date,statusChanges);
 
-        noDataLastDate=getPrecedingNoDataDate(date,noDataDates);//new Date(noDataDates[noDataDates.length-1].from); //Note json error
+        //See if selected date falls within a time with no data.
+        var dataOnDate=checkDateForData(gpsStation.id,date,noDataDates);
 
-        if(stateLastDate.getTime() >= dayBefore.getTime() ) {
+        if(stateLastDate.toDateString() == date.toDateString() ) {
             theState=gpsStationState[1];  //red
         }
-        //Station has changed state recently. We may also have no
-        //data on the current day.
-        else if(stateLastDate.getTime() >= lastMonth.getTime()) {
-            //The last element of the array has the most recent change.
-            //This assumes the date is today, which is only for testing.
-            if(noDataLastDate.getTime() >= dayBefore.getTime()) {
+        //See if the station has changed state in between the
+        //selected date and 30 days prior to the selected date.
+        else if(stateLastDate.getTime() >= lastMonth.getTime()
+                && stateLastDate.getTime() <= date.getTime()) {
+            //See if we have no data within 24 hours of the selected date.            
+            if(dataOnDate==false) {
+                //Data is missing within last 24 hours and state has changed within
+                //last 30 days.
                 theState=gpsStationState[4];  //blue
             }
             else {
+                //We have data on the date and state has changed within a 
+                //30 day window.
                 theState=gpsStationState[2]; //yellow
             }
         }
         //No data is available on selected date
-        else if(noDataLastDate.getTime()>dayBefore.getTime()) {
+        else if(dataOnDate==false) {
+            //        else if(noDataLastDate.toDateString() == date.toDateString()) {
             theState=gpsStationState[3];  //light blue
         }
     }
+//    console.log("Station:",gpsStation.id,", Statelastdate:",stateLastDate.toDateString(),", Selected Date:",date.toDateString(),", Last month:",lastMonth.toDateString(),", State:",theState);
     return theState;
 };
 
@@ -156,42 +159,47 @@ function getNetworkStateOnDate(selectedDate){
 };
 
 //Would be nice to throw an exception here 
-function getPrecedingStateChange(selectedDate,statusChanges) {
+function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
     var stateLastDate;
     var latestPossibleDate=new Date(statusChanges[statusChanges.length-1].date);
     var earliestPossibleDate=new Date(statusChanges[0].date);
-    if(selectedDate.getTime() < earliestPossibleDate.getTime()) {
+//    console.log("debug:",stationId,selectedDate,latestPossibleDate.toDateString(),latestPossibleDate,statusChanges[statusChanges.length-1].date);
+    if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
         stateLastDate=earliestPossibleDate;
     }
-    else if(selectedDate.getTime() > latestPossibleDate.getTime()) {
+    else if(selectedDate.getTime() >= latestPossibleDate.getTime()) {
         stateLastDate=latestPossibleDate;
     }
     else {
-        for(var i=0; i<statusChanges.length-1; i++) {
-            var stateChangeDate1=new Date(statusChanges[i].date);
-            var stateChangeDate2=new Date(statusChanges[i+1].date);
-            if(selectedDate.getTime() > stateChangeDate1.getTime() 
-               && selectedDate.getTime() < stateChangeDate2.getTime()) {
+        for(var i=statusChanges.length-1; i>0; i--) {
+            var stateChangeDate1=new Date(statusChanges[i-1].date);
+            var stateChangeDate2=new Date(statusChanges[i].date);
+            //The last state change date to find is the one
+            //on or before the curren date.
+            if(selectedDate > stateChangeDate1 
+               && selectedDate <= stateChangeDate2) {
                 stateLastDate=stateChangeDate1;
                 //Dates are in order, so we can stop
                 break;
             }
         }
     }
-//    console.log(selectedDate,stateLastDate,earliestPossibleDate,latestPossibleDate);
+    console.log(stationId,selectedDate.toDateString(),",",stateLastDate.toDateString(),",",earliestPossibleDate.toDateString(),",",latestPossibleDate.toDateString());
     return stateLastDate;
 };
 
 //Logic is the same as the previous function but arrays are a little different. Combine?
 function getPrecedingNoDataDate(selectedDate,noDataDates) {
-    var noDataLastDate;
+    var noDataLastDate, selectedEntry;
     var latestPossibleDate=new Date(noDataDates[noDataDates.length-1].from);
     var earliestPossibleDate=new Date(noDataDates[0].from);
     if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
         noDataLastDate=earliestPossibleDate;
+        selectedEntry=noDataDates[0];
     }
     else if(selectedDate.getTime() >= latestPossibleDate.getTime()) {
         noDataLastDate=latestPossibleDate;
+        selectedEntry=noDataDates[1];
     }
     else {
         //This loop requires at least two entries. 
@@ -202,11 +210,27 @@ function getPrecedingNoDataDate(selectedDate,noDataDates) {
             if(selectedDate.getTime() > noDataDate1.getTime() 
                && selectedDate.getTime() < noDataDate2.getTime()) {
                 noDataLastDate=noDataDate1;
+                selectedEntry=noDataDates[i];
                 //Dates are in order, so we can stop
                 break;
             }
         }
     }
-//    console.log(noDataLastDate);
-    return noDataLastDate;
+    return selectedEntry;
 };
+
+
+function checkDateForData(station,selectedDate,noDataDates) {
+    var dataOnDate=true;
+    for (var i=0; i<noDataDates.length; i++) {
+        var startDate=new Date(noDataDates[i].to);
+        var endDate=new Date(noDataDates[i].from);
+
+        if(startDate <= selectedDate && endDate >= selectedDate) {
+            dataOnDate=false;
+            break;
+        }
+    }
+//    console.log(station,startDate.toDateString(), endDate.toDateString(), selectedDate.toDateString(),dataOnDate);    
+    return dataOnDate;
+}
