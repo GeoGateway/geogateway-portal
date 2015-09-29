@@ -1,5 +1,5 @@
 //var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json";
-var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json";
+//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json";
 //var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json";
 //var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json";
 var gpsNetwork;
@@ -12,14 +12,15 @@ var iconOrigin = new google.maps.Point(0, 0);
 var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
 
-function loadGpsStations() {
+function loadGpsStations(gpsNetworkUrl) {
     //Set the network and markers to empty or null values.
     //Need to make sure memory is managed well.
-    gpsNetwork=null;
+//    gpsNetwork=null;
     gpsStations=null;
     marker=[];
+    console.log(gpsNetworkUrl);
     
-    $.getJSON(gpsUrl, function(){
+    $.getJSON(gpsNetworkUrl, function(){
     })
         .done(function(data) {
             gpsNetwork=data;
@@ -154,7 +155,9 @@ function getStationState(date,gpsStation) {
     return theState;
 };
 
+//Selected date should be a string.
 function getNetworkStateOnDate(selectedDate){
+    console.log("Selected date:"+selectedDate);
     createMarkers(selectedDate);
 };
 
@@ -184,47 +187,15 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
             }
         }
     }
-    console.log(stationId,selectedDate.toDateString(),",",stateLastDate.toDateString(),",",earliestPossibleDate.toDateString(),",",latestPossibleDate.toDateString());
+//    console.log(stationId,selectedDate.toDateString(),",",stateLastDate.toDateString(),",",earliestPossibleDate.toDateString(),",",latestPossibleDate.toDateString());
     return stateLastDate;
 };
-
-//Logic is the same as the previous function but arrays are a little different. Combine?
-function getPrecedingNoDataDate(selectedDate,noDataDates) {
-    var noDataLastDate, selectedEntry;
-    var latestPossibleDate=new Date(noDataDates[noDataDates.length-1].from);
-    var earliestPossibleDate=new Date(noDataDates[0].from);
-    if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
-        noDataLastDate=earliestPossibleDate;
-        selectedEntry=noDataDates[0];
-    }
-    else if(selectedDate.getTime() >= latestPossibleDate.getTime()) {
-        noDataLastDate=latestPossibleDate;
-        selectedEntry=noDataDates[1];
-    }
-    else {
-        //This loop requires at least two entries. 
-        //Single element arrays should be handled previously.
-        for(var i=0; i<noDataDates.length-1; i++) {
-            var noDataDate1=new Date(noDataDates[i].from);
-            var noDataDate2=new Date(noDataDates[i+1].from);
-            if(selectedDate.getTime() > noDataDate1.getTime() 
-               && selectedDate.getTime() < noDataDate2.getTime()) {
-                noDataLastDate=noDataDate1;
-                selectedEntry=noDataDates[i];
-                //Dates are in order, so we can stop
-                break;
-            }
-        }
-    }
-    return selectedEntry;
-};
-
 
 function checkDateForData(station,selectedDate,noDataDates) {
     var dataOnDate=true;
     for (var i=0; i<noDataDates.length; i++) {
-        var startDate=new Date(noDataDates[i].to);
-        var endDate=new Date(noDataDates[i].from);
+        var startDate=new Date(noDataDates[i].from);
+        var endDate=new Date(noDataDates[i].to);
 
         if(startDate <= selectedDate && endDate >= selectedDate) {
             dataOnDate=false;
