@@ -48,15 +48,66 @@
   </head>
   <body>
     <div id="map-canvas"></div>
-<!--    <input type="submit" value="Get Network" onclick="loadGpsStations()">-->
+    <div class="tools-panel">
+      <div class="tab-pane tool-tab-pane active" id="maptools">  
+        <div class="tool">
+          <div class="tool-content">
+            <table style="width:450 px">
+          <tr>
+            <td>
+              <table border='1' style="width:200px">
+                <tr><td><b>State</b></td><td nowrap><b>Color<b></td></tr>
+                <tr>
+                  <td>no state change:</td>
+                  <td align='center'><img border="0" width="18" height="18" src="http://maps.google.com/mapfiles/ms/micons/green.png">
+                  </td>
+                </tr>
+                <tr>
+                  <td>state changed on selected date:</td>
+                  <td align='center'><img border="0" width="18" height="18" src="http://maps.google.com/mapfiles/ms/micons/red.png">
+                  </td>
+                </tr>
+                <tr>
+                  <td>state changed in last 30 days before selected date:</td>
+                  <td align='center'><img border="0" width="18" height="18" src="http://maps.google.com/mapfiles/ms/micons/yellow.png">
+                  </td>
+                </tr>
+                <tr>
+                  <td>no data on selected date:</td>
+                  <td align='center'><img border="0" width="18" height="18" src="http://maps.google.com/mapfiles/ms/micons/lightblue.png">
+                  </td>
+                </tr>
+                <tr>
+                  <td>no data on selected date, state changed in last 30 days before selected date::</td>
+                  <td align='center'><img border="0" width="18" height="18" src="http://maps.google.com/mapfiles/ms/micons/blue.png">
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td><p/></td></tr>
+          <tr>
+            <td>Select GPS Station: 
+              <select id="gpsNetworkSelector" style="width:200px" name="gpsStations" onchange="loadGpsStations(this.options[this.selectedIndex].value)">
+                <option value="" disabled selected>Select Network</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json">UNAVCO_NUCLEUS</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json">UNAVCO_PBO</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json">UNR_FID</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_comb</option>
+              </select>
+            </td>
+          </tr>
+          <tr><td><p/></td></tr>
+          <tr>
+            <td>Select Date:
+              <input type="date" id="networkStateDisplayDate" onchange="getNetworkStateOnDate(this.value)">
+            </td>
+          </tr>
+        </table>
 
-    <select id="gpsNetworkSelector" name="gpsStations" onchange="loadGpsStations(this.options[this.selectedIndex].value)">
-      <option value="" disabled selected>Select Network</option>
-      <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json">UNAVCO_NUCLEUS</option>
-      <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json">UNAVCO_PBO</option>
-      <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json">UNR_FID</option>
-      <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_comb</option>
-    </select>
-    <input type="date" id="networkStateDisplayDate" onchange="getNetworkStateOnDate(this.value)">
+      </div>
+    </div>
+    </div>
+</div>
   </body>
 </html>

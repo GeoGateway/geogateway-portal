@@ -1,7 +1,3 @@
-//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json";
-//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json";
-//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json";
-//var gpsUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json";
 var gpsNetwork;
 var gspStations;
 var iconDefImgUrl = "http://maps.google.com/mapfiles/ms/micons/green.png"; 
@@ -17,16 +13,18 @@ function loadGpsStations(gpsNetworkUrl) {
     //Need to make sure memory is managed well.
 //    gpsNetwork=null;
     gpsStations=null;
-    marker=[];
     console.log(gpsNetworkUrl);
     
     $.getJSON(gpsNetworkUrl, function(){
+        console.log("Loading stations");
     })
         .done(function(data) {
+            console.log("Done loading stations");
             gpsNetwork=data;
             gpsStations=gpsNetwork.stations;
            // var theDate=new Date(gpsNetwork.end_date);
             
+            $('#networkStateDisplayDate').val(gpsNetwork.end_date);
             createMarkers(gpsNetwork.end_date);
             
         })
@@ -41,18 +39,20 @@ function loadGpsStations(gpsNetworkUrl) {
 //Pass the date in as a string so that we have control over how the date objects are created.
 function createMarkers(theDateString) {
     var theDate=new Date(theDateString);
+
+    //Remove any old markers from the map.  These were created for networks with
+    //different sizes than the current one, so do this before iterating over the
+    //new stations.
+    for(var i=0; i<marker.length;i++){
+        marker[i].setMap(null);
+    }
+
     gpsStations=gpsNetwork.stations;
     $.each(gpsStations, function(i, gpsStation) {
         var myLatLng=new google.maps.LatLng(gpsStation.lat,gpsStation.long);
         var stationState=getStationState(theDate,gpsStation);
         var iconImgUrl=iconBaseUrl+stationState+".png";
         var icon=new google.maps.MarkerImage(iconImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);                
-        //Remove any old marker from the map.
-        //This is a simple test to make sure the marker isn't null at the given index.
-        if(i<marker.length) {
-            marker[i].setMap(null);
-        }
-
         //Add the marker
         marker[i]=new google.maps.Marker({
             position:myLatLng,
@@ -140,24 +140,22 @@ function getStationState(date,gpsStation) {
                 theState=gpsStationState[4];  //blue
             }
             else {
-                //We have data on the date and state has changed within a 
-                //30 day window.
+                //We have data on the date and state has changed within a 30 day window.
                 theState=gpsStationState[2]; //yellow
             }
         }
         //No data is available on selected date
         else if(dataOnDate==false) {
-            //        else if(noDataLastDate.toDateString() == date.toDateString()) {
             theState=gpsStationState[3];  //light blue
         }
     }
-//    console.log("Station:",gpsStation.id,", Statelastdate:",stateLastDate.toDateString(),", Selected Date:",date.toDateString(),", Last month:",lastMonth.toDateString(),", State:",theState);
+//    console.log("Station:",gpsStation.id,", Statelastdate:",stateLastDate,", Selected Date:",date,", State:",theState);
     return theState;
 };
 
 //Selected date should be a string.
 function getNetworkStateOnDate(selectedDate){
-    console.log("Selected date:"+selectedDate);
+//    console.log("Selected date:"+selectedDate);
     createMarkers(selectedDate);
 };
 
@@ -166,7 +164,7 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
     var stateLastDate;
     var latestPossibleDate=new Date(statusChanges[statusChanges.length-1].date);
     var earliestPossibleDate=new Date(statusChanges[0].date);
-//    console.log("debug:",stationId,selectedDate,latestPossibleDate.toDateString(),latestPossibleDate,statusChanges[statusChanges.length-1].date);
+//   console.log("debug:",stationId,selectedDate,latestPossibleDate.toDateString(),latestPossibleDate,statusChanges[statusChanges.length-1].date);
     if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
         stateLastDate=earliestPossibleDate;
     }
@@ -179,8 +177,8 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
             var stateChangeDate2=new Date(statusChanges[i].date);
             //The last state change date to find is the one
             //on or before the curren date.
-            if(selectedDate > stateChangeDate1 
-               && selectedDate <= stateChangeDate2) {
+            if(selectedDate >= stateChangeDate1 
+               && selectedDate < stateChangeDate2) {
                 stateLastDate=stateChangeDate1;
                 //Dates are in order, so we can stop
                 break;
