@@ -81,6 +81,7 @@ function setup_UAVSAR() {
 
     //Controling the Layers that appear in Map A.  You can set certain maps to appear in Map A or in Map B.  In this example they appear in both maps.
     //TODO: These need to be unified with mapA's other option settings in initialize().
+    /**
     mapA.setOptions({
         mapTypeControlOptions: {
             mapTypeIds: [
@@ -89,12 +90,13 @@ function setup_UAVSAR() {
                 google.maps.MapTypeId.TERRAIN
             ],
             style:  google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.TOP_CENTER
+            position: google.maps.ControlPosition.TOP_RIGHT
         },
         disableDefaultUI: false
     });
+*/
 
-    mapA.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+//    mapA.setMapTypeId(google.maps.MapTypeId.TERRAIN);
 
     // add drawing tools
     UAVSARDrawingManager = new google.maps.drawing.DrawingManager({
@@ -1559,10 +1561,16 @@ function initialize() {
 
     var mapA_setup = {
         zoom: 6,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeIds: [
+            google.maps.MapTypeId.TERRAIN,
+            google.maps.MapTypeId.HYBRID,
+            google.maps.MapTypeId.ROADMAP
+        ],
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
         MapTypeControl: true,
         scaleControl:true,
-        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DEFAULT, 
+                                position:google.maps.ControlPosition.TOP_RIGHT},
 //        navigationControl: true,
 //        navigationControlOptions: {style: google.maps.NavigationControlStyle.ZOOM_PAN},
         panControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
