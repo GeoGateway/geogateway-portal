@@ -466,12 +466,6 @@ function removeChildElement(childId) {
         childElem.parentNode.removeChild(childElem);
     }
 
-    // Get the element with id='head'
-    //    var list = document.getElementsByTagName('head')[0];
-    // As long as elemsnt has a child node, remove it
-    //    while (list.hasChildNodes()) {  
-    //        list.removeChild(list.firstChild);
-    //    }
 }
 
 function showGDACS(){
@@ -713,19 +707,6 @@ function toggleKmlDisplay(toggleLayer){
 
 //check out dislocKMLLayer
 function loaddislocKmlLayer(folderurl,kmlfile){
-    //var theLayer=document.getElementById(folderurl).href;
-    //theLayer = theLayer + kmlfile;
-    //alert(theLayer);
-    //console.log("Adding layer:"+theLayer);
-    //turn on the checkbox
-    //$("#display"+folderurl).prop("checked",true);
-    //$("#display"+folderurl).show();
-    //kmlLayer = new google.maps.KmlLayer({
-    //    url: theLayer,
-    //     suppressInfoWindows: false,
-    //    map: mapA
-    //});
-    //dislockmls[folderurl]=kmlLayer;
     dislockmls[folderurl]="";
 }
 
@@ -983,21 +964,12 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
 		  var d2r=Math.PI/180.0;
 		  var flatten=1.0/298.247;
 
-		  //This is the old formula.
-//		  var dlon=(neLon-swLon)*d2r;
-//		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
-//		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
-//		  azimuth=Math.atan2(y,x)/d2r;
-
 		  var theFactor=d2r* Math.cos(d2r * swLat) * 6378.139 * (1.0 - Math.sin(d2r * swLat) * Math.sin(d2r * swLat) * flatten);
 		  var x=(neLon-swLon)*theFactor;
 		  var y=(neLat-swLat)*111.32;
 		  
 		  azimuth=Math.atan2(x,y)/d2r;
 		  azimuth=azimuth.toFixed(1);
-//		  if(azimuth.value>180) azimuth.value=azimuth.value-360;
-//		  if(azimuth.value<-180) azimuth.value=azimuth.value+360;
-
 		  if(azimuth>180) azimuth=azimuth-360;
 		  if(azimuth<-180) azimuth=azimuth+360;
 
@@ -1174,25 +1146,6 @@ function displaySelectedImages(datasets,masterMap) {
     };
     updateVisibleDatasets();
     
-
-/*
-  //Deprecated method below
-    $("#data-panel").on('click', '.dataset-checkbox', function() {
-        var uid = $(this).val();
-        if(this.checked)
-        {
-            //                    console.log(uid);
-            viewDataset(uid, '', true);
-        }
-        else
-        {
-            // console.log('hiding');
-            //                    console.log(uid);
-            viewDataset(uid, '', false);
-        }
-        updateVisibleDatasets();
-    });
-*/
 }
 
 
