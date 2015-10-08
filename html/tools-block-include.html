@@ -56,6 +56,11 @@ function updateTabPanel() {
       </button>
     </li>
     <li>
+      <button class="tab-button tool-tab-button" value="GPS">
+        GPS
+      </button>
+    </li>
+    <li>
       <button class="tab-button tool-tab-button" value="Reset">
         Reset Map
       </button>
@@ -86,6 +91,11 @@ function updateTabPanel() {
   <!--Forecast tab -->
   <div class="tab-pane tool-tab-pane inactive" id="Forecast">
     <div ng-include="'forecast-include.html'"></div>
+  </div>
+
+  <!--GPS tab -->
+  <div class="tab-pane tool-tab-pane inactive" id="GPS">
+    <div ng-include="'gps-tools-include.html'"></div>
   </div>
   
   <div class="tab-pane tool-tab-pane inactive" id="Reset">
