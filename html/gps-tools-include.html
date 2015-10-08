@@ -15,6 +15,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="bower_components/qtip2/jquery.qtip.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -47,6 +48,18 @@
     <script src="js/gps-tools.js"></script>
   </head>
   <body>
+	<DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:40%;left:50%;display:none">
+		<TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
+			<TR>
+				<TD WIDTH="100%" HEIGHT="100%" BGCOLOR="#CCCCFF" ALIGN="CENTER" VALIGN="MIDDLE">
+					<BR><BR>   
+            	<FONT FACE="Helvetica,Verdana,Arial" SIZE=2 COLOR="#6600CC"><B>Loading stations.  Please wait...</B></FONT>
+					<BR><BR>
+				</TD>
+			</TR>
+		</TABLE>
+	</DIV>
+
     <div id="map-canvas"></div>
     <div class="tools-panel">
       <div class="tab-pane tool-tab-pane active" id="maptools">  
@@ -87,20 +100,42 @@
           </tr>
           <tr><td><p/></td></tr>
           <tr>
-            <td>Select GPS Station: 
+            <td>
               <select id="gpsNetworkSelector" style="width:200px" name="gpsStations" onchange="loadGpsStations(this.options[this.selectedIndex].value)">
-                <option value="" disabled selected>Select Network</option>
+                <option value="" disabled selected>Select GPS Network</option>
                 <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json">UNAVCO_NUCLEUS</option>
                 <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json">UNAVCO_PBO</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_IGS08_FILL.json">UNR_IGS08</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_SPLICE_FILL.json">UNR_SPLICE</option>
                 <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json">UNR_FID</option>
                 <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_comb</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_jpl_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_sopac_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_ResidNeuTimeSeries_comb_FILL.json">WNAM_Clean_ResidNeuTimeSeries_comb</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_ResidNeuTimeSeries_jpl_FILL.json">/WNAM_Clean_ResidNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_ResidNeuTimeSeries_sopac_FILL.json">WNAM_Clean_ResidNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_TrendNeuTimeSeries_comb_FILL.json">WNAM_Clean_TrendNeuTimeSeries_comb</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_TrendNeuTimeSeries_jpl_FILL.json">WNAM_Clean_TrendNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_TrendNeuTimeSeries_sopac_FILL.json">WNAM_Clean_TrendNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_DetrendNeuTimeSeries_comb_FILL.json">WNAM_Filter_DetrendNeuTimeSeries</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_DetrendNeuTimeSeries_jpl_FILL.json">WNAM_Filter_DetrendNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_DetrendNeuTimeSeries_sopac_FILL.json">WNAM_Filter_DetrendNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_ResidNeuTimeSeries_jpl_FILL.json">WNAM_Filter_ResidNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_ResidNeuTimeSeries_sopac_FILL.json">WNAM_Filter_ResidNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_TrendNeuTimeSeries_comb_FILL.json">/WNAM_Filter_TrendNeuTimeSeries_comb</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_TrendNeuTimeSeries_jpl_FILL.json">WNAM_Filter_TrendNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Filter_TrendNeuTimeSeries_sopac_FILL.json">WNAM_Filter_TrendNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Raw_TrendNeuTimeSeries_comb_FILL.json">WNAM_Raw_TrendNeuTimeSeries_comb</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Raw_TrendNeuTimeSeries_jpl_FILL.json">WNAM_Raw_TrendNeuTimeSeries_jpl</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Raw_TrendNeuTimeSeries_sopac_FILL.json">WNAM_Raw_TrendNeuTimeSeries_sopac</option>
+                <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/rawNeuTimeSeries.MEASURES_Combination_FILL.json">rawNeuTimeSeries.MEASURES_Combination</option>
               </select>
             </td>
           </tr>
           <tr><td><p/></td></tr>
           <tr>
             <td>Select Date:
-              <input type="date" id="networkStateDisplayDate" onchange="getNetworkStateOnDate(this.value)">
+              <input disabled type="text" id="networkStateDisplayDate" onchange="getNetworkStateOnDate(this.value)">
             </td>
           </tr>
         </table>
