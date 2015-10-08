@@ -8,9 +8,6 @@ var iconOrigin = new google.maps.Point(0, 0);
 var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
 
-$(function() {
-    $("#networkStateDisplayDate").datepicker();
-});
 
 function loadGpsStations(gpsNetworkUrl) {
     //Set the network and markers to empty or null values.
@@ -18,8 +15,8 @@ function loadGpsStations(gpsNetworkUrl) {
 //    gpsNetwork=null;
     gpsStations=null;
     console.log(gpsNetworkUrl);
+    $("#networkStateDisplayDate").prop("disabled",true);
     $("#waitScreen").show();
-    $("#networkStateDisplayDate").prop("disabled",false);
     
     $.getJSON(gpsNetworkUrl, function(){
         console.log("Loading stations");
@@ -34,7 +31,9 @@ function loadGpsStations(gpsNetworkUrl) {
             console.log("Creating markers");
             createMarkers(gpsNetwork.end_date);
             $("#waitScreen").hide();
-            
+            $("#networkStateDisplayDate").datepicker();
+            $("#networkStateDisplayDate").prop("disabled",false);
+           
         })
         .fail(function(data){
             console.log("Failed:");
