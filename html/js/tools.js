@@ -925,7 +925,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         if (typeof highresoverlay !== 'undefined') {
               mapA.overlayMapTypes.setAt(0, null); }
 
-        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org:8080/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
         wmsgf9_samples[uid][0].setMap(null);
         wmsgf9_samples[uid][1]=false;
     }
