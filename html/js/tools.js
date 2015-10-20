@@ -797,7 +797,7 @@ function updateAzimuth() {
 
 //Uses the new distance to calculate the new ending lat,lon
 function updateDistance() {
-	 length=$("#losLength-value").val();
+	 losLength=$("#losLength-value").val();
 	 azimuth=$("#azimuth-value").val();
 	 setEndpointsFromAzimuthAndLength();
 }
