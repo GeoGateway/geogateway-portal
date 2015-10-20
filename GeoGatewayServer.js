@@ -599,6 +599,8 @@ app.get('/los_query/',function(req,res) {
     frmt=req.query.format;
     resolution=req.query.resolution;
     method=req.query.method;
+    azimuth=req.query.azimuth;
+    losLength=req.query.losLength;
     //The below code for averaging needs to be validated.
     average=null;
     if(method=="average"){
@@ -627,6 +629,8 @@ app.get('/los_query/',function(req,res) {
             +"#image uid:"+image_uid+"\n"
             +"#start:"+lat1+","+lng1+"\n"
             +"#end:"+lat2+","+lng2+"\n"
+            +"#azimuth:"+azimuth+"\n"
+            +"#length:"+losLength+"\n"
             +data;
 //        console.log(data);
         res.status(200).send(data);

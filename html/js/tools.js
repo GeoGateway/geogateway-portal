@@ -1334,7 +1334,9 @@ function drawDygraphAjax(image_uid) {
     var resolution = $('#resolution-value').val();
     var method = 'native';
     var average = '10';
-    var downloadUrl="/los_query?image_uid="+image_uid+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average;
+    var azimuth = $("#azimuth-value").val();
+    var losLength=$("#losLength-value").val();
+    var downloadUrl="/los_query?image_uid="+image_uid+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average+"&azimuth="+azimuth+"&losLength="+losLength;
     $("#LOS-Data-Download").html("<a href='"+downloadUrl+"' target='_blank'><b>Download LOS Data</b></a>");
     
 
