@@ -211,6 +211,25 @@ UserProjectApp.directive('fileModel', ['$parse', function($parse) {
 }]);
 
 UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http','$location', function($scope,$rootScope,$http,$location) {
+    //TODO: probably better for this method to take input instead of hard-coding below.
+    $scope.getUsgsGeoJson=function(){
+        var geoJsonUrl=$("#usgs-input-file").val();
+        console.log(geoJsonUrl);
+        $.getJSON(geoJsonUrl,function(){
+        })
+            .done(function(data){
+                console.log(data);
+                var momentTensor=data.properties.products["moment-tensor"][0];
+                console.log(momentTensor);
+                console.log("Dip:",momentTensor.properties["nodal-plane-1-dip"]);
+                console.log("Strike:",momentTensor.properties["nodal-plane-1-strike"]);
+                console.log("Rake:",momentTensor.properties["nodal-plane-1-rake"]);
+            })
+            .fail(function(data){
+            });
+
+    }
+
     $scope.username=$rootScope.globals.currentUser.username;
 
     $scope.$on('loginEvent', function(event,arg) {
@@ -572,6 +591,8 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
 * TODO: Generalize the functions so that we don't need a specialized upload for each case
 */                       
 UserProjectApp.controller("UploadController", ['$scope','$rootScope','$http','$location','UploadService',function($scope, $rootScope, $http, $location, UploadService) {
+
+
     //This version is used to plot a KML file on KmlMapper (standalone version)
     $scope.uploadFileForKmlOld=function(){
         var file=$scope.myFile;

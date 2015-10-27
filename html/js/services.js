@@ -12,11 +12,6 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
                 password: ""
             },
             currentProject: {}
-//            currentProject: {
-//                //This is a barebones project
-//                projectName: "anoymousProject",
-//                readyToSubmit: false
-//            }
         };
     };
     service.doLogin2=function(username, password, callback){
@@ -35,27 +30,7 @@ GeoGatewayServices.factory('AuthenticationServices',['$rootScope','$cookieStore'
                 password: password
             },
             currentProject:{}
-//            currentProject: {
-//                projectName: username+"Project",
-//                status: "New",                
-//            }
         };
-        //Create a new project for the authenticated user.
-//        var newProject={};
-//        newProject.projectName=$rootScope.globals.currentProject.projectName;
-//        //Need to see if necessary to stringify newProject or if it can be passed directly.
-//        $http.post('/projects/'+$rootScope.globals.currentUser.username,newProject).
-//            success(function(project){
-//                console.log("Project created for "+$rootScope.globals.currentUser.username+": "+project._id);
-//                //Set or update the current project
-//                $rootScope.globals.currentProject=project;
-//                $rootScope.globals.currentProject.status="New"; 
-//            }).
-//            error(function(data){
-//                console.error("Could not create the new project");
-//            });
-//        
-//        //        $cookieStore.put('globals', $rootScope.globals);
     }
     return service;
 }]);
