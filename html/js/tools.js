@@ -864,7 +864,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     x.innerHTML="<b>Heading:</b>"+heading+"&deg &nbsp; &nbsp;";
     x.innerHTML+="<b>Radar Direction:</b>"+radardirection;
 
-    $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a>');
+    $("#QuakeTables-Link").html('<p><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a></p>');
 
     var direction_kml = (heading.toString()).split(".")[0];
     direction_kml = "http://gf1.ucs.indiana.edu/direction_kml/"+direction_kml+"_left.kmz";
