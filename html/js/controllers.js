@@ -468,6 +468,40 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //Put the updated project in the DB.
         $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
             success(function(data, status) { 
+                $http.get('/execute_disloc2/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
+                    success(function(data){
+                        console.log("Successful exec:"+JSON.stringify(data));
+                        $rootScope.globals.currentProject.status="Completed";
+                        
+                        $scope.myproject=$rootScope.globals.currentProject;
+                        //alert("run loaddislocKmlLayer");
+                        loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
+                        loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
+                        loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
+                        //Put the updated project in the DB. 
+                        //This is repeated alot, need to make more efficient.
+                        
+                        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+                            success(function(data, status) { 
+                                console.log("Updated the project",data,status);
+                            }).
+                            error(function(data){
+                                console.log("Couldn't update the db");
+                            });
+                        
+                    }).
+                    error(function(data){
+                        console.error("Unsuccessful exec:"+JSON.stringify(data));
+                        $rootScope.globals.currentProject.status="Failed";
+                        $scope.myproject=$rootScope.globals.currentProject;
+                        $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
+                            success(function(data, status) { 
+                            }).
+                            error(function(data){
+                                console.log("Couldn't update the db");
+                            });
+                    });
+                
             }).
             error(function(data){
                 console.log("Couldn't update the db");
@@ -475,39 +509,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         
         //disbale submit button
 
-        $http.get('/execute_disloc2/'+appName+'/'+$rootScope.globals.currentUser.username+'/'+$rootScope.globals.currentProject._id).
-            success(function(data){
-                console.log("Successful exec:"+JSON.stringify(data));
-                $rootScope.globals.currentProject.status="Completed";
-
-                $scope.myproject=$rootScope.globals.currentProject;
-                //alert("run loaddislocKmlLayer");
-                loaddislocKmlLayer("disloc_outputkml",$rootScope.globals.currentProject.projectOutputKMLFileName);
-                loaddislocKmlLayer("disloc_sarimagekml",$rootScope.globals.currentProject.projectOutputSARImageKMLFileName);
-                loaddislocKmlLayer("disloc_strainmagkml",$rootScope.globals.currentProject.projectOutputStrainMagFileName);
-                //Put the updated project in the DB. 
-                //This is repeated alot, need to make more efficient.
-
-                $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
-                    success(function(data, status) { 
-                        console.log("Updated the project",data,status);
-                    }).
-                    error(function(data){
-                        console.log("Couldn't update the db");
-                    });
-
-            }).
-            error(function(data){
-                console.error("Unsuccessful exec:"+JSON.stringify(data));
-                $rootScope.globals.currentProject.status="Failed";
-                $scope.myproject=$rootScope.globals.currentProject;
-                $http.put("/projects/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject._id,$rootScope.globals.currentProject).
-                    success(function(data, status) { 
-                    }).
-                    error(function(data){
-                        console.log("Couldn't update the db");
-                    });
-            });
     }
     
     //This runs the blocking version of the executable wrapper
