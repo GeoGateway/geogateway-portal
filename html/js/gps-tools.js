@@ -133,7 +133,8 @@ function getStationState(date,gpsStation) {
         //See if selected date falls within a time with no data.
         var dataOnDate=checkDateForData(gpsStation.id,date,noDataDates);
 
-        if(stateLastDate.toDateString() == date.toDateString() ) {
+//        if(stateLastDate.toDateString() == date.toDateString() ) {
+        if(stateLastDate.getTime() > dayBefore.getTime()) {
             theState=gpsStationState[1];  //red
         }
         //See if the station has changed state in between the
