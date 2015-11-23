@@ -25,9 +25,10 @@ function loadGpsStations(gpsNetworkUrl) {
             console.log("Done loading stations");
             gpsNetwork=data;
             gpsStations=gpsNetwork.stations;
-           // var theDate=new Date(gpsNetwork.end_date);
-            
-            $('#networkStateDisplayDate').val(gpsNetwork.end_date);
+
+            var endDate=new Date(gpsNetwork.end_date);
+            //            $('#networkStateDisplayDate').val(gpsNetwork.end_date);
+            $('#networkStateDisplayDate').val(endDate.getFullYear()+"/"+endDate.getMonth()+"/"+endDate.getDate());
             console.log("Creating markers");
             createMarkers(gpsNetwork.end_date);
             $("#waitScreen").hide();
