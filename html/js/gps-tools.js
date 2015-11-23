@@ -7,6 +7,7 @@ var iconAnchor = new google.maps.Point(1, 10);
 var iconOrigin = new google.maps.Point(0, 0);
 var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
+var dateSlider;
 
 
 function loadGpsStations(gpsNetworkUrl) {
@@ -27,13 +28,22 @@ function loadGpsStations(gpsNetworkUrl) {
             gpsStations=gpsNetwork.stations;
 
             var endDate=new Date(gpsNetwork.end_date);
+            var beginDate=new Date(gpsNetwork.begin_date);
             //            $('#networkStateDisplayDate').val(gpsNetwork.end_date);
-            $('#networkStateDisplayDate').val(endDate.getMonth()+"/"+endDate.getDate()+"/"+endDate.getFullYear());
+            $('#networkStateDisplayDate').val(endDate.getMonth()+1+"/"+endDate.getDate()+"/"+endDate.getFullYear());
             console.log("Creating markers");
             createMarkers(gpsNetwork.end_date);
             $("#waitScreen").hide();
             $("#networkStateDisplayDate").datepicker();
             $("#networkStateDisplayDate").prop("disabled",false);
+            dateSlider=$("#dateSlider").slider({
+                slide:sliderSlideEventHandler,
+                stop: sliderDateEventHandler,
+                min:beginDate.getTime(),
+                max:endDate.getTime(),
+                value:endDate.getTime()
+            });
+            
            
         })
         .fail(function(data){
@@ -42,6 +52,21 @@ function loadGpsStations(gpsNetworkUrl) {
         })
         .always(function(){
         });
+}
+
+function sliderSlideEventHandler(event,ui) {
+    selectedDate=new Date(ui.value);
+    $(this).find('.ui-slider-handle').text(selectedDate.getMonth()+1+"/"+selectedDate.getDate()+"/"+selectedDate.getFullYear());    
+}
+
+function sliderDateEventHandler(event,ui) {
+    console.log("Event:",new Date(ui.value));
+    $("#networkStateDisplayDate").datepicker("setDate",ui.value);
+    getNetworkStateOnDate(ui.value);
+    selectedDate=new Date(ui.value);
+    $('#networkStateDisplayDate').val(selectedDate.getMonth()+1+"/"+selectedDate.getDate()+"/"+selectedDate.getFullYear());    
+    $(this).find('.ui-slider-handle').text("");    
+
 }
 
 //Pass the date in as a string so that we have control over how the date objects are created.
@@ -165,9 +190,7 @@ function getStationState(date,gpsStation) {
 //Selected date should be a string.
 function getNetworkStateOnDate(selectedDate){
 //    console.log("Selected date:"+selectedDate);
-
     createMarkers(selectedDate);
-//    $("#waitScreen").hide();
 };
 
 //Would be nice to throw an exception here 
