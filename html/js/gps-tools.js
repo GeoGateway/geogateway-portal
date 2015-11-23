@@ -28,7 +28,7 @@ function loadGpsStations(gpsNetworkUrl) {
 
             var endDate=new Date(gpsNetwork.end_date);
             //            $('#networkStateDisplayDate').val(gpsNetwork.end_date);
-            $('#networkStateDisplayDate').val(endDate.getFullYear()+"/"+endDate.getMonth()+"/"+endDate.getDate());
+            $('#networkStateDisplayDate').val(endDate.getMonth()+"/"+endDate.getDate()+"/"+endDate.getFullYear());
             console.log("Creating markers");
             createMarkers(gpsNetwork.end_date);
             $("#waitScreen").hide();
@@ -165,7 +165,9 @@ function getStationState(date,gpsStation) {
 //Selected date should be a string.
 function getNetworkStateOnDate(selectedDate){
 //    console.log("Selected date:"+selectedDate);
+
     createMarkers(selectedDate);
+//    $("#waitScreen").hide();
 };
 
 //Would be nice to throw an exception here 
