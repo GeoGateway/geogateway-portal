@@ -252,12 +252,8 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
 
 function checkDateForData(station,selectedDate,noDataDates) {
     var dataOnDate=true;
-    //selected date is before the station's first data
-    if (selectedDate <= new Date(noDataDates[0].from)) {
-        dataOnDate=false;
-    }
     //Selected date is after the last no-data date.
-    else if(selectedDate > noDataDates[noDataDates.length-1].to) {
+    if(selectedDate > noDataDates[noDataDates.length-1].to) {
         dataOnDate=true;
     }
     //Otherwise, check each no-data interval to see if the date falls within.
