@@ -143,7 +143,9 @@ function createMarkers(theDateString) {
 }
 
 function getStationState(date,gpsStation) {
+//    console.log("Station state: ",date,gpsStation);
     var theState=gpsStationState[0];  //This is the default.
+    var today=new Date(date.toString());
     var lastMonth=new Date(date.toString());
     var dayBefore=new Date(date.toString());
     lastMonth.setDate(date.getDate()-30);
@@ -151,15 +153,37 @@ function getStationState(date,gpsStation) {
     var statusChanges=gpsStation.status_changes;
     var noDataDates=gpsStation.time_nodata;
 
-    if(statusChanges.length > 0) {
+    var earliestDataDate=new Date(gpsStation.start_date);
+    var dataOnDate=checkDateForData(gpsStation.id,date,noDataDates);
+    
+    //Hopefully this big if-else construction correctly captures all the case.
+    //It can be simplified later.
 
+    //Provided date is before any data available for that station, so state is light blue
+    if(today < earliestDataDate) {
+        theState=gpsStationState[3];  //light blue        
+    }
+
+    //Date falls within data range, there are no status changes, and data is available on date
+    else if(today > earliestDataDate && statusChanges.length==0 && dataOnDate==true) {
+        theState=gpsStationState[0];  //green
+    }
+
+    //Date falls within data range, there are no state changes, and no data on selected date.
+    else if(today > earliestDataDate && statusChanges.length==0 && dataOnDate==false) {
+        theState=gpsStationState[3];  //light blue
+    }
+
+    //We have data on the date, but it proceeds the earliest state change
+    else if(today.getTime() < new Date(statusChanges[0].date)) {
+        theState=gpsStationState[0];  //green
+    }
+    //See if the date falls within 1 day or 1 month of a state change.
+    else if(statusChanges.length > 0) {
         //Get nearest preceding state change date.
         stateLastDate=getPrecedingStateChange(gpsStation.id,date,statusChanges);
-
-        //See if selected date falls within a time with no data.
-        var dataOnDate=checkDateForData(gpsStation.id,date,noDataDates);
-
-//        if(stateLastDate.toDateString() == date.toDateString() ) {
+        
+        //See if state change was yesterday.
         if(stateLastDate.getTime() > dayBefore.getTime()) {
             theState=gpsStationState[1];  //red
         }
@@ -178,12 +202,13 @@ function getStationState(date,gpsStation) {
                 theState=gpsStationState[2]; //yellow
             }
         }
-        //No data is available on selected date
+        //No data is available on selected date for this station, and station is
+        //not within either the 1 day or 30 day window.
         else if(dataOnDate==false) {
             theState=gpsStationState[3];  //light blue
         }
     }
-//    console.log("Station:",gpsStation.id,", Statelastdate:",stateLastDate,", Selected Date:",date,", State:",theState);
+    
     return theState;
 };
 
@@ -198,9 +223,11 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
     var stateLastDate;
     var latestPossibleDate=new Date(statusChanges[statusChanges.length-1].date);
     var earliestPossibleDate=new Date(statusChanges[0].date);
-//   console.log("debug:",stationId,selectedDate,latestPossibleDate.toDateString(),latestPossibleDate,statusChanges[statusChanges.length-1].date);
+
+    //This should actually throw an erorr since there is no earlier state change.
     if(selectedDate.getTime() <= earliestPossibleDate.getTime()) {
-        stateLastDate=earliestPossibleDate;
+//        stateLastDate=earliestPossibleDate;
+        stateLastDate=selectedDate;
     }
     else if(selectedDate.getTime() >= latestPossibleDate.getTime()) {
         stateLastDate=latestPossibleDate;
@@ -225,15 +252,26 @@ function getPrecedingStateChange(stationId,selectedDate,statusChanges) {
 
 function checkDateForData(station,selectedDate,noDataDates) {
     var dataOnDate=true;
-    for (var i=0; i<noDataDates.length; i++) {
-        var startDate=new Date(noDataDates[i].from);
-        var endDate=new Date(noDataDates[i].to);
-
-        if(startDate <= selectedDate && endDate >= selectedDate) {
-            dataOnDate=false;
-            break;
+    //selected date is before the station's first data
+    if (selectedDate <= new Date(noDataDates[0].from)) {
+        dataOnDate=false;
+    }
+    //Selected date is after the last no-data date.
+    else if(selectedDate > noDataDates[noDataDates.length-1].to) {
+        dataOnDate=true;
+    }
+    //Otherwise, check each no-data interval to see if the date falls within.
+    else {
+        for (var i=0; i<noDataDates.length; i++) {
+            var startDate=new Date(noDataDates[i].from);
+            var endDate=new Date(noDataDates[i].to);
+            
+            //This only works for data sets after the start date.
+            if(startDate <= selectedDate && endDate >= selectedDate) {
+                dataOnDate=false;
+                break;
+            }
         }
     }
-//    console.log(station,startDate.toDateString(), endDate.toDateString(), selectedDate.toDateString(),dataOnDate);    
     return dataOnDate;
 }
