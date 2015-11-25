@@ -869,7 +869,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     var direction_kml = (heading.toString()).split(".")[0];
     direction_kml = "http://gf1.ucs.indiana.edu/direction_kml/"+direction_kml+"_left.kmz";
     //alert(direction_kml);
-    //revmoe the previous one
+    //remove the previous one
     if (typeof wmsgf9_select_direction_kml !== 'undefined') {
         wmsgf9_select_direction_kml.setMap(null);
         }
@@ -889,29 +889,39 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         wmsgf9_samples[uid1][1]=false;
         wmsgf9_samples[uid1][2]=true;
     }
-    //Turn the display flags back on for te selected image.
+
+    //Turn the display flags back on for the selected image.
 	 $("#sarDisplayOrNot_"+uid).prop('checked',true);	 
 	 $("#sarDisplayOrNot_"+uid).prop('disabled',true);
 	 wmsgf9_samples[uid][1]=true;
 	 wmsgf9_samples[uid][2]=false;
    
     // var querystr = uid + "/" + dataname;
+
+    var firstSelected=true;
+    if(Object.keys(wmsgf9_select).length>0) {
+        firstSelected=false;
+    }
     wmsgf9_select = wmsgf9_samples[uid];
 
-
-
-    // zoom to the kmllayer
-    mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
+    // Zoom to the kmllayer if this is the first selected overlay.  Otherwise we
+    // preserve the view port.
+    if(firstSelected) {
+        mapA.fitBounds(wmsgf9_select[0].getDefaultViewport());  
+    }
 
     // check wms layer -- disabled for check-in
-    //alert(wmsgf9_select[3]);
     if (wmsgf9_select[3] == 0) {
         var has_wms = checkwmslayer(uid);
-        if (has_wms) {wmsgf9_select[3] =1;wmsgf9_samples[uid][3] = 1;}
-        else {wmsgf9_select[3] = -1;wmsgf9_samples[uid][3] = -1;}
+        if (has_wms) {
+            wmsgf9_select[3] =1;
+            wmsgf9_samples[uid][3] = 1;
+        }
+        else {
+            wmsgf9_select[3] = -1;
+            wmsgf9_samples[uid][3] = -1;
+        }
     }
-    
-
 
     if(wmsgf9_select[2]) {
         viewDataset(uid, dataname, false);
@@ -1161,18 +1171,14 @@ function displaySelectedImages(datasets,masterMap) {
     // be changed
     // currentState will automatically update when the visible layers are updated
     // add onemore state: wmslayer, -1 no wms layer, 0 not checked, 1 has wms layer
-function viewDataset(uid, dataname, show)
-{
-//    console.log("View Dataset: ", uid,dataname);
-    if(show)
-    {
-        if(uid in wmsgf9_samples)
-        {
+function viewDataset(uid, dataname, show) {
+
+    if(show) {
+        if(uid in wmsgf9_samples) {
 
             wmsgf9_samples[uid][1] = true;
         }
-        else
-        {
+        else {
             var querystr = uid + '/' + dataname;
 //            console.log( 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz');
             var wmsgf9_temp = new google.maps.KmlLayer({
@@ -1187,8 +1193,7 @@ function viewDataset(uid, dataname, show)
         }
     }
     // it is assumed that type = hide is only called for wmsgf9s already visible
-    else
-    {
+    else{
 //        console.log(uid,wmsgf9_samples);
         wmsgf9_samples[uid][1] = false;
     }
