@@ -898,6 +898,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
    
     // var querystr = uid + "/" + dataname;
 
+    //See if this is the first selected image.
     var firstSelected=true;
     if(Object.keys(wmsgf9_select).length>0) {
         firstSelected=false;
@@ -933,9 +934,11 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     if (wmsgf9_select[3] == 1) {
         // remove the previsous high res overlat if loaded
         if (typeof highresoverlay !== 'undefined') {
-              mapA.overlayMapTypes.setAt(0, null); }
+              mapA.overlayMapTypes.setAt(0, null); 
+        }
 
         highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+//        console.log("High resolution overlay:",highresoverlay);
         wmsgf9_samples[uid][0].setMap(null);
         wmsgf9_samples[uid][1]=false;
     }
@@ -1606,18 +1609,24 @@ $(document).ready(function() {
 //--------------------------------------------------
 // This function fades and restores the SAR image
 //--------------------------------------------------
-$(document).ready(function(){
-    $(".faderButton").click(function() {
-        //updated the source to usercontent
-        //$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
-        $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
-    });
-    
-    $(".resetButton").click(function() {
-        //$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
-        $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
-    });
-});
+function fadeInsarImage() {
+    console.log("Fader button selected");
+    //updated the source to usercontent
+    //$("#map-canvas").find("img[src*='mapsatt']").fadeTo("fast","0.50");
+    $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","0.50");
+    if(typeof highresoverlay !== 'undefined') {
+        highresoverlay.setOpacity(0.5);
+    }
+}
+  
+function resetInsarImage() {
+    console.log("Reset button selected.");
+    //$("map-canvas").find("img[src*='mapsatt']").fadeTo("fast","1.0");           
+    $("#map-canvas").find("img[src*='usercontent']").fadeTo("fast","1.0");
+    if(typeof highresoverlay !== 'undefined') {
+        highresoverlay.setOpacity(1.0);
+    }
+}
 
 
 //--------------------------------------------------
