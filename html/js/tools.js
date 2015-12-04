@@ -1350,7 +1350,7 @@ function drawDygraphAjax(image_uid) {
 
     $.ajax({        
         url:"/los_query",
-        beforeSend:function() {if(dygraph1) {dygraph1.destroy(); };
+        beforeSend:function() {if(dygraph1 !== null) {dygraph1.destroy(); };
 										 $('#dygraph-LOS').html('<center><img src="http://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
                               },
         data: {
