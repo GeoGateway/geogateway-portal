@@ -61,11 +61,12 @@ MercatorProjection.prototype.fromDivPixelToSphericalMercator = function(pixel, z
     return new google.maps.Point(x,y);
 };
 
-//test if the layer exist 
-function checkwmslayer(uid) {
+//test if the layer exist on a certian server
+//server: highres, coloring
+function checkwmslayer(uid,server) {
     var layername = "uid" + uid + "_unw";
     
-    var results=$.ajax({url:'has_wms',data:{'layername':layername},async:false}).responseText;
+    var results=$.ajax({url:'has_wms',data:{'layername':layername,'server': server},async:false}).responseText;
     var datajson=jQuery.parseJSON(results);
 
 

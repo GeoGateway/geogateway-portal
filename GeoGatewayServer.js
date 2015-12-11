@@ -36,6 +36,7 @@ var baseUserProjectPath=geogatewayHomeDir+baseDestDir;
 
 var uavsarSearchUrl=config.uavsarSearchUrl;
 var wmsUrl=config.wmsUrl;
+var wmscolorUrl = config.wmscolorUrl;
 var losQueryUrl=config.losQueryUrl;
 
 //Call or prepare constructors
@@ -571,6 +572,7 @@ app.get('/uavsar_query/',function(req,res){
 app.get('/has_wms/', function(req,res) {
 //    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
     var geoServerUrl = wmsUrl;
+    if (req.server == 'coloring') {geoServerUrl = wmscolorUrl;}
     var wmsParams = [
         "version=1.1.1",
         "request=DescribeLayer",

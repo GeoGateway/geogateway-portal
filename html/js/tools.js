@@ -913,7 +913,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
 
     // check wms layer -- disabled for check-in
     if (wmsgf9_select[3] == 0) {
-        var has_wms = checkwmslayer(uid);
+        var has_wms = checkwmslayer(uid,"highres");
         if (has_wms) {
             wmsgf9_select[3] =1;
             wmsgf9_samples[uid][3] = 1;
@@ -1269,6 +1269,7 @@ function closeDataPanel() {
     $('#FadeDisplay').hide();
     $('#Color-mapping').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
+    $('#color-mapping-checkbox').prop("checked",false);    
     $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
     $('#search-string-value').val("");
