@@ -1124,6 +1124,7 @@ function displaySelectedImages(datasets,masterMap) {
         $('.panel-close-button').removeClass('inactive').addClass('active');
         $('#uavsar').removeClass('inactive').addClass('active');
         $('#FadeDisplay').show();
+        $('#Color-mapping').show();
     }
     // else clear #uavsar
     else
@@ -1266,6 +1267,7 @@ function closeDataPanel() {
     $('#UAVSAR-markers').empty();
     $('#UAVSAR-formFields').hide();
     $('#FadeDisplay').hide();
+    $('#Color-mapping').hide();
     $('#UAVSAR-active-tool').prop("checked",false);
     $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
