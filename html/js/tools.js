@@ -5,6 +5,7 @@ var mapA;
 //var wmsgf9;
 var wmsgf9_select;
 var wmsgf9_select_direction_kml;
+var wmsgf9_select_legend_kml;
 var highresoverlay
 var wmsgf9_samples = {};
 var UAVSARDrawingManager;
@@ -73,6 +74,9 @@ function deleteAllKml() {
     // remove direction kml if loaded
     if (typeof wmsgf9_select_direction_kml !== 'undefined') {
         wmsgf9_select_direction_kml.setMap(null); }
+    // remove legend kml if loaded
+    if (typeof wmsgf9_select_legend_kml !== 'undefined') {
+        wmsgf9_select_legend_kml.setMap(null); }
 
 }
 
@@ -936,12 +940,26 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         if (typeof highresoverlay !== 'undefined') {
               mapA.overlayMapTypes.setAt(0, null); 
         }
+        // remove the legend if loaded
+        if (typeof wmsgf9_select_legend_kml !== 'undefined') {
+                    wmsgf9_select_legend_kml.setMap(null);
+        }
+
         //load color mapping one if checked
         if($('#color-mapping-checkbox').prop('checked')) {
             var has_coloring;
             has_coloring = checkwmslayer(uid,"coloring");
             if (has_coloring) {
                 highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+                // load legend
+                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend/uid"+uid+"_unw_default.kmz";
+                    wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
+                    url: legend_kml,
+                    preserveViewport:true,
+                    screenOverlays:true
+                    });
+                wmsgf9_select_legend_kml.setMap(mapA);
+
             }  
             else {highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
             }
