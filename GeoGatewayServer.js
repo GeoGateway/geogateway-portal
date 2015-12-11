@@ -571,8 +571,9 @@ app.get('/uavsar_query/',function(req,res){
 // has_wms query, this is the temporary solution, shall be removed later
 app.get('/has_wms/', function(req,res) {
 //    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
-    var geoServerUrl = wmsUrl;
-    if (req.server == 'coloring') {geoServerUrl = wmscolorUrl;}
+    var geoServerUrl;
+    if (req.query.server == 'coloring') {geoServerUrl = wmscolorUrl;} 
+    else { geoServerUrl = wmsUrl;}
     var wmsParams = [
         "version=1.1.1",
         "request=DescribeLayer",

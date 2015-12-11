@@ -936,8 +936,19 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         if (typeof highresoverlay !== 'undefined') {
               mapA.overlayMapTypes.setAt(0, null); 
         }
-
+        //load color mapping one if checked
+        if($('#color-mapping-checkbox').prop('checked')) {
+            var has_coloring;
+            has_coloring = checkwmslayer(uid,"coloring");
+            if (has_coloring) {
+                highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+            }  
+            else {highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+            }
+        }   
+        else {
         highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        }
 //        console.log("High resolution overlay:",highresoverlay);
         wmsgf9_samples[uid][0].setMap(null);
         wmsgf9_samples[uid][1]=false;
