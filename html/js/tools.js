@@ -961,11 +961,31 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
                 wmsgf9_select_legend_kml.setMap(mapA);
 
             }  
-            else {highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+            else {
+                highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+                    // load high-res legend
+            var legend_kml = "http://gw88.iu.xsede.org/highreslegend/2pi.kmz";
+            if (parseInt(uid)<=369) {legend_kml = "http://gw88.iu.xsede.org/highreslegend/pi.kmz";};
+            wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
+            url: legend_kml,
+            preserveViewport:true,
+            screenOverlays:true
+            });
+            wmsgf9_select_legend_kml.setMap(mapA);
+
             }
         }   
         else {
         highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        // load high-res legend
+        var legend_kml = "http://gw88.iu.xsede.org/highreslegend/2pi.kmz";
+        if (parseInt(uid)<=369) {legend_kml = "http://gw88.iu.xsede.org/highreslegend/pi.kmz";};
+        wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
+        url: legend_kml,
+        preserveViewport:true,
+        screenOverlays:true
+        });
+        wmsgf9_select_legend_kml.setMap(mapA);
         }
 //        console.log("High resolution overlay:",highresoverlay);
         wmsgf9_samples[uid][0].setMap(null);
