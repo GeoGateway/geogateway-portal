@@ -935,7 +935,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     updateVisibleDatasets();
     $("input:checkbox[value="+uid+"]").prop("checked", true);
 
-    if (wmsgf9_select[3] == 1) {
+    // this part needs clean up
+    if (wmsgf9_select[3] == 1 || $('#color-mapping-checkbox').prop('checked')) {
         // remove the previsous high res overlat if loaded
         if (typeof highresoverlay !== 'undefined') {
               mapA.overlayMapTypes.setAt(0, null); 
