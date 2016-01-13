@@ -1600,6 +1600,14 @@ function initialize() {
 
     mapA = new google.maps.Map(document.getElementById("map-canvas"), mapA_setup);
 
+    // load geogateway logo
+    var logokml =  new google.maps.KmlLayer({
+                    url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
+                    preserveViewport:true,
+                    screenOverlays:true
+                    });
+    logokml.setMap(mapA);    
+
     setup_UAVSAR();
     setup_FAULT_LAYER();
 }
