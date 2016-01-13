@@ -953,7 +953,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
             if (has_coloring) {
                 highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
                 // load legend
-                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend/uid"+uid+"_unw_default.kmz";
+                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/uid"+uid+"_unw_default.kmz";
                     wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
                     url: legend_kml,
                     preserveViewport:true,
