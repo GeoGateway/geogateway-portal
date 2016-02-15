@@ -647,7 +647,7 @@ a:visited {
 .tool-tab-pane {
     padding-top: 1px;
     width: 100%;
-    height: calc(95% - 3px);
+    height: calc(90%);
     background-color: rgb(230, 230, 255);
 }
 
@@ -692,7 +692,7 @@ a:visited {
 //    display: inline;
     top: 4%;
     left: 450px;
-    height: 100%;
+    height: 96%;
     width: calc(100% - 450px);
     margin: 0px;
     padding: 0px;
