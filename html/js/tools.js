@@ -1388,7 +1388,7 @@ function drawDygraphAjax(image_uid) {
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
-        $('.extra-tools-panel').animate({height: "160px"}, 50);
+        $('.extra-tools-panel').animate({height: "200px"}, 50);
     }
     var lat1 = LOS_markers[0].getPosition().lat();
     var lng1 = LOS_markers[0].getPosition().lng();
