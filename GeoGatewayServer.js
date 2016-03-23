@@ -593,6 +593,7 @@ app.get('/los_query/',function(req,res) {
 //	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
 	 var base_url = losQueryUrl;
     image_uid=req.query.image_uid;
+    image_name = req.query.image_name;
     lat1=req.query.lat1;
     lat2=req.query.lat2;
     lng1=req.query.lng1;
@@ -628,12 +629,12 @@ app.get('/los_query/',function(req,res) {
         data=data.replace(regex,'');
         res.setHeader('Content-Type','text/csv');
         res.setHeader('Content-Disposition','attachment; filename="'+image_uid+'".csv"');
-        data="Lat, Lon, Distance (km), Displacement\n"
-            +"#image uid:"+image_uid+"\n"
-            +"#start:"+lat1+","+lng1+"\n"
-            +"#end:"+lat2+","+lng2+"\n"
-            +"#azimuth:"+azimuth+"\n"
-            +"#length:"+losLength+"\n"
+        data = "image name, "+image_name+"\n"
+            +"start, "+lat1+", "+lng1+"\n"
+            +"end, "+lat2+", "+lng2+"\n"
+            +"azimuth, "+azimuth+"\n"
+            +"length, "+losLength+"\n"
+            +"Lat, Lon, Distance (km), Displacement\n"
             +data;
 //        console.log(data);
         res.status(200).send(data);
