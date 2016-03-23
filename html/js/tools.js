@@ -1445,11 +1445,33 @@ function drawDygraphAjax(image_uid) {
                            yLabelWidth:16,
                            xlabel:'Distance (km)',
                            ylabel:'Ground Range Change (cm)',
-			   interactionModel: {}}
+			   interactionModel: {}
+			  }
             );
         });
     
 }
+//These are some methods that can be used by the interactionModel.
+//But they don't play well with jquery's draggable.
+//See view-source:http://dygraphs.com/tests/interaction.html and http://dygraphs.com/tests/interaction.js
+function downV3(event, g, context) {
+  context.initializeMouseDown(event, g, context);
+    if (event.altKey || event.shiftKey) {
+	Dygraph.startZoom(event, g, context);
+    }
+}
+
+function moveV3(event, g, context) {
+    Dygraph.moveZoom(event, g, context);
+}
+
+function upV3(event, g, context) {
+    if (context.isZooming) {
+	Dygraph.endZoom(event, g, context);
+    }
+     Dygraph.cancelEvent(event);
+}
+
 //TODO: Deprecate this in favor of the jQuery().ajax() method above.
 function drawDygraph(image_uid) {
 //    console.log("drawDygraph called: "+image_uid);
