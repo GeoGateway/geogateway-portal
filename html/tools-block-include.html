@@ -1,21 +1,23 @@
 <script>
-// listener for TOOL PANEL TABS
-//TODO: need to replace this with Angular methods.
-$(document).ready(function() {
-    $('.tab-button').click(function() {
-        if($(this).hasClass('tool-tab-button'))
-        {
-            $(this).parent().parent().children().removeClass('active');
-            $(this).parent().addClass('active');
-            updateTabPanel();
-        }
+    // listener for TOOL PANEL TABS
+    //TODO: need to replace this with Angular methods.
+    $(document).ready(function() {
+	$('.tab-button').click(function() {
+            if($(this).hasClass('tool-tab-button'))
+            {
+		$(this).parent().parent().children().removeClass('active');
+		$(this).parent().addClass('active');
+		updateTabPanel();
+	    }
+	});
+		
+	$('.extra-tools-panel').draggable();
     });
-});
 
 function updateTabPanel() {
-   var active_tab = $('.tool-tabs').children('.active').children().val();
-   $('.tools-panel').children('.active').removeClass('active').addClass('inactive');
-   $('.tools-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
+    var active_tab = $('.tool-tabs').children('.active').children().val();
+    $('.tools-panel').children('.active').removeClass('active').addClass('inactive');
+    $('.tools-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
 };
 
 </script>
@@ -140,12 +142,8 @@ function updateTabPanel() {
 
 <div class="extra-tools-panel inactive">
   <div class="extra-tool">
-    <!-- get rid of title
-         <div class="extra-tool-title">PLOT</div>
-         <div class="divider"></div>
-         -->
     <div class="extra-tool-content" id="dygraph-LOS"></div>
-    <div class="extra-tool-content" id="dygraph-HGT"></div>
+<!--    <div class="extra-tool-content" id="dygraph-HGT"></div>-->
   </div>
 </div>
 
