@@ -1384,7 +1384,7 @@ function updateMarkerFormFields() {
 
 function drawDygraphAjax(image_uid) {
 //    console.log("drawDygraphAjax called");
-    alert(LOS_dataname);
+    //alert(LOS_dataname);
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
@@ -1400,7 +1400,7 @@ function drawDygraphAjax(image_uid) {
     var average = '10';
     var azimuth = $("#azimuth-value").val();
     var losLength=$("#losLength-value").val();
-    var downloadUrl="/los_query?image_uid="+image_uid+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average+"&azimuth="+azimuth+"&losLength="+losLength;
+    var downloadUrl="/los_query?image_uid="+image_uid+"&image_name="+LOS_dataname+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average+"&azimuth="+azimuth+"&losLength="+losLength;
     $("#LOS-Data-Download").html("<a href='"+downloadUrl+"' target='_blank'><b>Download LOS Data</b></a>");
     
 
