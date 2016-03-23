@@ -1,37 +1,37 @@
 <script>
-  //TODO: Clean this up. Move to tools at least.
-  $(document).ready(function() {
-  $(".tools-checkbox").click(function() {
-  var checked = this.checked;
-  var type = $(this).val();
-  console.log("Tools checkbox clicked:",type);
-  switch(type) {
-  // UAVSAR
-  case 'uavsar':
-  if(checked) {
-  draw_UAVSAR();
-  $('#uavsar-instructions').show();
-  }
-  else {
-  closeDataPanel();
-  wmsgf9_select={};
-  $('#UAVSAR-geometry').empty();
-  }
-  break;
-  // FAULT LAYER
-  case 'fault-layer':
-  break;
-  case 'kml-layer':
-  if(checked) {
-  $('#KmlMapperDiv').show();
-  }
-  else {
-  $('#KmlMapperDiv').hide();
-  }
-  break;
-  }
-  });
-  });
+    //TODO: Clean this up. Move to tools at least.
+    $(document).ready(function() {
+	$(".tools-checkbox").click(function() {
+	    var checked = this.checked;
+	    var type = $(this).val();
+	    console.log("Tools checkbox clicked:",type);
+	    switch(type) {
+		// UAVSAR
+	    case 'uavsar':
+		if(checked) {
+		    draw_UAVSAR();
+		    $('#uavsar-instructions').show();
+		}
+		else {
+		    closeDataPanel();
+		    wmsgf9_select={};
+		    $('#UAVSAR-geometry').empty();
+		}
+		break;
+		// FAULT LAYER
+	    case 'fault-layer':
+		break;
+	    case 'kml-layer':
+		if(checked) {
+		    $('#KmlMapperDiv').show();
+		}
+		else {
+		    $('#KmlMapperDiv').hide();
+		}
+		break;
+	    }
+	});
+    });
 </script>
 
 <div class="tool">

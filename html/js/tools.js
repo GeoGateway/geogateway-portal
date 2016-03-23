@@ -1436,12 +1436,16 @@ function drawDygraphAjax(image_uid) {
             
             dygraph1= new Dygraph(
                 document.getElementById("dygraph-LOS"),
-                csv_final,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
+                csv_final,{drawPoints:true,
+			   pointSize:2,
+			   strokeWidth:0.0,
+			   title:'Ground Range Change',
                            titleHeight:20, 
                            xLabelHeight:16,
                            yLabelWidth:16,
                            xlabel:'Distance (km)',
-                           ylabel:'Ground Range Change (cm)'}
+                           ylabel:'Ground Range Change (cm)',
+			   interactionModel: {}}
             );
         });
     
