@@ -630,11 +630,11 @@ app.get('/los_query/',function(req,res) {
         res.setHeader('Content-Type','text/csv');
         res.setHeader('Content-Disposition','attachment; filename="'+image_uid+'".csv"');
         data="Lat, Lon, Distance (km), Displacement\n"
-            +"image name:"+image_name+"\n"
-            +"start:"+lat1+","+lng1+"\n"
-            +"end:"+lat2+","+lng2+"\n"
-            +"azimuth:"+azimuth+"\n"
-            +"length:"+losLength+"\n"
+            +"image name: "+image_name+"\n"
+            +"start: "+lat1+","+lng1+"\n"
+            +"end: "+lat2+","+lng2+"\n"
+            +"azimuth: "+azimuth+"\n"
+            +"length: "+losLength+"\n"
             +data;
 //        console.log(data);
         res.status(200).send(data);
