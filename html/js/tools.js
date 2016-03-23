@@ -853,6 +853,7 @@ function connect_LOS_markers() {
 
 // script for loading a specific UAVSAR dataset
 var LOS_uid = null;
+var LOS_dataname = null;
 
 function selectDataset(row, uid, dataname, heading, radardirection) {
 //    console.log(row);
@@ -1010,11 +1011,12 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         }
     });
     //update the plot if markers already exist when change the dataset
+    LOS_uid = uid;
+    LOS_dataname = dataname;
     if (LOS_markers.length > 0 )
         {
             drawDygraphAjax(uid);
         }
-    LOS_uid = uid;
 }
 
 	 function setAzimuth(){
@@ -1382,6 +1384,7 @@ function updateMarkerFormFields() {
 
 function drawDygraphAjax(image_uid) {
 //    console.log("drawDygraphAjax called");
+    alert(LOS_dataname);
     if($('.extra-tools-panel').hasClass('inactive'))
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
