@@ -8,6 +8,7 @@ var iconOrigin = new google.maps.Point(0, 0);
 var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
 var dateSlider;
+var gpsDataBaseUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/";
 
 
 function loadGpsStations(gpsNetworkUrl) {
@@ -33,6 +34,13 @@ function loadGpsStations(gpsNetworkUrl) {
             $('#networkStateDisplayDate').val(endDate.getMonth()+1+"/"+endDate.getDate()+"/"+endDate.getFullYear());
             console.log("Creating markers");
             createMarkers(gpsNetwork.end_date);
+
+	    //Set and display the download link
+	    $('#gpsDownloadLinkDiv').show();
+	    gpsDataUrl=gpsDataBaseUrl+gpsNetwork.data_source+"_"+gpsNetwork.end_date+".zip";
+	    $('#gpsDownloadLink').attr("href",gpsDataUrl);
+
+	    //Enable date slider
             $("#waitScreen").hide();
             $("#networkStateDisplayDate").datepicker();
             $("#networkStateDisplayDate").prop("disabled",false);
@@ -214,8 +222,9 @@ function getStationState(date,gpsStation) {
 
 //Selected date should be a string.
 function getNetworkStateOnDate(selectedDate){
-//    console.log("Selected date:"+selectedDate);
+    //    console.log("Selected date:"+selectedDate);
     createMarkers(selectedDate);
+    
 };
 
 //Would be nice to throw an exception here 
