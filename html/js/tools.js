@@ -1267,14 +1267,15 @@ function uavsarquery(querystr) {
     });
     var eventDateString = $.trim($("#event_date").val());
     if (eventDateString != ""){
-       // alert(eventDateString);
-      querystr+="&eventtime=" + eventDateString };
-
+	// alert(eventDateString);
+	querystr+="&eventtime=" + eventDateString };
+    
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
+//	    console.log("Query:"+querystr);
             var datasets=jQuery.parseJSON(datasetsStr);
             displaySelectedImages(datasets);
-    });
+	});
 }
 
 function updateVisibleDatasets() {
