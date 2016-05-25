@@ -23,6 +23,7 @@ var depth_limit=1000.0;
 var userPositionMarker;
 var stateKml;
 var coastlineKml;
+var uavsarDataSet;
 
 //OpenHazards/UCDavis KMZ Layers
 var kml_wo = new google.maps.KmlLayer({
@@ -50,6 +51,20 @@ var kml_gdacs = new google.maps.KmlLayer({
 
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
+
+function filterUavsarImagesByDate(selectedDate) {
+    console.log("Selected time:"+selectedDate);
+    console.log(uavsarDataSet);
+    var uavsarDataSubSet=[];
+    for(var i=0; i<uavsarDataSet.length;i++){
+	console.log(new Date(uavsarDataSet[i].time1));
+	if(uavsarDataSet[i].time1 < new Date(selectedDate) < uavsarDataSet[i].time2) {
+	    uavsarDataSubSet.push(uavsarDataSet[i]);
+	}
+    }
+    displaySelectedImages(uavsarDataSubSet);
+    
+}
 
 // deletes all geometry markings made for UAVSAR
 function deleteAllShape() {
@@ -1266,15 +1281,18 @@ function uavsarquery(querystr) {
         deleteAllShape();
     });
     var eventDateString = $.trim($("#event_date").val());
+    console.log(eventDateString);
     if (eventDateString != ""){
 	// alert(eventDateString);
 	querystr+="&eventtime=" + eventDateString };
     
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
+	    datasetsStr;
 //	    console.log("Query:"+querystr);
-            var datasets=jQuery.parseJSON(datasetsStr);
-            displaySelectedImages(datasets);
+	    console.log("Data:"+datasetsStr);
+            uavsarDataSet=jQuery.parseJSON(datasetsStr);
+            displaySelectedImages(uavsarDataSet);
 	});
 }
 

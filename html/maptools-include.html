@@ -1,4 +1,11 @@
 <script>
+  var event_date;
+  $(function() {
+  //  event_date=$( "#event_date" ).datepicker({ dateFormat: 'yy-mm-dd' , onSelect: function() { filterUavsarImagesByDate(this.value)}});
+    $("#event_date").prop('disabled',false);
+    $( "#event_date" ).datepicker({ dateFormat: 'yy-mm-dd' , onSelect: function () {$(this).prop('disabled',true)}});
+  });
+
     //TODO: Clean this up. Move to tools at least.
     $(document).ready(function() {
 	$(".tools-checkbox").click(function() {
@@ -12,7 +19,8 @@
 		    draw_UAVSAR();
 		    $('#uavsar-instructions').show();
 		}
-		else {
+                else {
+                    $("#event_date").prop('disabled',false);
 		    closeDataPanel();
 		    wmsgf9_select={};
 		    $('#UAVSAR-geometry').empty();
@@ -85,8 +93,8 @@
         Use drawing tool on the map to select the region of interests.  
         <br/>You can also search by flight name or flight path:
         <input type="text" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')"> 
-        <br/>(Optional) Event date (MM/DD/YYYY):
-        <input type="date" name="eventDate", id="event_date", size=10, value="">
+        <br/>(Optional) Event date (YYYY-MM-DD):
+        <input type="text" name="eventDate", id="event_date", size=10, value="">
       </div>
       <p/>
       <button class="panel-close-button inactive">X</button>
