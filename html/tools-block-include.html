@@ -141,7 +141,10 @@ function updateTabPanel() {
 </div>
 
 <div class="extra-tools-panel inactive">
-  <div class="extra-tool-border"><p>Click here to drag</p></div>
+  <div class="extra-tool-border">Click here to drag
+    Y Min Value : <input type="text" id="groundRangeChangeYMin" size="3" onchange="updateDygraphYValueRange()">
+        Y Max Value : <input type="text" id="groundRangeChangeYMax" size="3" onchange="updateDygraphYValueRange()">
+  </div>
   <div class="extra-tool">
     <div class="extra-tool-content" id="dygraph-LOS"></div>
 <!--    <div class="extra-tool-content" id="dygraph-HGT"></div>-->

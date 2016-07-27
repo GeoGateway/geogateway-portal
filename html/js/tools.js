@@ -1465,13 +1465,22 @@ function drawDygraphAjax(image_uid) {
                            xLabelHeight:16,
                            yLabelWidth:16,
                            xlabel:'Distance (km)',
-                           ylabel:'Ground Range Change (cm)',
-			   interactionModel: {},
+                           ylabel:'Ground Range Change (cm)'
 			  }
             );
         });
     
 }
+
+function updateDygraphYValueRange(){
+    console.log("Update dygraph y value range",$("#groundRangeChangeYValues").val());
+    //dygraph1.updateOptions({valueRange:[-10,10]"});
+    var minY=$("#groundRangeChangeYMin").val();
+    var maxY=$("#groundRangeChangeYMax").val();
+    dygraph1.updateOptions({valueRange:[minY,maxY]});
+}
+
+
 //These are some methods that can be used by the interactionModel.
 //But they don't play well with jquery's draggable.
 //See view-source:http://dygraphs.com/tests/interaction.html and http://dygraphs.com/tests/interaction.js
