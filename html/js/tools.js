@@ -1408,6 +1408,8 @@ function drawDygraphAjax(image_uid) {
     {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
         $('.extra-tools-panel').animate({height: "200px"}, 50);
+	//	$('.extra-tools-panel').draggable();
+	$('.extra-tools-panel').draggable({handle:"div.extra-tool-border"});
     }
     var lat1 = LOS_markers[0].getPosition().lat();
     var lng1 = LOS_markers[0].getPosition().lng();
@@ -1464,7 +1466,7 @@ function drawDygraphAjax(image_uid) {
                            yLabelWidth:16,
                            xlabel:'Distance (km)',
                            ylabel:'Ground Range Change (cm)',
-			   interactionModel: {}
+			   interactionModel: {},
 			  }
             );
         });
