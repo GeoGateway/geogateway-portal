@@ -182,6 +182,10 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
     });
                
     $scope.resetAll=function(){
+        //Remove plot pannel, copied from clear_UAVSAR function in tools.js
+        //Notice UAVSAR is not cleared, may call clear_UAVSAR
+        if($('.extra-tools-panel').hasClass('active'))
+            {$('.extra-tools-panel').removeClass('active').addClass('inactive');};
         initialize();
     };
 
