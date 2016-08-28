@@ -1817,3 +1817,12 @@ function showUCERF3FaultLayer() {
     }
     
 }
+
+// hide and show plot panel
+function hidePlotPanel() {
+    if($('.extra-tools-panel').hasClass('active')) {
+        $('.extra-tools-panel').removeClass('active').addClass('inactive');
+    } else {
+        $('.extra-tools-panel').removeClass('inactive').addClass('active');
+    };
+}
