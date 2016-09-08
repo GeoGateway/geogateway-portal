@@ -629,7 +629,7 @@ app.get('/los_query/',function(req,res) {
         data=data.replace(regex,'');
         res.setHeader('Content-Type','text/csv');
         res.setHeader('Content-Disposition','attachment; filename="'+image_uid+'".csv"');
-        data = "image name, "+image_name+"\n"
+        data = image_name+"\n"
             +"start, "+lat1+", "+lng1+"\n"
             +"end, "+lat2+", "+lng2+"\n"
             +"azimuth, "+azimuth+"\n"
