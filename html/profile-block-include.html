@@ -44,7 +44,7 @@ $(document).ready(function() {
             // getColleagues();
         }
         //Must be the profile event, right?
-        else {  
+        else if($(this).is('#profile')) {  
             if($('.profile-panel').hasClass('open')) {
                 $('.profile-panel').removeClass('open');
                 $('.profile-panel').addClass('closed');
@@ -68,6 +68,25 @@ $(document).ready(function() {
             // $('.notecard-container').empty();
             // $('.colleague-container').empty();
         }
+        else if($(this).is('#news')) {
+           console.log("News");
+           if($('.intro-window').hasClass('open')) {
+               console.log("try to close it");
+               $('.intro-window').removeClass('open').addClass('closed');
+               $('.intro-window').hide(0);
+               $('#map-canvas').removeClass('blur');
+               $('.tools-panel').removeClass('blur');
+            }
+            
+            else if($('.intro-window').hasClass('closed')) {
+               console.log("try to open it");
+               $('.intro-window').removeClass('closed').addClass('open');
+               $('.intro-window').show(0);
+               $('#map-canvas').addClass('blur');
+               $('.tools-panel').addClass('blur');
+            }
+        }
+
     });
 });
 

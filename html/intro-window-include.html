@@ -2,6 +2,7 @@
 /////////////////////////// INTRO WINDOW RELATED /////////////////////////
 
 // script for the opening and closing animation for the intro window
+/**
 $(document).ready(function() {
     $('.intro-window-close').click(function() {
         if($('.intro-window').hasClass('open')) {
@@ -40,11 +41,14 @@ $(document).ready(function() {
         }
     });
 });
-</script> 
-<div class="intro-window-open">
+*/
+</script>
+<!--
+<div class="intro-window-open" style="display:none">
   <span class="glyphicon glyphicon-chevron-down intro-window-open-glyph"> </span>
 </div>
-<div class="intro-window open">
+-->
+<div class="intro-window closed" style="display:none">
   <div class="intro-window-content">
     <div class="intro-window-welcome">
       <div class="welcome-text default-font huge">Welcome to</div>
@@ -127,12 +131,14 @@ $(document).ready(function() {
               </div>
             </div>
             -->
-    </div>
+      </div>
+      <!--
     <div class="intro-window-close">
       <button class="intro-window-close-button">
         <span class="glyphicon glyphicon-chevron-up intro-window-close-glyph"> </span>
         <span class="default-font huge intro-window-close-sign">&nbsp;Access Tools</span>
       </button>
     </div>
+-->
   </div>
 </div>

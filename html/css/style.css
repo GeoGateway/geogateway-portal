@@ -537,6 +537,10 @@ a:visited {
     right: 0.5%;
 }
 
+.panel-toggle#news {
+    right: 80px;
+}
+
 .panel-toggle:focus {
     outline: 0;
 }
