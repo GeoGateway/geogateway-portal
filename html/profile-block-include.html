@@ -146,5 +146,23 @@ $(document).ready(function() {
         </div>
       </form>
     </div>
+    <div class="profile-panel open" ng-controller="UserProjectController">
+      <ul type="none" class="tool-tabs">
+	<li class="active">
+	  <button class="tab-button tool-tab-button" value="MyNotecards">
+            Cards
+	  </button>
+	</li>
+	<li>
+	  <button class="tab-button tool-tab-button" value="AllNotecards">
+            Public Cards
+	  </button>
+	</li>
+      </ul>
+    </div>
+    <div class="tab-pane tool-tab-pane active" id="MyNotecards">
+      <div ng-include="'mynotecards-include.html'"></div>
+    </div>
+
   </div>
 </div>
