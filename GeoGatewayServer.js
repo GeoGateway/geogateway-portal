@@ -591,11 +591,13 @@ app.get('/has_wms/', function(req,res) {
 });
 
 // SLD service: get_area_minmax for a image
-app.get('get_area_minmax', function(req,res) {
+app.get('/get_area_minmax/', function(req,res) {
+
     var queryUrl = sldserviceUrl + "/getminmax?";
 
     queryUrl += "image=" + req.query.image + "&extent=" + req.query.extent;
     //console.log(queryUrl);
+
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
     });
