@@ -38,6 +38,7 @@ var uavsarSearchUrl=config.uavsarSearchUrl;
 var wmsUrl=config.wmsUrl;
 var wmscolorUrl = config.wmscolorUrl;
 var losQueryUrl=config.losQueryUrl;
+var sldserviceUrl = config.sldserviceUrl;
 
 //Call or prepare constructors
 var app=express();
@@ -587,6 +588,18 @@ app.get('/has_wms/', function(req,res) {
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
     });
+});
+
+// SLD service: get_area_minmax for a image
+app.get('get_area_minmax', function(req,res) {
+    var queryUrl = sldserviceUrl + "/getminmax?";
+
+    queryUrl += "image=" + req.query.image + "&extent=" + req.query.extent;
+    //console.log(queryUrl);
+    restClient.get(queryUrl, function(data, response){
+        res.status(200).send(data);
+    });
+
 });
 
 app.get('/los_query/',function(req,res) {

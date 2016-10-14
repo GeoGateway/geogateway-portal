@@ -977,8 +977,16 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
                     });
                 wmsgf9_select_legend_kml.setMap(mapA);
 
+                // enable color stretch function
+                $("#get-area-minmax-button").show();
+                $("#get-area-minmax-button").removeAttr('disabled');
+                $("#get-area-minmax-button").on( "click", {uid: uid}, color_stretch);
             }  
             else {
+                // disbale color stretch function
+
+                $("#get-area-minmax-button").attr('disabled');
+
                 highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
                     // load high-res legend
             var legend_kml = "http://gw88.iu.xsede.org/highreslegend/2pi.kmz";
@@ -1228,6 +1236,12 @@ function displaySelectedImages(datasets,masterMap) {
     updateVisibleDatasets();
     
 }
+
+// color_stretch function
+function color_stretch(event) {
+    alert(event.data.uid);
+
+};
 
 
 // viewDataset loads a dataset into wmsgf9_samples
