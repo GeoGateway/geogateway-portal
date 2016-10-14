@@ -590,13 +590,21 @@ app.get('/has_wms/', function(req,res) {
     });
 });
 
-// SLD service: get_area_minmax for a image
-app.get('/get_area_minmax/', function(req,res) {
+// SLD service
+app.get('/sldservice/', function(req,res) {
 
-    var queryUrl = sldserviceUrl + "/getminmax?";
+    var queryUrl = sldserviceUrl;
+    // get area minmax for a image 
+    if (req.query.service == "getminmax") {
+        queryUrl +=  "/getminmax?";
+        queryUrl += "image=" + req.query.image + "&extent=" + req.query.extent;
+    }
 
-    queryUrl += "image=" + req.query.image + "&extent=" + req.query.extent;
-    //console.log(queryUrl);
+    if (req.query.service == "sldgenerator") {
+        queryUrl +=  "/sldgenerator?";
+        queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max;
+    }
+    //console.log(queryUrl);     
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);

@@ -1242,7 +1242,7 @@ function color_stretch(event) {
     //alert(event.data.uid);
     var imagename = "uid" + event.data.uid + "_unw";
     var mapextent = mapA.getBounds().toString();
-    var results=$.ajax({url:'get_area_minmax',data:{'image':imagename,'extent': mapextent},async:false}).responseText;
+    var results=$.ajax({url:'get_area_minmax',data:{'service':'getminmax','image':imagename,'extent': mapextent},async:false}).responseText;
     //alert(results);
     var datajson=jQuery.parseJSON(results);
     //alert(datajson);
