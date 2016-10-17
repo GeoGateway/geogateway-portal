@@ -43,7 +43,6 @@ $(document).ready(function() {
             // loadNotecards('.newsfeed-container', -1, 0, 5, 'append');
             // getColleagues();
         }
-        //Must be the profile event, right?
         else if($(this).is('#profile')) {  
             if($('.profile-panel').hasClass('open')) {
                 $('.profile-panel').removeClass('open');
@@ -108,7 +107,7 @@ $(document).ready(function() {
 
 function updateProfileTabPanel() {
     var active_tab = $('.profile-tabs').children('.active').children().val();
-    $('.profil-panel').children('.active').removeClass('active').addClass('inactive');
+    $('.profile-panel').children('.active').removeClass('active').addClass('inactive');
     $('.profile-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
 };
 
@@ -156,12 +155,13 @@ function updateProfileTabPanel() {
 	    </button>
 	  </li>
 	  -->
-      
+      <!--
       <li>
 	<button class="tab-button profile-tab-button" value="newsfeed">
           <span class="glyphicon glyphicon-globe"> </span>
 	</button>
       </li>
+      -->
       
       <!--
 	  <li>
@@ -177,26 +177,31 @@ function updateProfileTabPanel() {
 	Notecards
       </div>
       <div class="profile-panel-divider"></div>
-      <form class="new-notecard-form" action="post_notecard" method="POST" enctype="multipart/form-data"> 
-	notecard_form.title
-	notecard_form.content
-	<div class="log-tools">
-          notecard_form.image
-          <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
+      <form class="new-notecard-form" action="post_notecard" method="POST" enctype="multipart/form-data">
+	<div class="notecard_form.title">
+	  Title: <input type="text" id="notecard.title"/>
 	</div>
+	<div class="notecard_form.content">
+	  Content: <textarea id="notecard.content"></textarea>
+	</div>
+	<!-- Optional screenshut upload for input -->
+	<div class="log-tools">
+          <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
       </form>
       <div class="profile-panel-divider"></div>
       <div class="notecard-container"></div>
       <button class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
     </div>
-  </div>
-  <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
-    <div class="profile-tab-panel-header">
-      News Feed
+
+    <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
+      <div class="profile-tab-panel-header">
+	News Feed
+      </div>
+      <div class="profile-panel-divider"></div>
+      <div class="newsfeed-container"></div>
+      <button class="load-more-notecards" value=".newsfeed-container">Load more Notecards</button>
     </div>
-    <div class="profile-panel-divider"></div>
-    <div class="newsfeed-container"></div>
-    <button class="load-more-notecards" value=".newsfeed-container">Load more Notecards</button>
   </div>
 </div>
+  
   
