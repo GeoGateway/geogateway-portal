@@ -6,7 +6,7 @@ var mapA;
 var wmsgf9_select;
 var wmsgf9_select_direction_kml;
 var wmsgf9_select_legend_kml;
-var highresoverlay
+var highresoverlay;
 var wmsgf9_samples = {};
 var UAVSARDrawingManager;
 var ctaLayer;
@@ -1234,15 +1234,44 @@ function displaySelectedImages(datasets,masterMap) {
         viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
     };
     updateVisibleDatasets();
-    
-}
 
-// color_stretch function
+};
+
+function new_color_api(){
+    var imagename = $('#currentimage').val();
+    var mind = Number($('#mind').val());
+    var maxd = Number($('#maxd').val());
+    mind = mind / -1.897155;
+    maxd = maxd / -1.897155;
+    var minv = Math.min(mind,maxd);
+    var maxv = Math.max(mind,maxd);
+    var results=$.ajax({url:'sldservice',data:{'service':'sldgenerator','image':imagename,'min':minv,'max':maxv},async:false}).responseText;
+    //alert(results);
+    var datajson=jQuery.parseJSON(results);
+    //alert(results);
+
+    //reload legend
+    wmsgf9_select_legend_kml.setMap(null);
+    wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
+                    url: datajson['kmz'],
+                    preserveViewport:true,
+                    screenOverlays:true
+                    });
+    wmsgf9_select_legend_kml.setMap(mapA);
+
+    //remove current wms
+    mapA.overlayMapTypes.setAt(0, null);
+    //reload wms
+    highresoverlay=loadWMSwithstyle(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+datajson['image'],datajson['style']);
+
+};
+
+// color_stretch fAunction
 function color_stretch(event) {
-    //alert(event.data.uid);
+    //alert(event"+data['image']
     var imagename = "uid" + event.data.uid + "_unw";
     var mapextent = mapA.getBounds().toString();
-    var results=$.ajax({url:'get_area_minmax',data:{'service':'getminmax','image':imagename,'extent': mapextent},async:false}).responseText;
+    var results=$.ajax({url:'sldservice',data:{'service':'getminmax','image':imagename,'extent': mapextent},async:false}).responseText;
     //alert(results);
     var datajson=jQuery.parseJSON(results);
     //alert(datajson);
@@ -1256,7 +1285,9 @@ function color_stretch(event) {
     $('#Strech-color-div').append(inputstr);
     $('#mind').val(datajson['mind']);
     $('#maxd').val(datajson['maxd']);
-    $('#Strech-color-div').append("<p>"+"<button onclick=new_color_api()>Make New Color</button></strong>");
+    $('#Strech-color-div').append("<input type=hidden id=currentimage value="+datajson['image']+">");
+    $('#Strech-color-div').append("<p>"+"<button id=make-new-color-button onclick=new_color_api()>Make New Color</button></strong>");
+    //$("#make-new-color-butoon").on( "click", {image: datajson['image']}, new_color_api);
 
 };
 

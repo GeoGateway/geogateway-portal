@@ -604,7 +604,7 @@ app.get('/sldservice/', function(req,res) {
         queryUrl +=  "/sldgenerator?";
         queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max;
     }
-    //console.log(queryUrl);     
+    console.log(queryUrl);     
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
