@@ -172,27 +172,30 @@ function updateProfileTabPanel() {
 	  -->
     </ul>
     
-    <div class="tab-pane profile-tab-pane active" id="notecards">
+    <div class="tab-pane profile-tab-pane active" id="notecards" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">
 	Notecards
       </div>
       <div class="profile-panel-divider"></div>
-      <form class="new-notecard-form" action="post_notecard" method="POST" enctype="multipart/form-data">
+      <form class="new-notecard-form" ng-submit="submitNewNotecard()">
 	<div class="notecard_form.title">
-	  Title: <input type="text" id="notecard.title"/>
+	  Title: <input type="text" id="notecardTitle"/>
 	</div>
 	<div class="notecard_form.content">
-	  Content: <textarea id="notecard.content"></textarea>
+	  Content: <textarea id="notecardContent"></textarea>
 	</div>
 	<!-- Optional screenshut upload for input -->
 	<div class="log-tools">
           <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
+	</div>
       </form>
-      <div class="profile-panel-divider"></div>
-      <div class="notecard-container"></div>
-      <button class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
+      <form ng-submit="laodMoreNotecards()">
+	<div class="profile-panel-divider"></div>
+	<div class="notecard-container"></div>
+	<button type="submit" class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
+      </form>
     </div>
-
+    
     <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
       <div class="profile-tab-panel-header">
 	News Feed

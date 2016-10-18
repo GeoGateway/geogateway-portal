@@ -283,7 +283,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //This is the true case
         if($scope.publishCheckboxModel) {
             //Fetch the project with that ID from the DB.
-            //TODO: This and the false case have nearly identiccal code, so move to a private function.
+            //TODO: This and the false case have nearly identical code, so move to a private function.
             $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
                 success(function(project) {
                     project.permission="Published";
@@ -731,3 +731,26 @@ UserProjectApp.factory('FeedService',['$http',function($http){
         }
     }
 }]);
+
+UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',function ($scope,$rootScope,$http) {
+    console.log("Notecard controller called");
+    $scope.submitNewNotecard=function(){
+	console.log("Submit new notecard");
+	var notecard={};
+	notecard.notecardTitle=$scope.notecardTitle;
+	notecard.notecardContent=$scope.notecardContent;
+	console.log("Notecard:",$scope.notecardTitle,$scope.notecardContent);
+	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
+            success(function(project){
+		//Set the currentProject
+                console.log("Notecard uploaded");
+		$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+		    console.log(data);
+		});
+
+            }).
+            error(function(data){
+                console.error("Could not create the new notecard");
+            });
+    }
+}]);    
