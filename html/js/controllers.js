@@ -734,14 +734,16 @@ UserProjectApp.factory('FeedService',['$http',function($http){
 UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',function ($scope,$rootScope,$http) {
     console.log("Notecard controller called");
     $scope.orderProp="-creationTime";
+    $scope.viewNotecardList=true;
     
     $scope.getAllNotecards=function() {
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
 	    console.log(data);
 	    $scope.notecards=data;
+	    $scope.viewNotecardList=true;
 	});
-    });
-    
+    }
+						 
     $scope.$on('loginEvent', function(event,arg) {
 	console.log("Getting all the notecards for "+$rootScope.globals.currentUser.username);
         $scope.username=$rootScope.globals.currentUser.username;
@@ -752,16 +754,16 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',f
         $scope.authenticated=$rootScope.authenticated;
     });
     
-    $scope.viewNotecardList=true;
+
     //Get all the notecards
     
     $scope.submitNewNotecard=function(){
 	console.log("Submit new notecard");
 	var notecard={};
-	notecard.notecardTitle=$scope.notecard.notecardTitle;
-	notecard.notecardContent=$scope.notecard.notecardContent;
+	notecard.notecardTitle=$scope.newNotecard.notecardTitle;
+	notecard.notecardContent=$scope.newNotecard.notecardContent;
 	notecard.permission="Private";
-	console.log("Notecard:",$scope.notecard.notecardTitle,$scope.notecard.notecardContent);
+	console.log("Notecard:",notecard.notecardTitle,notecard.notecardContent);
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
             success(function(project){
 		//Set the currentProject
@@ -770,10 +772,22 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',f
 		    console.log(data);
 		    $scope.notecards=data;
 		});	
-		$scope.notecard={};
+		$scope.newNotecard={};
             }).
             error(function(data){
                 console.error("Could not create the new notecard");
+            });
+    }
+
+    $scope.viewNotecard=function(notecardId) {
+	$http.get('notecards/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+	    success(function(notecard) {
+		$scope.viewNotecardList=false;
+                console.log("Got the notecard:"+JSON.stringify(notecard));
+                $scope.notecard=notecard;
+            }).
+            error(function(data){
+                console.log("Could not load the notecard");
             });
     }
 }]);    

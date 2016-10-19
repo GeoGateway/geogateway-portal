@@ -179,10 +179,10 @@ function updateProfileTabPanel() {
       <div class="profile-panel-divider"></div>
       <form class="new-notecard-form" ng-submit="submitNewNotecard()">
 	<div class="notecard_form.title">
-	  Title: <input type="text" ng-model="notecard.notecardTitle" id="notecardTitle"/>
+	  Title: <input type="text" ng-model="newNotecard.notecardTitle" id="notecardTitle"/>
 	</div>
 	<div class="notecard_form.content">
-	  Content: <textarea ng-model="notecard.notecardContent" id="notecardContent"></textarea>
+	  Content: <textarea ng-model="newNotecard.notecardContent" id="notecardContent"></textarea>
 	</div>
 	<!-- Optional screenshut upload for input -->
 	<div class="log-tools">
@@ -215,7 +215,7 @@ function updateProfileTabPanel() {
       <div id="viewSelectedNotecard" ng-show='viewNotecardList==false'>
 	<div class="panel-body">
           <button class="btn btn-info" ng-click="getAllNotecards()">Refresh</button>
-          <button class="btn btn-success" ng-click="viewCompleteNotecardList()">View List </button>             
+          <button class="btn btn-success" ng-click="getAllNotecards()">View List </button>             
           <h4>Your project's components</h4>
           <div>
             <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
