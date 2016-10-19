@@ -735,7 +735,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',f
     console.log("Notecard controller called");
     $scope.orderProp="-creationTime";
     
-    $scope.$on('refresh', function(event,arg) {
+    $scope.getAllNotecards=function() {
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
 	    console.log(data);
 	    $scope.notecards=data;
