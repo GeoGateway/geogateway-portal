@@ -179,21 +179,69 @@ function updateProfileTabPanel() {
       <div class="profile-panel-divider"></div>
       <form class="new-notecard-form" ng-submit="submitNewNotecard()">
 	<div class="notecard_form.title">
-	  Title: <input type="text" id="notecardTitle"/>
+	  Title: <input type="text" ng-model="notecard.notecardTitle" id="notecardTitle"/>
 	</div>
 	<div class="notecard_form.content">
-	  Content: <textarea id="notecardContent"></textarea>
+	  Content: <textarea ng-model="notecard.notecardContent" id="notecardContent"></textarea>
 	</div>
 	<!-- Optional screenshut upload for input -->
 	<div class="log-tools">
           <button type="submit" class="btn btn-default new-notecard-submit-btn">Post</button>
 	</div>
       </form>
-      <form ng-submit="laodMoreNotecards()">
-	<div class="profile-panel-divider"></div>
-	<div class="notecard-container"></div>
-	<button type="submit" class="load-more-notecards" value=".notecard-container">Load more Notecards</button>
-      </form>
+      <div class="profile-panel-divider"></div>
+      <div class="notecard-container"></div>
+      <div id="theBigNotecardList" ng-show='viewNotecardList==true'>
+	<button class="btn btn-info" ng-click="getAllNotecards()">Refresh</button>
+	<table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive"> 
+          <thead>
+            <tr>
+              <th>Notecard Title</th>
+              <th>Creation Time</th>
+              <th>View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="notecard in notecards | filter:query|orderBy:orderProp">
+              <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
+              <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
+              <td>
+		<button class="btn btn-info" ng-click="viewNotecard(notecard._id)">View</button>
+              </td>
+            </tr>
+          </tbody>
+	</table>
+      </div>
+      <div id="viewSelectedNotecard" ng-show='viewNotecardList==false'>
+	<div class="panel-body">
+          <button class="btn btn-info" ng-click="getAllNotecards()">Refresh</button>
+          <button class="btn btn-success" ng-click="viewCompleteNotecardList()">View List </button>             
+          <h4>Your project's components</h4>
+          <div>
+            <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
+        </div>
+        <table class="table table-striped table-bordered table-condensed table-responsive">
+          <tbody>
+            <tr>
+              <td>Notecard Title</td>
+              <td>{{notecard.notecardTitle}}</td>
+            </tr>
+            <tr>
+              <td>Permission</td>
+              <td>{{notecard.permission}}</td>
+            </tr>
+            <tr>
+              <td>Project ID</td>
+              <td>{{notecard._id}}</td>
+            </tr>
+            <tr>
+              <td>Creation Time</td>
+              <td>{{notecard.creationTime}}</td>
+            </tr>
+          </tbody>
+        </table>
+	</div>
+      </div>
     </div>
     
     <div class="tab-pane profile-tab-pane inactive" id="newsfeed">

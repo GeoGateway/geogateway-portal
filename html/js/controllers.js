@@ -77,7 +77,6 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     });
 }]);
 
-//UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices', function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
 UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
     $scope.authenticated=$rootScope.authenticated;
     $scope.username=$rootScope.globals.currentUser.username;
@@ -734,20 +733,44 @@ UserProjectApp.factory('FeedService',['$http',function($http){
 
 UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',function ($scope,$rootScope,$http) {
     console.log("Notecard controller called");
+    $scope.orderProp="-creationTime";
+    
+    $scope.$on('refresh', function(event,arg) {
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+	    console.log(data);
+	    $scope.notecards=data;
+	});
+    });
+    
+    $scope.$on('loginEvent', function(event,arg) {
+	console.log("Getting all the notecards for "+$rootScope.globals.currentUser.username);
+        $scope.username=$rootScope.globals.currentUser.username;
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+	    console.log(data);
+	    $scope.notecards=data;
+	});	
+        $scope.authenticated=$rootScope.authenticated;
+    });
+    
+    $scope.viewNotecardList=true;
+    //Get all the notecards
+    
     $scope.submitNewNotecard=function(){
 	console.log("Submit new notecard");
 	var notecard={};
-	notecard.notecardTitle=$scope.notecardTitle;
-	notecard.notecardContent=$scope.notecardContent;
-	console.log("Notecard:",$scope.notecardTitle,$scope.notecardContent);
+	notecard.notecardTitle=$scope.notecard.notecardTitle;
+	notecard.notecardContent=$scope.notecard.notecardContent;
+	notecard.permission="Private";
+	console.log("Notecard:",$scope.notecard.notecardTitle,$scope.notecard.notecardContent);
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
             success(function(project){
 		//Set the currentProject
                 console.log("Notecard uploaded");
 		$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
 		    console.log(data);
-		});
-
+		    $scope.notecards=data;
+		});	
+		$scope.notecard={};
             }).
             error(function(data){
                 console.error("Could not create the new notecard");
