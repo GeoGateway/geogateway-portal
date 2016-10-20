@@ -740,7 +740,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	console.log($location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id);
     }
     
-    $scope.orderProp="-creationTime";
+    $scope.orderProp="-_id";
     $scope.viewNotecardList=true;
     
     $scope.getAllNotecards=function() {
