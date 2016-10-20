@@ -731,8 +731,15 @@ UserProjectApp.factory('FeedService',['$http',function($http){
     }
 }]);
 
-UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',function ($scope,$rootScope,$http) {
+UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','$location','UploadService',function ($scope,$rootScope,$http,$location,UploadService) {
     console.log("Notecard controller called");
+    $scope.uploadNotecardFile=function() {
+	var file=$scope.newNotecardFile;
+	var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+	UploadService.uploadFileToUrl2(file,uploadUrl);
+	console.log($location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id);
+    }
+    
     $scope.orderProp="-creationTime";
     $scope.viewNotecardList=true;
     
@@ -758,6 +765,9 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',f
     //Get all the notecards
     
     $scope.submitNewNotecard=function(){
+	var file=$scope.newNotecardFile;
+	console.log(file);
+	
 	console.log("Submit new notecard");
 	var notecard={};
 	notecard.notecardTitle=$scope.newNotecard.notecardTitle;
@@ -765,18 +775,40 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http',f
 	notecard.permission="Private";
 	console.log("Notecard:",notecard.notecardTitle,notecard.notecardContent);
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
-            success(function(project){
-		//Set the currentProject
+	    //We created the notecard successfully.
+            success(function(theNotecard){
+		console.log(theNotecard);
+		$scope.newNotecard={};		
+		//If we need to upload a file, do so now.
+		if(file!=null) {
+		    var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id;
+		    UploadService.uploadFileToUrl2(file,uploadUrl);
+		    var attachedFileUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id+"/"+file.name;
+		    console.log(attachedFileUrl);
+		    theNotecard.attachedFileUrl=attachedFileUrl;
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id,theNotecard).
+			success(function(updatedNotecard){
+			    console.log("Uploaded file added to notecard:",updatedNotecard);
+			    //			    $http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+			    //				console.log(data);
+			    //				$scope.notecards=data;
+			    //			    });	
+			    
+			});
+		}; //Use ; here to force sequential execution, hopefully.
+
                 console.log("Notecard uploaded");
+		//Get the collection of notecards
 		$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
 		    console.log(data);
 		    $scope.notecards=data;
 		});	
-		$scope.newNotecard={};
-            }).
-            error(function(data){
-                console.error("Could not create the new notecard");
-            });
+		
+	    }).
+	    //Something went wrong
+	    error(function(data){
+		console.error("Could not create the new notecard");
+	    });
     }
 
     $scope.viewNotecard=function(notecardId) {
