@@ -77,7 +77,6 @@ UserProjectApp.run(['$rootScope','$location','$cookieStore','$http',function ($r
     });
 }]);
 
-//UserProjectApp.controller('LoginController',['$scope','$rootScope','$location','$cookieStore','AuthenticationServices', function($scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
 UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScope,$location,$cookieStore,AuthenticationServices) {
     $scope.authenticated=$rootScope.authenticated;
     $scope.username=$rootScope.globals.currentUser.username;
@@ -283,7 +282,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         //This is the true case
         if($scope.publishCheckboxModel) {
             //Fetch the project with that ID from the DB.
-            //TODO: This and the false case have nearly identiccal code, so move to a private function.
+            //TODO: This and the false case have nearly identical code, so move to a private function.
             $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
                 success(function(project) {
                     project.permission="Published";
@@ -731,3 +730,149 @@ UserProjectApp.factory('FeedService',['$http',function($http){
         }
     }
 }]);
+
+/**
+ * The Notecard controller  and family of functions
+ */
+UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','$location','UploadService',function ($scope,$rootScope,$http,$location,UploadService) {
+    console.log("Notecard controller called");
+    $scope.uploadNotecardFile=function() {
+	var file=$scope.newNotecardFile;
+	var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
+	UploadService.uploadFileToUrl2(file,uploadUrl);
+	console.log($location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id);
+    }
+    
+    $scope.orderProp="-_id";
+    $scope.viewNotecardList=true;
+
+    $scope.showMyNotecards=true;
+    
+    $scope.getAllNotecards=function() {
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+	    console.log(data);
+	    $scope.notecards=data;
+	    $scope.viewNotecardList=true;
+	});
+    }
+						 
+    $scope.$on('loginEvent', function(event,arg) {
+	console.log("Getting all the notecards for "+$rootScope.globals.currentUser.username);
+        $scope.username=$rootScope.globals.currentUser.username;
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+	    console.log(data);
+	    $scope.notecards=data;
+	});	
+        $scope.authenticated=$rootScope.authenticated;
+    });
+    
+
+    //Get all the notecards
+    
+    $scope.submitNewNotecard=function(){
+	var file=$scope.newNotecardFile;
+	console.log(file);
+	
+	console.log("Submit new notecard");
+	var notecard={};
+	notecard.notecardTitle=$scope.newNotecard.notecardTitle;
+	notecard.notecardContent=$scope.newNotecard.notecardContent;
+	notecard.permission="Private";
+	console.log("Notecard:",notecard.notecardTitle,notecard.notecardContent);
+	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
+	    //We created the notecard successfully.
+            success(function(theNotecard){
+		console.log(theNotecard);
+		$scope.newNotecard={};		
+		//If we need to upload a file, do so now.
+		if(file!=null) {
+		    var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id;
+		    UploadService.uploadFileToUrl2(file,uploadUrl);
+		    var attachedFileUrl=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/userUploads/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id+"/"+file.name;
+		    console.log(attachedFileUrl);
+		    theNotecard.attachedFileUrl=attachedFileUrl;
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+theNotecard._id,theNotecard).
+			success(function(updatedNotecard){
+			    console.log("Uploaded file added to notecard:",updatedNotecard);
+			    //			    $http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+			    //				console.log(data);
+			    //				$scope.notecards=data;
+			    //			    });	
+			    
+			});
+		}; //Use ; here to force sequential execution, hopefully.
+
+                console.log("Notecard uploaded");
+		//Get the collection of notecards
+		$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
+		    console.log(data);
+		    $scope.notecards=data;
+		});	
+		
+	    }).
+	    //Something went wrong
+	    error(function(data){
+		console.error("Could not create the new notecard");
+	    });
+    }
+
+    $scope.viewNotecard=function(notecardId) {
+	$http.get('notecards/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+	    success(function(notecard) {
+		$scope.viewNotecardList=false;
+                console.log("Got the notecard:"+JSON.stringify(notecard));
+                $scope.notecard=notecard;
+            }).
+            error(function(data){
+                console.log("Could not load the notecard");
+            });
+    }
+    $scope.publishNotecard=function(notecardId) {
+	console.log("Publishing notecard ",notecardId);
+	if($scope.publishNotecardCheckboxModel){
+	    $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+		success(function(notecard) {
+		    notecard.permission="Published";
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
+			success(function(data){
+			}).
+			error(function(data){
+			    console.log("Error updating card:",data);
+			});
+		}).
+		error(function(data){
+		    console.log("Error getting card:",data);
+		});
+	}
+	//Assume private settings
+	else {
+	    $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+		success(function(notecard) {
+		    notecard.permission="Private";
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
+			success(function(data){
+			}).
+			error(function(data){
+			    console.log("Error updating card:",data);
+			});
+		}).
+		error(function(data){
+		    console.log("Error getting card:",data);
+		});
+	    
+	}
+    }
+
+    $scope.getTheNotecard=function(){
+	console.log("Notecard id:",$scope.theNotecard);
+	$http.get('projects/'+$scope.theNotecard.username+"/"+$scope.theNotecard.notecardId).
+	    success(function(notecard) {
+		console.log("Got the notecard:",notecard);
+		$scope.theNotecard=notecard;
+	    }).
+	    error(function(data){
+		console.log("Error getting card:",data);		
+	    });
+	
+    }
+}]);    
