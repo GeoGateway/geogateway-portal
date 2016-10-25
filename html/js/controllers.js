@@ -731,6 +731,9 @@ UserProjectApp.factory('FeedService',['$http',function($http){
     }
 }]);
 
+/**
+ * The Notecard controller  and family of functions
+ */
 UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','$location','UploadService',function ($scope,$rootScope,$http,$location,UploadService) {
     console.log("Notecard controller called");
     $scope.uploadNotecardFile=function() {
@@ -742,6 +745,8 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
     
     $scope.orderProp="-_id";
     $scope.viewNotecardList=true;
+
+    $scope.showMyNotecards=true;
     
     $scope.getAllNotecards=function() {
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
@@ -821,5 +826,53 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
             error(function(data){
                 console.log("Could not load the notecard");
             });
+    }
+    $scope.publishNotecard=function(notecardId) {
+	console.log("Publishing notecard ",notecardId);
+	if($scope.publishNotecardCheckboxModel){
+	    $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+		success(function(notecard) {
+		    notecard.permission="Published";
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
+			success(function(data){
+			}).
+			error(function(data){
+			    console.log("Error updating card:",data);
+			});
+		}).
+		error(function(data){
+		    console.log("Error getting card:",data);
+		});
+	}
+	//Assume private settings
+	else {
+	    $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+		success(function(notecard) {
+		    notecard.permission="Private";
+		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
+			success(function(data){
+			}).
+			error(function(data){
+			    console.log("Error updating card:",data);
+			});
+		}).
+		error(function(data){
+		    console.log("Error getting card:",data);
+		});
+	    
+	}
+    }
+
+    $scope.getTheNotecard=function(){
+	console.log("Notecard id:",$scope.theNotecard);
+	$http.get('projects/'+$scope.theNotecard.username+"/"+$scope.theNotecard.notecardId).
+	    success(function(notecard) {
+		console.log("Got the notecard:",notecard);
+		$scope.theNotecard=notecard;
+	    }).
+	    error(function(data){
+		console.log("Error getting card:",data);		
+	    });
+	
     }
 }]);    

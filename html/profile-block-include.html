@@ -141,7 +141,7 @@ function updateProfileTabPanel() {
   </div>
   
   <!-- profile-panel tabs -->
-  <div ng-show='isAuthenticated()'>
+  <div class="profile-panel" ng-show='isAuthenticated()'>
     <ul type="none" class="profile-tabs">
       <li class="active">
 	<button class="tab-button profile-tab-button" value="notecards">
@@ -155,13 +155,13 @@ function updateProfileTabPanel() {
 	    </button>
 	  </li>
 	  -->
-      <!--
+
       <li>
 	<button class="tab-button profile-tab-button" value="newsfeed">
           <span class="glyphicon glyphicon-globe"> </span>
 	</button>
       </li>
-      -->
+
       
       <!--
 	  <li>
@@ -224,14 +224,16 @@ function updateProfileTabPanel() {
       </div>
       <div id="viewSelectedNotecard" ng-show='viewNotecardList==false'>
 	<div class="panel-body">
-          <button class="btn btn-info" ng-click="getAllNotecards()">Refresh</button>
-          <button class="btn btn-success" ng-click="getAllNotecards()">View List </button>             
-          <h4>Your project's components</h4>
+          <button class="btn btn-success" ng-click="getAllNotecards()">View List </button>
           <div>
             <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
         </div>
         <table class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
+	    <tr>
+              <td>Id</td>
+              <td>{{notecard._id}}</td>
+            </tr>
             <tr>
               <td>Title</td>
               <td>{{notecard.notecardTitle}}</td>
@@ -258,13 +260,59 @@ function updateProfileTabPanel() {
       </div>
     </div>
     
-    <div class="tab-pane profile-tab-pane inactive" id="newsfeed">
+    <div class="tab-pane profile-tab-pane inactive" id="newsfeed" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">
-	News Feed
+	Public Notecards
       </div>
       <div class="profile-panel-divider"></div>
       <div class="newsfeed-container"></div>
-      <button class="load-more-notecards" value=".newsfeed-container">Load more Notecards</button>
+      <form>
+	<table>
+	  <tr>
+	    <td>
+	      Notecard ID: <input type="text" ng-model="theNotecard.notecardId" id="notecardId"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      Notecard Username: <input type="text" ng-model="theNotecard.username" id="notecardUsername"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <button type="submit" class="btn btn-success" ng-click="getTheNotecard()">Get Notecard</button>
+	    </td>
+	  </tr>
+	  </table>
+      </form>
+      
+      <div class="panel-body">
+        <table class="table table-striped table-bordered table-condensed table-responsive">
+          <tbody>
+            <tr>
+              <td>Title</td>
+              <td>{{theNotecard.notecardTitle}}</td>
+            </tr>
+            <tr>
+              <td>Content</td>
+              <td>{{theNotecard.notecardContent}}</td>
+            </tr>
+	    <tr ng-show='notecard.attachedFileUrl != null'>
+              <td>Attached File</td>
+              <td><a href="{{theNotecard.attachedFileUrl}}" target="_blank">File</a></td>
+	    </tr>
+            <tr>
+              <td>Permission</td>
+              <td>{{theNotecard.permission}}</td>
+            </tr>
+            <tr>
+              <td>Creation Time</td>
+              <td>{{theNotecard.creationTime}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     </div>
   </div>
 </div>
