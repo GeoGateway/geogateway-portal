@@ -117,7 +117,7 @@ function updateProfileTabPanel() {
 <div class="profile-panel closed" ng-controller="LoginController">    
   <!--This is the login/signup stuff -->
   
-  <div class="tab-pane profile-tab-pane active" id="auth" ng-hide='isAuthenticated()'>
+  <div class="tab-pane profile-tab-pane" id="auth" ng-hide='isAuthenticated()'>
     <div class="tool">
       <div class="tool-title"><b>Login</b></div>
       <div class="divider"></div>
@@ -127,18 +127,6 @@ function updateProfileTabPanel() {
     </div>
   </div>
   
-  <div class="user-info" ng-show='isAuthenticated()'>
-    {{username}}
-    <form name='logoutForm' 
-          ng-submit='logoutGeo()' 
-          ng-show='isAuthenticated()'>
-      <div class="auth-btn-container">
-	<button type="submit" class="profile-tab-button">
-	  <span class="glyphicon glyphicon-log-out"> Logout</span>
-	</button>
-      </div>
-    </form>
-  </div>
   
   <!-- profile-panel tabs -->
   <div class="profile-panel" ng-show='isAuthenticated()'>
@@ -163,13 +151,11 @@ function updateProfileTabPanel() {
       </li>
 
       
-      <!--
-	  <li>
-	    <button class="tab-button profile-tab-button" value="settings">
-              <span class="glyphicon glyphicon-cog"> </span>
-	    </button>
-	  </li>
-	  -->
+      <li>
+	<button class="tab-button profile-tab-button" value="settings">
+          <span class="glyphicon glyphicon-cog"> </span>
+	</button>
+      </li>
     </ul>
     
     <div class="tab-pane profile-tab-pane active" id="notecards" ng-controller="NotecardController">
@@ -313,6 +299,17 @@ function updateProfileTabPanel() {
         </table>
       </div>
     </div>
+    <div class="user-info" ng-show='isAuthenticated()'>
+      {{username}}
+      <form name='logoutForm' 
+            ng-submit='logoutGeo()' 
+            ng-show='isAuthenticated()'>
+	<div class="auth-btn-container">
+	  <button type="submit" class="profile-tab-button">
+	    <span class="glyphicon glyphicon-log-out"> Logout</span>
+	  </button>
+	</div>
+      </form>
     </div>
   </div>
 </div>
