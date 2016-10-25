@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script LANGUAGE="JavaScript">
+		// $(document).ready(function(){
+
+		    function getData(form){
+
+		    	var lat_min=form.lat_min.value;
+		    	var lat_max=form.lat_max.value;
+		    	var lon_min=form.lon_min.value;
+		    	var lon_max=form.lon_max.value;
+		    	var year=form.year.value;
+		    	var month=form.month.value;
+		    	var day=form.day.value;
+
+		    	var myurl="http://52.23.156.184:5000/gps?lat_min="+lat_min+
+		    		"&lat_max="+lat_max+
+		    		"&long_min="+lon_min+
+		    		"&long_max="+lon_max+
+		    		"&year="+year+
+		    		"&month="+month+
+		    		"&day="+day
+
+		    	var start = new Date();
+		    	$("#result_count").html('');
+		    	$("#result").html('');
+
+		        $.ajax({
+		        	url: myurl, 
+		        	dataType: 'jsonp',
+		        	jsonpCallback: 'callback',
+		        	type: 'GET',
+		        	success: function(result){
+		            	$("#result_count").html(result.station_count);
+		            	console.log(result);
+		            	var txt='';
+		            	for (x in result.status){
+		            			txt += result.status[x].id+" :: "+result.status[x].status+"<br />";
+		        		}
+		        		$("#result").html(txt);
+		        		// console.log(txt)
+		        	}
+		        });
+
+		        var time = new Date() - start;
+		        // console.log(time)
+		        $("#time_to_process").html(time);
+		    }
+		// });
+		</script>
+	</head>>
+	<body>
+		<form NAME="myform" ACTION="">Enter bounding box: <BR>
+		<p>Minimum Latitude <input TYPE="text" NAME="lat_min" VALUE="-89.998914447"> </p>
+		<p>Maximum Latitude <input TYPE="text" NAME="lat_max" VALUE="83.64323665"></p>
+		<p>Minimum Longitude <input TYPE="text" NAME="lon_min" VALUE="-359.998835383"></p>
+		<p>Maximum Longitude <input TYPE="text" NAME="lon_max" VALUE="-0.037155605"></p>
+		<p>Year <input TYPE="text" NAME="year" VALUE="2012"></p>
+		<p>Month <input TYPE="text" NAME="month" VALUE="1"></p>
+		<p>Day <input TYPE="text" NAME="day" VALUE="1"></p>
+		<input TYPE="button" NAME="button" Value="Get Station states" onClick="getData(this.form)">
+		</form>
+
+		<!-- <button type="button">Get data</button> -->
+		<p>Time in milliseconds to process query: <l id="time_to_process"></l></p>
+		<p>No of stations: <l id="result_count"></l></p>
+		<p id="result"></p>
+
+		<script>
+		 	function myFunc(){
+		 		document.getElementById("demo").innerHTML = "Hello JavaScript!";
+		 	}
+			
+		</script>
+
+	</body>
+</html>
