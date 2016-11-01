@@ -39,13 +39,14 @@
       <tr><td><p/></td></tr>
       <tr>
         <td>
-          <select id="gpsNetworkSelector" style="width:300px" name="gpsStations" onchange="loadGpsStations(this.options[this.selectedIndex].value)">
+          <select id="gpsNetworkSelector" style="width:300px" name="gpsStations" onchange="updateNetwork(this.options[this.selectedIndex].value)">
             <option value="" disabled selected>Select GPS Network</option>
-            <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json">UNAVCO_NUCLEUS</option>
+            
+            <!-- <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_NUCLEUS_FILL.json">UNAVCO_NUCLEUS</option>
             <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNAVCO_PBO_FILL.json">UNAVCO_PBO</option>
-            <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_IGS08_FILL.json">UNR_IGS08</option>
+            <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_IGS08_FILL.json">UNR_IGS08</option> -->
             <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_SPLICE_FILL.json">UNR_SPLICE</option>
-            <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json">UNR_FID</option>
+            <!-- <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/UNR_FID_FILL.json">UNR_FID</option> -->
 <!--
             <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_comb_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_comb</option>
             <option value="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/WNAM_Clean_DetrendNeuTimeSeries_jpl_FILL.json">WNAM_Clean_DetrendNeuTimeSeries_jpl</option>

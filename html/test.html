@@ -15,7 +15,7 @@
 		    	var month=form.month.value;
 		    	var day=form.day.value;
 
-		    	var myurl="http://52.23.156.184:5000/gps?lat_min="+lat_min+
+		    	var myurl="http://54.204.111.105:5000/gps?lat_min="+lat_min+
 		    		"&lat_max="+lat_max+
 		    		"&long_min="+lon_min+
 		    		"&long_max="+lon_max+
@@ -37,7 +37,7 @@
 		            	console.log(result);
 		            	var txt='';
 		            	for (x in result.status){
-		            			txt += result.status[x].id+" :: "+result.status[x].status+"<br />";
+		            			txt += result.status[x].station_id+" :: "+result.status[x].status+"<br />";
 		        		}
 		        		$("#result").html(txt);
 		        		// console.log(txt)
@@ -64,7 +64,7 @@
 		</form>
 
 		<!-- <button type="button">Get data</button> -->
-		<p>Time in milliseconds to process query: <l id="time_to_process"></l></p>
+		<p>Time in seconds to process query: <l id="time_to_process"></l></p>
 		<p>No of stations: <l id="result_count"></l></p>
 		<p id="result"></p>
 
