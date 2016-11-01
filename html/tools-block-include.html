@@ -70,10 +70,10 @@ function updateTabPanel() {
       </button>
     </li>
     <li>
-      <!-- <button class="tab-button tool-tab-button" value="GPS-NEW">
+      <button class="tab-button tool-tab-button" value="GPS-NEW">
         GPS-NEW
-      </button> -->
-      	<input type="button" onclick="location.href='test.html';" value="GPS-NEW" />
+      </button>
+      	<!-- <input type="button" onclick="location.href='test.html';" value="GPS-NEW" /> -->
     </li>
     <li>
       <button class="tab-button tool-tab-button" value="Reset">
@@ -122,6 +122,12 @@ function updateTabPanel() {
     <div ng-include="'gps-tools-include.html'"></div>
   </div>
   
+    <!--GPS-NEW tab -->
+  <div class="tab-pane tool-tab-pane inactive" id="GPS-NEW">
+    <div ng-include="'gps-tools-include-new.html'"></div>
+  </div>
+
+
   <div class="tab-pane tool-tab-pane inactive" id="Reset">
     <div class="tool">
       <div class="tool-title"><b>Reset</b></div>
