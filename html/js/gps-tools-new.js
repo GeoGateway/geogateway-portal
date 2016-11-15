@@ -7,19 +7,27 @@ var marker=[];
 var gpsStationState=["green","red","yellow","lightblue","blue"];
 var dateSlider;
 // var gpsDataBaseUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/";
-var gpsDataBaseUrl="http://54.204.111.105:5000/gps?lat_min="
-var lastYearInDb = 2015
-var lastMonthInDb = 12
-var beginDate = new Date(1994,0,1);
+// var gpsDataBaseUrl="http://54.204.111.105:5000/gps?lat_min="
+var gpsDataBaseUrl="http://54.88.85.90:5000/GPS_";
+var selectedDatabase="";
+var gpsNetwork;
+var currGpsStation;
+
+var lastYearInDb = 2015;
+var lastMonthInDb = 12;
+var beginDate = new Date(1994,0,1),
+    endDate= new Date();
 
 
 // Function similar to loadGpsStations
-function updateNetwork(gpsNetworkUrl) {
+function updateNetwork(newGpsNetwork) {
     //Set the network and markers to empty or null values.
     //Need to make sure memory is managed well.
 //    gpsNetwork=null;
     gpsStations=null;
-    console.log(gpsNetworkUrl);
+    selectedDatabase=newGpsNetwork;
+    console.log('Changed network to : '+selectedDatabase);
+
     $("#networkStateDisplayDateNew").prop("disabled",true);
     $("#waitScreen").show();
 
@@ -40,53 +48,73 @@ function updateNetwork(gpsNetworkUrl) {
 
     var endDate = new Date(year, month-1, day);
 
-    var myurl=gpsDataBaseUrl+lat_min+
-        "&lat_max="+lat_max+
-        "&long_min="+lon_min+
-        "&long_max="+lon_max+
-        "&year="+year+
-        "&month="+month+
-        "&day="+day
+    var myNetworkUrl=gpsDataBaseUrl+selectedDatabase+'/network_meta'
+    console.log(myNetworkUrl) 
 
     $.ajax({
-        url: myurl, 
+        url: myNetworkUrl, 
         dataType: 'jsonp',
         jsonpCallback: 'callback',
         type: 'GET',
         success: function(result){
 
-            console.log("Done loading stations");
-            // console.log(result);
+            console.log("Done loading network meta");
+            gpsNetwork = result;
 
-            // Set date field
-            $('#networkStateDisplayDateNew').val(month+"/"+day+"/"+year);
+            var myTimeSeriesUrl=gpsDataBaseUrl+selectedDatabase+'/time_series?'+
+                "lat_min="+lat_min+
+                "&lat_max="+lat_max+
+                "&long_min="+lon_min+
+                "&long_max="+lon_max+
+                "&year="+year+
+                "&month="+month+
+                "&day="+day
 
-            console.log("Creating markers");
-            myCreateMarkers(result.stations);
-            
-            //Enable date slider
-            $("#waitScreen").hide();
-            $("#networkStateDisplayDateNew").datepicker();
-            $("#networkStateDisplayDateNew").prop("disabled",false);
-            dateSlider=$("#dateSliderNew").slider({
-                slide:mySliderSlideEventHandler,
-                stop: mySliderDateEventHandler,
-                min:beginDate.getTime(),
-                max: endDate.getTime(),
-                value:endDate.getTime()
+            // console.log(myTimeSeriesUrl);
+
+            $.ajax({
+                url: myTimeSeriesUrl, 
+                dataType: 'jsonp',
+                jsonpCallback: 'callback',
+                type: 'GET',
+                success: function(result){
+
+                    console.log("Done loading stations");
+                    // console.log(result);
+
+                    // Set date field
+                    $('#networkStateDisplayDateNew').val(month+"/"+day+"/"+year);
+
+                    console.log("Creating markers");
+                    myCreateMarkers(result.stations);
+                    
+                    //Enable date slider
+                    $("#waitScreen").hide();
+                    $("#networkStateDisplayDateNew").datepicker();
+                    $("#networkStateDisplayDateNew").prop("disabled",false);
+                    dateSlider=$("#dateSliderNew").slider({
+                        slide:mySliderSlideEventHandler,
+                        stop: mySliderDateEventHandler,
+                        min:beginDate.getTime(),
+                        max: endDate.getTime(),
+                        value:endDate.getTime()
+                    });
+
+                    // $("#result_count").html(result.station_count);
+                    // console.log(result);
+                    // var txt='';
+                    // for (x in result.status){
+                    //         txt += result.status[x].station_id+" :: "+result.status[x].status+"<br />";
+                    // }
+                    // $("#result").html(txt);
+                    // console.log(txt)
+
+                }
             });
-
-            // $("#result_count").html(result.station_count);
-            // console.log(result);
-            // var txt='';
-            // for (x in result.status){
-            //         txt += result.status[x].station_id+" :: "+result.status[x].status+"<br />";
-            // }
-            // $("#result").html(txt);
-            // console.log(txt)
-
         }
     });
+
+    
     
     // $.getJSON(gpsNetworkUrl, function(){
     //     console.log("Loading stations");
@@ -157,7 +185,8 @@ function updateNetworkStateToDate(dateAsString){
     var lon_max="";  
 
 
-    var myurl=gpsDataBaseUrl+lat_min+
+    var myurl=gpsDataBaseUrl+selectedDatabase+'/time_series?'+
+        "lat_min="+lat_min+
         "&lat_max="+lat_max+
         "&long_min="+lon_min+
         "&long_max="+lon_max+
@@ -222,51 +251,74 @@ function myCreateMarkers(gpsStations) {
             map:mapA
         });
         
-        // marker[i].addListener('click',function(){
-        //     var dygraphsHtml="<html><body>";
-        //       dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+gpsStation.id+" <b>Lat:</b> "+(new Number(gpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(gpsStation.long)).toFixed(5)+"<\/div>";
-        //       dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
-        //       dygraphsHtml+="<br/>";
-        //     dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
-        //       dygraphsHtml+="<\/script>";
-        //       dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+gpsStation.pro_dir+"/"+gpsStation.DygraphsInputFile+"'><\/script>";
-        //       dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
-        //       dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
-        //       dygraphsHtml+="<br/>";
-        //       dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
-        //       dygraphsHtml+="<br/>";
-        //       dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
-        //       //Use mm displacements for UNAVCO data types.  Note significant figures change from below
-        //       dygraphsHtml+="<script type='text/javascript'>";
-        //       dygraphsHtml+="var graphs=[]\;"
-        //       dygraphsHtml+="var plot1, plot2, plot3\;";
-        // if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
-        // //TODO: East and North are reversed. Need to fix this.Below is a bandaid
-        //           dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-        //           dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-        //           dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
-        //       }
-        //       else {
-        //           //The other cases
-        //       //TODO: East and North are reversed. Need to fix this.Below is a bandaid
-        //            dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-        //            dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-        //            dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
-        //       }
-        //       dygraphsHtml+="graphs.push(plot1)\;";
-        //       dygraphsHtml+="graphs.push(plot2)\;";
-        //       dygraphsHtml+="graphs.push(plot3)\;";
-        //       dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
-        //       dygraphsHtml+="<\/script>";
+        marker[i].addListener('click',function(){
+
+            // Make ajax call to get data for this particular station
+            myStationUrl = gpsDataBaseUrl+selectedDatabase+
+                '/station_meta?station_id_to_find='+ gpsStation.station_id;
+            console.log(myStationUrl);
+
+            $.ajax({
+                url: myStationUrl, 
+                dataType: 'jsonp',
+                jsonpCallback: 'callback',
+                type: 'GET',
+                success: function(result){
+
+                    currGpsStation = result;
+                    // currGpsStation.pro_dir = 'daily_project_1NSU_2016-11-06'
+                    // currGpsStation.DygraphsInputFile = 'daily_project_1NSU_2016-11-06.dygraphs.js';
+
+                    console.log("Found station meta data");
+                    console.log(currGpsStation);
+                    console.log(gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile);
+                }
+            });
+
+            var dygraphsHtml="<html><body>";
+              dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+currGpsStation._id+" <b>Lat:</b> "+(new Number(currGpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(currGpsStation.long)).toFixed(5)+"<\/div>";
+              dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
+              dygraphsHtml+="<br/>";
+            dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
+              dygraphsHtml+="<\/script>";
+              dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile+"'><\/script>";
+              dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
+              dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
+              dygraphsHtml+="<br/>";
+              dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
+              dygraphsHtml+="<br/>";
+              dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
+              //Use mm displacements for UNAVCO data types.  Note significant figures change from below
+              dygraphsHtml+="<script type='text/javascript'>";
+              dygraphsHtml+="var graphs=[]\;"
+              dygraphsHtml+="var plot1, plot2, plot3\;";
+            if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
+            //TODO: East and North are reversed. Need to fix this.Below is a bandaid
+                  dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+                  dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+                  dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
+              }
+              else {
+                  //The other cases
+              //TODO: East and North are reversed. Need to fix this.Below is a bandaid
+                   dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+                   dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+                   dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
+              }
+              dygraphsHtml+="graphs.push(plot1)\;";
+              dygraphsHtml+="graphs.push(plot2)\;";
+              dygraphsHtml+="graphs.push(plot3)\;";
+              dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
+              dygraphsHtml+="<\/script>";
             
-        //     dygraphsHtml+="</body></html>";
+            dygraphsHtml+="</body></html>";
             
-        //     var windowName=gpsStation.id+"-Dygraphs";
-        //       var newWin = window.open("", windowName, "width=850,height=750");
-        //       newWin.document.writeln(dygraphsHtml);
-        //       newWin.document.title = gpsStation.id;
-        //       newWin.document.close();
-        // });
+            var windowName=currGpsStation._id+"-Dygraphs";
+              var newWin = window.open("", windowName, "width=850,height=750");
+              newWin.document.writeln(dygraphsHtml);
+              newWin.document.title = currGpsStation._id;
+              newWin.document.close();
+        });
         
     });
 }
