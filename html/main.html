@@ -40,36 +40,36 @@
     <script src="js/controllers.js"></script>
     <script src="js/gps-tools.js"></script>
     <script src="js/gps-tools-new.js"></script>
+    <script src="js/openhazards-tools.js"></script>
 
     <!-- dygraphs -->
     <script type="text/javascript" src="js/dygraph-combined.js"></script>
     
     <!-- ajaxForm jquery plugin -->
     <script src="http://malsup.github.com/jquery.form.js"></script>
-
-
+    
   </head>
   <body>
     <!--
 	TODO: This is used by the GPS station interface. Need to find out how to move it to a better place.
       -->
   <DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:40%;left:50%;display:none">
-	 <TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
-		<TR>
-		  <TD WIDTH="100%" HEIGHT="100%" BGCOLOR="#CCCCFF" ALIGN="CENTER" VALIGN="MIDDLE">
-			 <BR><BR>   
+    <TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
+      <TR>
+	<TD WIDTH="100%" HEIGHT="100%" BGCOLOR="#CCCCFF" ALIGN="CENTER" VALIGN="MIDDLE">
+	  <BR><BR>   
           <FONT FACE="Helvetica,Verdana,Arial" SIZE=2 COLOR="#6600CC"><B>Loading stations.  Please wait...</B></FONT>
-			 <BR><BR>
-		  </TD>
-		</TR>
-	 </TABLE>
+	  <BR><BR>
+	</TD>
+      </TR>
+    </TABLE>
   </DIV>
-    
-    <div ng-include="'navigation-bar-include.html'"></div>
-    <div ng-include="'intro-window-include.html'"></div>
-    <div ng-include="'profile-block-include.html'"></div>
-    <div ng-include="'tools-block-include.html'"></div>
-    
+  
+  <div ng-include="'navigation-bar-include.html'"></div>
+  <div ng-include="'intro-window-include.html'"></div>
+  <div ng-include="'profile-block-include.html'"></div>
+  <div ng-include="'tools-block-include.html'"></div>
+  
   <!-- ========================= QTip Mouseovers =========================-->
   <script>
 	 //--------------------------------------------------

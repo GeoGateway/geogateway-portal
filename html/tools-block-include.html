@@ -1,26 +1,27 @@
 <script>
-    // listener for TOOL PANEL TABS
-    //TODO: need to replace this with Angular methods.
-    $(document).ready(function() {
-	$('.tab-button').click(function() {
-            if($(this).hasClass('tool-tab-button'))
-            {
-		$(this).parent().parent().children().removeClass('active');
-		$(this).parent().addClass('active');
-		updateTabPanel();
-	    }
-	});
-		
-//	$('.extra-tools-panel').draggable();
+// listener for TOOL PANEL TABS
+$(document).ready(function() {
+    $(".tab-button").click(function() {
+        if($(this).hasClass('tool-tab-button'))
+        {
+	    $(this).parent().parent().children().removeClass('active');
+	    $(this).parent().addClass('active');
+	    updateTabPanel();
+	}
+	
     });
+    
+    
+    //	$('.extra-tools-panel').draggable();
+});
 
 function updateTabPanel() {
     var active_tab = $('.tool-tabs').children('.active').children().val();
     $('.tools-panel').children('.active').removeClass('active').addClass('inactive');
     $('.tools-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
 };
-
 </script>
+
 <div id="map-canvas"></div>
 <div class="tools-panel open" ng-controller="UserProjectController">
   <ul type="none" class="tool-tabs">

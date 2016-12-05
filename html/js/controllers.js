@@ -735,7 +735,6 @@ UserProjectApp.factory('FeedService',['$http',function($http){
  * The Notecard controller  and family of functions
  */
 UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','$location','UploadService',function ($scope,$rootScope,$http,$location,UploadService) {
-    console.log("Notecard controller called");
     $scope.uploadNotecardFile=function() {
 	var file=$scope.newNotecardFile;
 	var uploadUrl="/doUpload/"+$rootScope.globals.currentUser.username+"/"+$rootScope.globals.currentProject.projectName+"-"+$rootScope.globals.currentProject._id;
