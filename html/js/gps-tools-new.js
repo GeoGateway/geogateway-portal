@@ -9,15 +9,15 @@ var dateSlider;
 // var gpsDataBaseUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/";
 // var gpsDataBaseUrl="http://54.204.111.105:5000/gps?lat_min="
 var gpsDataBaseUrl="http://54.88.85.90:5000/GPS_";
+// var gpsDataBaseUrl="http://localhost:5000/GPS_";
+
 var selectedDatabase="";
 var gpsNetwork;
 var currGpsStation;
 
 var lastYearInDb = 2015;
 var lastMonthInDb = 12;
-var beginDate = new Date(1994,0,1),
-    endDate= new Date();
-
+var beginDate = new Date(1994,0,1);
 
 // Function similar to loadGpsStations
 function updateNetwork(newGpsNetwork) {
@@ -271,53 +271,66 @@ function myCreateMarkers(gpsStations) {
 
                     console.log("Found station meta data");
                     console.log(currGpsStation);
-                    console.log(gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile);
+                    // console.log(gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile);
                 }
             });
 
-            var dygraphsHtml="<html><body>";
-              dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+currGpsStation._id+" <b>Lat:</b> "+(new Number(currGpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(currGpsStation.long)).toFixed(5)+"<\/div>";
-              dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
-              dygraphsHtml+="<br/>";
-            dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
-              dygraphsHtml+="<\/script>";
-              dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile+"'><\/script>";
-              dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
-              dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
-              dygraphsHtml+="<br/>";
-              dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
-              dygraphsHtml+="<br/>";
-              dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
-              //Use mm displacements for UNAVCO data types.  Note significant figures change from below
-              dygraphsHtml+="<script type='text/javascript'>";
-              dygraphsHtml+="var graphs=[]\;"
-              dygraphsHtml+="var plot1, plot2, plot3\;";
-            if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
-            //TODO: East and North are reversed. Need to fix this.Below is a bandaid
-                  dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-                  dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
-                  dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
-              }
-              else {
-                  //The other cases
-              //TODO: East and North are reversed. Need to fix this.Below is a bandaid
-                   dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-                   dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
-                   dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
-              }
-              dygraphsHtml+="graphs.push(plot1)\;";
-              dygraphsHtml+="graphs.push(plot2)\;";
-              dygraphsHtml+="graphs.push(plot3)\;";
-              dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
-              dygraphsHtml+="<\/script>";
+            setTimeout(function() {
+
+            	var recoverdDygraph = currGpsStation.d_0 +'}'+  
+            			currGpsStation.d_1 + '}'+ 
+            			currGpsStation.d_2 + '}'+ 
+            			currGpsStation.d_3 + '}'+ 
+            			currGpsStation.d_4 + '}'+ 
+            			currGpsStation.d_5 + '}';
+
+	            var dygraphsHtml="<html><body>";
+	              dygraphsHtml+="<div><b>Data Set:</b> "+gpsNetwork.data_source+"<br/><b>Station ID:</b> "+currGpsStation._id+" <b>Lat:</b> "+(new Number(currGpsStation.lat)).toFixed(5)+" <b>Lon:</b> "+(new Number(currGpsStation.long)).toFixed(5)+"<\/div>";
+	              dygraphsHtml+="Click and drag to zoom plots vertically or horizontally.  Double-click the plot to reset to the default zoom level.";
+	              dygraphsHtml+="<br/>";
+	              dygraphsHtml+="<script src='http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js'>";
+	              dygraphsHtml+="<\/script>";
+	              dygraphsHtml+="<script> "+recoverdDygraph+"<\/script>";
+	              // dygraphsHtml+="<script src='"+gpsNetwork.server_url+"/"+currGpsStation.pro_dir+"/"+currGpsStation.DygraphsInputFile+"'><\/script>";
+	              dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
+	              dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:200px'><\/div>";
+	              dygraphsHtml+="<br/>";
+	              dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:200px'><\/div>";
+	              dygraphsHtml+="<br/>";
+	              dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:200px'><\/div>";
+	              //Use mm displacements for UNAVCO data types.  Note significant figures change from below
+	              dygraphsHtml+="<script type='text/javascript'>";
+	              dygraphsHtml+="var graphs=[]\;"
+	              dygraphsHtml+="var plot1, plot2, plot3\;";
+	            if(gpsNetwork.data_source=='unavcoPboFill' || gpsNetwork.data_source=='unavcoNucleusFill') {
+	            //TODO: East and North are reversed. Need to fix this.Below is a bandaid
+	                  dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+	                  dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:4})\;";
+	                  dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:4})\;";
+	              }
+	              else {
+	                  //The other cases
+	              //TODO: East and North are reversed. Need to fix this.Below is a bandaid
+	                   dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+	                   dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (mm)\",yAxisLabelWidth:100,sigFigs:3})\;";
+	                   dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (mm)\", yAxisLabelWidth:100,sigFigs:3})\;";
+	              }
+	              dygraphsHtml+="graphs.push(plot1)\;";
+	              dygraphsHtml+="graphs.push(plot2)\;";
+	              dygraphsHtml+="graphs.push(plot3)\;";
+	              dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
+	              dygraphsHtml+="<\/script>";
+	            
+	            dygraphsHtml+="</body></html>";
+	            
+	            var windowName=currGpsStation._id+"-Dygraphs";
+	              var newWin = window.open("", windowName, "width=850,height=750");
+	              newWin.document.writeln(dygraphsHtml);
+	              newWin.document.title = currGpsStation._id;
+	              newWin.document.close();
+
+            }, 1000);
             
-            dygraphsHtml+="</body></html>";
-            
-            var windowName=currGpsStation._id+"-Dygraphs";
-              var newWin = window.open("", windowName, "width=850,height=750");
-              newWin.document.writeln(dygraphsHtml);
-              newWin.document.title = currGpsStation._id;
-              newWin.document.close();
         });
         
     });
@@ -576,3 +589,5 @@ function myCreateMarkers(gpsStations) {
 //     }
 //     return dataOnDate;
 // }
+
+
