@@ -197,7 +197,11 @@ function loadWMSwithstyle(map, baseURL, layername, styleurl){
             if (lLR_Longitude < lUL_Longitude){
               lLR_Longitude = Math.abs(lLR_Longitude);
             }
+
             var urlResult = baseURL + wmsParams.join("&") + "&bbox=" + lUL_Longitude + "," + lUL_Latitude + "," + lLR_Longitude + "," + lLR_Latitude;
+            // try to add a cache funtion
+            var cache="&dummy="+(new Date()).getTime();
+            urlResult+=cache;
 
             return urlResult;
         },
