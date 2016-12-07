@@ -191,7 +191,7 @@ function loadWMSwithstyle(map, baseURL, layername, styleurl){
 
             var lUL_Latitude = lULg.y;
             var lUL_Longitude = lULg.x;
-            var lLR_Latitude = lLRg.y;
+            var lLR_Latitude = lLRg.y; 
             var lLR_Longitude = lLRg.x;
             //GJ: there is a bug when crossing the -180 longitude border (tile does not render) - this check seems to fix it
             if (lLR_Longitude < lUL_Longitude){

@@ -703,7 +703,7 @@ function new_color_api(){
     //reload legend
     wmsgf9_select_legend_kml.setMap(null);
     wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
-                    url: datajson['kmz'],
+                    url: datajson['kmz']+"?dummy="+(new Date()).getTime(),
                     preserveViewport:true,
                     screenOverlays:true
                     });
