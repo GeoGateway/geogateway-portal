@@ -695,7 +695,8 @@ function new_color_api(){
     maxd = maxd / -1.897155;
     var minv = Math.min(mind,maxd);
     var maxv = Math.max(mind,maxd);
-    var results=$.ajax({url:'sldservice',data:{'service':'sldgenerator','image':imagename,'min':minv,'max':maxv},async:false}).responseText;
+    var usercolortheme = $('#colortheme_sel').val();
+    var results=$.ajax({url:'sldservice',data:{'service':'sldgenerator','image':imagename,'min':minv,'max':maxv,'theme':usercolortheme},async:false}).responseText;
     //alert(results);
     var datajson=jQuery.parseJSON(results);
     //alert(results);
@@ -735,8 +736,12 @@ function color_stretch(event) {
     $('#Strech-color-div').append(inputstr);
     $('#mind').val(datajson['mind']);
     $('#maxd').val(datajson['maxd']);
+    var colorthemestr = "<p><strong>Color theme:<strong><select id='colortheme_sel'><option value='default'>Default</option><option value='RdYlGn_r'>RedYellowGreen</option></option></select>";
+    $('#Strech-color-div').append(colorthemestr);
     $('#Strech-color-div').append("<input type=hidden id=currentimage value="+datajson['image']+">");
     $('#Strech-color-div').append("<p>"+"<button id=make-new-color-button onclick=new_color_api()>Make New Color</button></strong>");
+    $('#Strech-color-div').append("<hr>");
+
     //$("#make-new-color-butoon").on( "click", {image: datajson['image']}, new_color_api);
 
 };

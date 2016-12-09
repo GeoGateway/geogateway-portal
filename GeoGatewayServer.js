@@ -602,7 +602,7 @@ app.get('/sldservice/', function(req,res) {
 
     if (req.query.service == "sldgenerator") {
         queryUrl +=  "/sldgenerator?";
-        queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max;
+        queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max + "&theme="+req.query.theme;
     }
     console.log(queryUrl);     
 
