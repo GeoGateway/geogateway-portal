@@ -8,7 +8,8 @@ var gpsStationState=["green","red","yellow","lightblue","blue"];
 var dateSlider;
 // var gpsDataBaseUrl="http://gf9.ucs.indiana.edu/daily_rdahmmexec/daily/";
 // var gpsDataBaseUrl="http://54.204.111.105:5000/gps?lat_min="
-var gpsDataBaseUrl="http://54.88.85.90:5000/GPS_";
+//var gpsDataBaseUrl="http://54.88.85.90:5000/GPS_";
+var gpsDataBaseUrl="http://gf3.ucs.indiana.edu:5000/GPS_";
 // var gpsDataBaseUrl="http://localhost:5000/GPS_";
 
 var selectedDatabase="";
