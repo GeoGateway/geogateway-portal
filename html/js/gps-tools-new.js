@@ -41,11 +41,11 @@ function updateNetwork(newGpsNetwork) {
     var month=date.getMonth();
     var day=date.getDate();
 
-    if (year > lastYearInDb){
-        year = lastYearInDb;
-        month = lastMonthInDb;
-        day = 28;
-    }
+    // if (year > lastYearInDb){
+    //     year = lastYearInDb;
+    //     month = lastMonthInDb;
+    //     day = 28;
+    // }
 
     var endDate = new Date(year, month-1, day);
 
@@ -58,10 +58,18 @@ function updateNetwork(newGpsNetwork) {
         jsonpCallback: 'callback',
         type: 'GET',
         success: function(result){
-
+            
             console.log("Done loading network meta");
+
             gpsNetwork = result;
 
+            var lastDateInDb= new Date(result.end_date);
+            year=lastDateInDb.getFullYear();
+            month=lastDateInDb.getMonth()+1;
+            day=lastDateInDb.getDate();
+
+            endDate = new Date(year, month-1, day);
+            
             var myTimeSeriesUrl=gpsDataBaseUrl+selectedDatabase+'/time_series?'+
                 "lat_min="+lat_min+
                 "&lat_max="+lat_max+
