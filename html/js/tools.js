@@ -752,6 +752,7 @@ function color_stretch(event) {
 
     $('#Strech-color-div').append("<p><strong>" + "Image Displacemnet (cm)" + datajson['image_mind'] + " to " +datajson['image_maxd']);
     $('#Strech-color-div').append("<p><strong>" + "Area Displacemnet (cm)" + datajson['mind'] + " to " +datajson['maxd']);
+    $('#Strech-color-div').append('<div id="minmax_slider" </div><p>');   
     var inputstr="<input type='text' id='mind' name='mind'>";
     inputstr +="<input type='text' id='maxd' name='maxd'>";
     $('#Strech-color-div').append(inputstr);
@@ -763,6 +764,17 @@ function color_stretch(event) {
     $('#Strech-color-div').append("&nbsp;"+"<button id=make-new-color-button onclick=new_color_api()>Make New Color</button>");
     $('#Strech-color-div').append("&nbsp;"+"<button id=reset-color-button onclick=reset_color_api()>Reset</button></strong>");    
     $('#Strech-color-div').append("<hr>");
+    var sliderscript ='<script type="text/javascript">'+
+    '$( "#minmax_slider" ).slider({' +
+      'range: true,'+
+      'min:'+datajson["image_mind"] +','+
+      'max:'+datajson["image_maxd"] +','+
+      'values:['+datajson["mind"]+','+datajson["maxd"]+'],'+
+       'slide: function( event, ui ) {'+
+       '$("#mind").val(ui.values[0]);$("#maxd").val(ui.values[1]);},'+
+    '});</script>';
+    $('#Strech-color-div').append(sliderscript);
+
 
     //$("#make-new-color-butoon").on( "click", {image: datajson['image']}, new_color_api);
 
