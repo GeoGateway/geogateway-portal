@@ -161,6 +161,7 @@ function toggleKmlDisplay(toggleLayer){
         kmlLayer = new google.maps.KmlLayer({
             url: toggleLayer.id,
             suppressInfoWindows: false,
+            preserveViewport: true
         });
         kmlLayerObj[toggleLayer.id]=kmlLayer;
     }
