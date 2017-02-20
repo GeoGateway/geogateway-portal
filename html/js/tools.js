@@ -688,6 +688,26 @@ function displaySelectedImages(datasets,masterMap) {
 
 };
 
+
+function reset_color_api(){
+    var imagename = $('#currentimage').val();
+    //uid43_unw
+    //remove
+    wmsgf9_select_legend_kml.setMap(null);
+    mapA.overlayMapTypes.setAt(0, null);
+    //reload
+     highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+imagename);
+    // load legend
+    var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/"+imagename+"_default.kmz";
+        wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
+        url: legend_kml,
+        preserveViewport:true,
+        screenOverlays:true
+        });
+    wmsgf9_select_legend_kml.setMap(mapA);
+
+};
+
 function new_color_api(){
     var imagename = $('#currentimage').val();
     var mind = Number($('#mind').val());
@@ -740,7 +760,8 @@ function color_stretch(event) {
     var colorthemestr = "<p><strong>Color theme:<strong><select id='colortheme_sel'><option value='default'>Default</option><option value='RdYlGn_r'>RedYellowGreen</option></option></select>";
     $('#Strech-color-div').append(colorthemestr);
     $('#Strech-color-div').append("<input type=hidden id=currentimage value="+datajson['image']+">");
-    $('#Strech-color-div').append("<p>"+"<button id=make-new-color-button onclick=new_color_api()>Make New Color</button></strong>");
+    $('#Strech-color-div').append("&nbsp;"+"<button id=make-new-color-button onclick=new_color_api()>Make New Color</button>");
+    $('#Strech-color-div').append("&nbsp;"+"<button id=reset-color-button onclick=reset_color_api()>Reset</button></strong>");    
     $('#Strech-color-div').append("<hr>");
 
     //$("#make-new-color-butoon").on( "click", {image: datajson['image']}, new_color_api);
