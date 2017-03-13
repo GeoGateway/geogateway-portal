@@ -336,22 +336,22 @@ app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
                             else {
                                 // run tilemap code
                                 // run qsxy2tilt with the default parameter
-                                theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
-                                exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr) {
-                                    if (error!==null){
-                                        console.error(error);
-                                        res.status(400).send(error);
-                                    }
-                                    else {
-                                        // run tilemap vis code
-                                        // run qsxy2tilt with the default parameter
-                                        theExec=projectBinDir+"tiltmap_vis"+" -i " + obj.projectOutputTiltCSVFileName;
-                                        exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
-                                            if (error!==null){
-                                                console.error(error);
-                                                res.status(400).send(error);
-                                            }
-                                            else {
+                                // theExec=projectBinDir+"qsxy2tilt"+" -i "+obj.projectOutputFileName+" -o " + obj.projectOutputTiltCSVFileName;
+                                // exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr) {
+                                //     if (error!==null){
+                                //         console.error(error);
+                                //         //res.status(400).send(error);
+                                //     }
+                                //     else {
+                                //         // run tilemap vis code
+                                //         // run qsxy2tilt with the default parameter
+                                //         theExec=projectBinDir+"tiltmap_vis"+" -i " + obj.projectOutputTiltCSVFileName;
+                                //         exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
+                                //             if (error!==null){
+                                //                 console.error(error);
+                                //                 //res.status(400).send(error);
+                                //             }
+                                //             else {
                                                 // zip the files for download
                                                 theExec= "zip -r " + obj.projectZipFileName + " .";
                                                 exec(theExec,{"cwd":baseWorkDirPath},function(error,stdout,stderr){
@@ -368,15 +368,15 @@ app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
                                                     }
                                                 });
                                             }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                                  //      });
+                                  //  }
+                                //});
+                            });
+                        
                     }
                 });
             }
-		  });
+        });
     });
 });
 
