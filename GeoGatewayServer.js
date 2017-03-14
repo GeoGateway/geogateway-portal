@@ -758,6 +758,24 @@ app.get('/rss/:collection',function(req,res) {
     });
 });
 
+/**
+* This method makes a query to http://www.ncedc.org/cgi-bin/catalog-search2.pl"
+*/ 
+app.get('/AnssCatalogService/',function(req,res) {
+    
+    var base_url="https://earthquake.usgs.gov/fdsnws/event/1/query";
+    var amp="&"
+    //    var format="format=geojson";
+    var format="format=kml";
+    var minmag="minmagnitude=5.0"
+    
+    query_url=base_url+amp+format+amp+minmag;
+    restClient.get(query_url, function(data, response){
+	console.log(data.toString());
+	res.status(200).send(data);
+    });
+});
+
 
 //--------------------------------------------------
 

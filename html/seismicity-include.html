@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <script src="js/anss-service.js"></script>
+    <script>
+      
+    </script>
+  </head>
+  <body>
+    
+    Select your bounding box and time interval and then click "Fetch Catalog". <br/> This service
+    harvests data from the <a target="blank" href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS FDSN API</a>
+	
+    <table>
+      <tr>
+	<td>
+	  Min Lat: <input type="text" id="minlatbbox" value="31.0">
+	</td>
+      </tr>
+      <tr>
+	<td>      
+	  Min Lon: <input type="text" id="minlonbbox" value="-120.0">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Max Lat: <input type="text" id="maxlatbbox" value="35.0">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Max Lon: <input type="text" id="maxlonbbox" value="-116.0">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Starting Date: <input type="text" id="acgMinDate" value="2002/01/01">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Starting Time: <input type="text" id="acgMinTime" value="00:00:00">
+	</td>
+      </tr>
+      <tr>
+	<td>
+	  Ending Date: <input type="text" id="acgMaxDate" value="2011/06/01">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Ending Time: <input type="text" id="acgMaxTime" value="00:00:00">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Minimum Magnitude: <input type="text" id="acgMinMagnitude" value="4.0">
+	</td>
+      </tr>
+      <tr>
+	<td>	  
+	  Maximum Magnitude:  <input type="text" id="acgMaxMagnitude" value="10.0">
+	</td>
+      </tr>
+    </table>
+    
+    <button id="RunAnssAction" onclick='anssgadget.submitMapRequest2()'>Fetch Seismic Catalog</button>
+
+  </body>
+</html>
