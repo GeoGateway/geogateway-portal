@@ -219,15 +219,15 @@ function updateProfileTabPanel() {
           <tbody>
 	    <tr>
               <td>Id</td>
-              <td>{{notecard._id}}</td>
+              <td style="word-wrap:break-word;">{{notecard._id}}</td>
             </tr>
             <tr>
               <td>Title</td>
-              <td>{{notecard.notecardTitle}}</td>
+              <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
             </tr>
             <tr>
               <td>Content</td>
-              <td>{{notecard.notecardContent}}</td>
+              <td style="word-wrap:break-word;">{{notecard.notecardContent}}</td>
             </tr>
 	    <tr ng-show='notecard.attachedFileUrl != null'>
               <td>Attached File</td>
@@ -235,11 +235,11 @@ function updateProfileTabPanel() {
 	    </tr>
             <tr>
               <td>Permission</td>
-              <td>{{notecard.permission}}</td>
+              <td style="word-wrap:break-word;">{{notecard.permission}}</td>
             </tr>
             <tr>
               <td>Creation Time</td>
-              <td>{{notecard.creationTime}}</td>
+              <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
             </tr>
           </tbody>
         </table>
