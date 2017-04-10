@@ -41,12 +41,28 @@ var anssgadget=anssgadget || (function() {
     var DEFAULT_MIN_WALLTIME="00:00:00";
     var DEFAULT_MAX_WALLTIME="00:00:00";
 
-    function submitMapRequest2(){
-	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query";
+    function submitMapRequestGeoJson() {
+	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
+	var amp="&";
+	var format="format=geojson";
+	var minmag="minmagnitude=5.0"
+	var finalUrl=urlBase+format+amp+minmag;
+	
+//	console.log(finalUrl);
+
+	$.getJSON(finalUrl)
+	    .done(function(data){
+		//		console.log(data);
+		mapA.data.addGeoJson(data);		
+	    });
+    }
+
+    function submitMapRequestKml(){
+	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
 	var amp="&";
 	var format="format=kml";
 	var minmag="minmagnitude=5.0"
-	var finalUrl=urlBase+amp+format+amp+minmag;
+	var finalUrl=urlBase+format+amp+minmag;
 
 	var kmlLayer = new google.maps.KmlLayer({
             url: finalUrl,
@@ -55,8 +71,9 @@ var anssgadget=anssgadget || (function() {
         });
 	
     }
+
     
-    function submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon) {	
+    function submitMapRequestOldAnss(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon) {	
 	
 	//Note this assumes the AnssCatalogService is co-located.
 	console.log("Submitting request");
@@ -101,7 +118,8 @@ var anssgadget=anssgadget || (function() {
      * This is the public API
      */
     return {
-	submitMapRequest:submitMapRequest,
-	submitMapRequest2:submitMapRequest2
+	submitMapRequestOldAnss:submitMapRequestOldAnss,
+	submitMapRequestKml:submitMapRequestKml,
+	submitMapRequestGeoJson:submitMapRequestGeoJson
     }
 })();
