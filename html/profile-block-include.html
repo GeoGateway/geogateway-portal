@@ -173,6 +173,9 @@ function updateProfileTabPanel() {
 	  Content: <textarea ng-model="newNotecard.notecardContent" id="notecardContent"></textarea>
 	</div>
 	<div>
+	  Share: <input type="text" ng-model="newNotecard.sharedList" id="notecardSharedList">
+	</div>
+	<div>
 	  <div>
             <input type="file" file-model="newNotecardFile">
           </div>
@@ -214,6 +217,7 @@ function updateProfileTabPanel() {
         <div>
           <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
         </div>
+	
         <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
 	    <tr>
@@ -240,8 +244,16 @@ function updateProfileTabPanel() {
               <td>Creation Time</td>
               <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
             </tr>
+	    <tr>
+	      <td>Shared</td>
+	      <td style="word-wrap:break-word;">{{notecard.sharedList}}</td>
+	    </tr>
           </tbody>
         </table>
+        <div>
+          Share Notecard: <input type="text" ng-model="newNotecard.newShares"> 
+	  <button class="btn btn-success" ng-click="shareNotecard(notecard._id,newNotecard.newShares)">Share</button>
+        </div>
       </div>
     </div>
     
@@ -271,8 +283,10 @@ function updateProfileTabPanel() {
 	  </table>
       </form>
       
-      <div class="panel-body">
-        <table class="table table-striped table-bordered table-condensed table-responsive">
+      <!--      <div class="panel-body"> -->
+      <!-- this is a not very good way to see if the card has been loaded yet -->
+      <div ng-show='theNotecard.notecardTitle!=null'>
+        <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
             <tr>
               <td>Title</td>
@@ -282,7 +296,7 @@ function updateProfileTabPanel() {
               <td>Content</td>
               <td>{{theNotecard.notecardContent}}</td>
             </tr>
-	    <tr ng-show='notecard.attachedFileUrl != null'>
+	    <tr ng-show='theNotecard.attachedFileUrl != null'> 
               <td>Attached File</td>
               <td><a href="{{theNotecard.attachedFileUrl}}" target="_blank">File</a></td>
 	    </tr>
@@ -297,6 +311,8 @@ function updateProfileTabPanel() {
           </tbody>
         </table>
       </div>
+<!--    </div> -->
+    
     </div>
     <div class="user-info" ng-show='isAuthenticated()'>
       {{username}}
