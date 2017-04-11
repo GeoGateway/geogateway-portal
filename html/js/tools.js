@@ -1377,3 +1377,8 @@ function hidePlotPanel() {
         $('.extra-tools-panel').removeClass('inactive').addClass('active');
     };
 }
+
+// close profile tools
+function closeProfileTool() {
+    alert("close profile tool");
+}
