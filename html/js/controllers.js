@@ -835,7 +835,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	$http.post("/notecards/"+username,notecard).
 	    success(function(theNotecard){
 		console.log("Notecard shared with ",username);
-		console.log(theNoteCard);
+		console.log(theNotecard);
 	    }).
 	    error(function(data){
 		console.error("Couldn't post shared notecard:"+data);
@@ -858,7 +858,15 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	console.log("Sharing notecard:"+notecardId+" "+newSharedList);
 	$http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
 	    success(function(notecard) {
-		notecard.sharedList=notecard.sharedList+","+newSharedList
+		delete notecard['_id'];
+		console.log(notecard);
+		if(notecard.sharedList != null) {
+		    notecard.sharedList=notecard.sharedList+","+newSharedList
+		}
+		else {
+		    notecard.sharedList=newSharedList;
+		}
+		
 		$http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
 		    success(function(data){
 			console.log("Updating shared list for notecard ",notecardId);
@@ -884,6 +892,8 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	    error(function(data){
 		console.log("Error getting card:",data);
 	    });
+	$scope.newNotecard={};
+	
     }
     
     $scope.publishNotecard=function(notecardId) {
