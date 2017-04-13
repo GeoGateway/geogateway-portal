@@ -144,13 +144,13 @@ function updateProfileTabPanel() {
 	    </button>
 	  </li>
 	  -->
-
+<!--
       <li>
 	<button class="tab-button profile-tab-button" value="newsfeed">
           <span class="glyphicon glyphicon-globe"> </span>
 	</button>
       </li>
-
+-->
       
       <li>
 	<button class="tab-button profile-tab-button" value="settings">
@@ -214,9 +214,11 @@ function updateProfileTabPanel() {
       </div>
       <div id="viewSelectedNotecard" ng-show='viewNotecardList==false'>
         <button class="btn btn-success" ng-click="getAllNotecards()">View List </button>
+<!--
         <div>
           <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
         </div>
+-->
 	
         <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
@@ -236,10 +238,12 @@ function updateProfileTabPanel() {
               <td>Attached File</td>
               <td><a href="{{notecard.attachedFileUrl}}" target="_blank">File</a></td>
 	    </tr>
+	      <!--	    
             <tr>
               <td>Permission</td>
               <td style="word-wrap:break-word;">{{notecard.permission}}</td>
             </tr>
+	    -->
             <tr>
               <td>Creation Time</td>
               <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
@@ -256,7 +260,8 @@ function updateProfileTabPanel() {
         </div>
       </div>
     </div>
-    
+
+    <!--
     <div class="tab-pane profile-tab-pane inactive" id="newsfeed" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">
 	Public Notecards
@@ -283,8 +288,6 @@ function updateProfileTabPanel() {
 	  </table>
       </form>
       
-      <!--      <div class="panel-body"> -->
-      <!-- this is a not very good way to see if the card has been loaded yet -->
       <div ng-show='theNotecard.notecardTitle!=null'>
         <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
@@ -311,9 +314,9 @@ function updateProfileTabPanel() {
           </tbody>
         </table>
       </div>
-<!--    </div> -->
-    
     </div>
+    -->
+      
     <div class="user-info" ng-show='isAuthenticated()'>
       {{username}}
       <form name='logoutForm' 
