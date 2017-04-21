@@ -102,6 +102,7 @@ UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScop
     } 
   
     //Old code, worked with pre-main.html versions of the user interface.
+    /**
     $scope.login=function(){
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
@@ -117,10 +118,11 @@ UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScop
         });
         $rootScope.authenticated=$scope.authenticated;
     }
-
+    */
+    
     //This is the code that handles login for master.html.
     $scope.loginGeo=function(){
-        console.log("In loginGeo:"+$scope.username);
+//        console.log("In loginGeo:"+$scope.username);
         AuthenticationServices.clearCredentials2();
         $scope.dataLoading=true;
         AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
@@ -174,7 +176,7 @@ UserProjectApp.controller('UserProjectController', function($scope,$rootScope,$h
     $scope.$on('loginEvent', function(event,arg) {
         $scope.username=$rootScope.globals.currentUser.username;
         $scope.authenticated=$rootScope.authenticated;
-        console.log("Getting all the projects for "+$rootScope.globals.currentUser.username);
+//        console.log("Getting all the projects for "+$rootScope.globals.currentUser.username);
         $http.get('projects/'+$rootScope.globals.currentUser.username).success(function(data){
             $scope.projects=data;
         });
@@ -219,7 +221,7 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
     //TODO: probably better for this method to take input instead of hard-coding below.
     $scope.getUsgsGeoJson=function(){
         var geoJsonUrl=$("#usgs-input-file").val();
-        console.log(geoJsonUrl);
+//        console.log(geoJsonUrl);
         $.getJSON(geoJsonUrl,function(){
         })
             .done(function(data){
@@ -326,7 +328,6 @@ UserProjectApp.controller("EditProjectController",['$scope','$rootScope','$http'
         }
     }
     
-
     //The following are functions that can be associated with submit actions.
     $scope.viewProject=function(projectId) {
         $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+projectId).
@@ -732,7 +733,7 @@ UserProjectApp.factory('FeedService',['$http',function($http){
 }]);
 
 /**
- * The Notecard controller  and family of functions
+ * The Notecard controller and family of functions
  */
 UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','$location','UploadService',function ($scope,$rootScope,$http,$location,UploadService) {
     $scope.uploadNotecardFile=function() {
@@ -749,7 +750,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
     
     $scope.getAllNotecards=function() {
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
-	    console.log(data);
+//	    console.log(data);
 	    $scope.notecards=data;
 	    $scope.viewNotecardList=true;
 	});
@@ -759,14 +760,11 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	console.log("Getting all the notecards for "+$rootScope.globals.currentUser.username);
         $scope.username=$rootScope.globals.currentUser.username;
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
-	    console.log(data);
+//	    console.log(data);
 	    $scope.notecards=data;
 	});	
         $scope.authenticated=$rootScope.authenticated;
     });
-    
-
-    //Get all the notecards
     
     $scope.submitNewNotecard=function(){
 	var file=$scope.newNotecardFile;
@@ -777,11 +775,13 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	notecard.notecardTitle=$scope.newNotecard.notecardTitle;
 	notecard.notecardContent=$scope.newNotecard.notecardContent;
 	notecard.permission="Private";
+	notecard.sharedList=$scope.newNotecard.sharedList;
+	notecard.owner=$rootScope.globals.currentUser.username;
 	console.log("Notecard:",notecard.notecardTitle,notecard.notecardContent);
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
 	    //We created the notecard successfully.
             success(function(theNotecard){
-		console.log(theNotecard);
+//		console.log(theNotecard);
 		$scope.newNotecard={};		
 		//If we need to upload a file, do so now.
 		if(file!=null) {
@@ -802,9 +802,25 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 		}; //Use ; here to force sequential execution, hopefully.
 
                 console.log("Notecard uploaded");
+		
+		//Share notecard
+		
+		//Split the shared list (CSV)
+		console.log("Shared List:"+notecard.sharedList);
+		if(notecard.sharedList != null && notecard.sharedList.length > 0) {
+		    var sharedListArray=(notecard.sharedList).split(",");
+		    console.log("Shared list array:"+sharedListArray);
+		    for(var i=0;i<sharedListArray.length;i++) {
+			console.log(sharedListArray[i]);
+			//Put the notecards in each user's collection
+			notecard.sharedFrom=$rootScope.globals.currentUser.username;
+			$scope.depositSharedNoteCard(notecard,sharedListArray[i]);
+		    }
+		}
+		
 		//Get the collection of notecards
 		$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
-		    console.log(data);
+		    //		    console.log(data);
 		    $scope.notecards=data;
 		});	
 		
@@ -812,6 +828,18 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	    //Something went wrong
 	    error(function(data){
 		console.error("Could not create the new notecard");
+	    });
+    }
+    
+    $scope.depositSharedNoteCard=function(notecard,username){
+	console.log("Depositing notecard: ",notecard,username);
+	$http.post("/notecards/"+username,notecard).
+	    success(function(theNotecard){
+		console.log("Notecard shared with ",username);
+		console.log(theNotecard);
+	    }).
+	    error(function(data){
+		console.error("Couldn't post shared notecard:"+data);
 	    });
     }
 
@@ -826,14 +854,58 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
                 console.log("Could not load the notecard");
             });
     }
+    
+    $scope.shareNotecard=function(notecardId, newSharedList) {
+	console.log("Sharing notecard:"+notecardId+" "+newSharedList);
+	$http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+	    success(function(notecard) {
+		delete notecard['_id'];
+		console.log(notecard);
+		if(notecard.sharedList != null) {
+		    notecard.sharedList=notecard.sharedList+","+newSharedList
+		}
+		else {
+		    notecard.sharedList=newSharedList;
+		}
+		
+		$http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
+		    success(function(data){
+			console.log("Updating shared list for notecard ",notecardId);
+			$scope.notecard=data;
+			//Deposit it into the updated list. We only need to update
+			//the new users
+			console.log("Shared List:"+newSharedList);
+			if(newSharedList != null && newSharedList.length > 0) {
+			    var sharedListArray=(newSharedList).split(",");
+			    console.log("Shared list array:"+sharedListArray);
+			    for(var i=0;i<sharedListArray.length;i++) {
+				console.log(sharedListArray[i]);
+				//Put the notecards in each user's collection
+				notecard.sharedFrom=$rootScope.globals.currentUser.username;
+				$scope.depositSharedNoteCard(notecard,sharedListArray[i]);
+			    }
+			}
+		    }).
+		    error(function(data){
+			console.log("Error updating card:",data);
+		    });
+	    }).
+	    error(function(data){
+		console.log("Error getting card:",data);
+	    });
+	$scope.newNotecard={};
+	
+    }
+    
     $scope.publishNotecard=function(notecardId) {
-	console.log("Publishing notecard ",notecardId);
 	if($scope.publishNotecardCheckboxModel){
 	    $http.get('projects/'+$rootScope.globals.currentUser.username+"/"+notecardId).
 		success(function(notecard) {
 		    notecard.permission="Published";
 		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
 			success(function(data){
+			    console.log("Publishing notecard ",notecardId);
+			    $scope.notecard=data;
 			}).
 			error(function(data){
 			    console.log("Error updating card:",data);
@@ -850,6 +922,8 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 		    notecard.permission="Private";
 		    $http.put("/notecards/"+$rootScope.globals.currentUser.username+"/"+notecardId,notecard).
 			success(function(data){
+			    console.log("Notecard "+notecardId+" has been unpublished");
+			    $scope.notecard=data;
 			}).
 			error(function(data){
 			    console.log("Error updating card:",data);
@@ -866,7 +940,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	console.log("Notecard id:",$scope.theNotecard);
 	$http.get('projects/'+$scope.theNotecard.username+"/"+$scope.theNotecard.notecardId).
 	    success(function(notecard) {
-		console.log("Got the notecard:",notecard);
+		//console.log("Got the notecard:",notecard);
 		$scope.theNotecard=notecard;
 	    }).
 	    error(function(data){

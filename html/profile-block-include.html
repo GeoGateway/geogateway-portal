@@ -95,9 +95,10 @@ $(document).ready(function() {
     // listener for TOOL PANEL TABS
     //TODO: need to replace this with Angular methods.
     $(document).ready(function() {
-	$('.tab-button').click(function() {
+    $('.tab-button').click(function() {
+    console.log("Ta clicked");
             if($(this).hasClass('profile-tab-button'))
-            {
+    {
 		$(this).parent().parent().children().removeClass('active');
 		$(this).parent().addClass('active');
 		updateProfileTabPanel();
@@ -108,10 +109,12 @@ $(document).ready(function() {
 
 function updateProfileTabPanel() {
     var active_tab = $('.profile-tabs').children('.active').children().val();
-    $('.profile-panel').children('.active').removeClass('active').addClass('inactive');
-    $('.profile-panel').children('#' + active_tab).removeClass('inactive').addClass('active');
-};
-
+    $('.profile-panel').children().children('.active').removeClass('active').addClass('inactive');
+    $('.profile-panel').children().children('#' + active_tab).removeClass('inactive').addClass('active');
+    console.log("Active tab:"+active_tab);
+    console.log($('.profile-tabs').children('.inactive').children().val());
+    };
+    
 </script>
 
 
@@ -128,59 +131,47 @@ function updateProfileTabPanel() {
     </div>
   </div>
   
-  
-  <!-- profile-panel tabs -->
-  <div class="profile-panel" ng-show='isAuthenticated()'>
-    <ul type="none" class="profile-tabs">
+  <div ng-show='isAuthenticated()'>
+    <!-- profile tabs -->
+    <ul class="profile-tabs">
       <li class="active">
 	<button class="tab-button profile-tab-button" value="notecards">
           <span class="glyphicon glyphicon-file"> </span>
 	</button>
       </li>
-      <!--
-	  <li>
-	    <button class="tab-button profile-tab-button" value="colleagues">
-              <span class="glyphicon glyphicon-user"> </span>
-	    </button>
-	  </li>
-	  -->
-
+      
       <li>
-	<button class="tab-button profile-tab-button" value="newsfeed">
-          <span class="glyphicon glyphicon-globe"> </span>
+	<button class="tab-button profile-tab-button" value="shared-notecards">
+            <span class="glyphicon glyphicon-globe"> </span>
 	</button>
       </li>
-
       
       <li>
 	<button class="tab-button profile-tab-button" value="settings">
-          <span class="glyphicon glyphicon-cog"> </span>
+            <span class="glyphicon glyphicon-log-out"> </span>
 	</button>
       </li>
     </ul>
     
+    <!-- Profile panels -->
     <div class="tab-pane profile-tab-pane active" id="notecards" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">
 	Notecards
       </div>
-      <!--      <div class="profile-panel-divider"></div> -->
-      <!--      <div class="divider"></div> -->
       <form class="new-notecard-form">
-	<div class="notecard_form.title">
+	<div class="notecard-title">
 	  Title: <input type="text" ng-model="newNotecard.notecardTitle" id="notecardTitle"/>
 	</div>
-	<div class="notecard_form.content">
+	<div class="notecard-content">
 	  Content: <textarea ng-model="newNotecard.notecardContent" id="notecardContent"></textarea>
+	</div>
+	<div class="notecard-content">
+	  Share: <input type="text" ng-model="newNotecard.sharedList" id="notecardSharedList">
 	</div>
 	<div>
 	  <div>
             <input type="file" file-model="newNotecardFile">
           </div>
-	  <!--
-          <div>
-            <button class="btn btn-sm btn-primary" ng-click="uploadNotecardFile()">Upload File</button>
-          </div>
-	  -->
 	</div>
 	<div class="log-tools">
           <button type="submit" class="btn btn-default new-notecard-submit-btn" ng-click="submitNewNotecard()">Post</button>
@@ -193,124 +184,85 @@ function updateProfileTabPanel() {
 	<table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive"> 
           <thead>
             <tr>
-              <th>Notecard Title</th>
-              <th>Creation Time</th>
-              <th>View</th>
+	      <th>Notecard Title</th>
+	      <th>Creation Time</th>
+	      <th>View</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="notecard in notecards | filter:query|orderBy:orderProp">
-              <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
-              <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
-              <td>
+	      <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
+	      <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
+	      <td>
 		<button class="btn btn-info" ng-click="viewNotecard(notecard._id)">View</button>
-              </td>
+	      </td>
             </tr>
           </tbody>
 	</table>
       </div>
       <div id="viewSelectedNotecard" ng-show='viewNotecardList==false'>
         <button class="btn btn-success" ng-click="getAllNotecards()">View List </button>
-        <div>
-          <input type="checkbox" ng-click="publishNotecard(notecard._id)" ng-checked="notecard.permission=='Published'" ng-model="publishNotecardCheckboxModel"> Publish Notecard  
-        </div>
+	
         <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
           <tbody>
 	    <tr>
-              <td>Id</td>
-              <td style="word-wrap:break-word;">{{notecard._id}}</td>
+	      <td>Id</td>
+	      <td style="word-wrap:break-word;">{{notecard._id}}</td>
             </tr>
             <tr>
-              <td>Title</td>
-              <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
+	      <td>Title</td>
+	      <td style="word-wrap:break-word;">{{notecard.notecardTitle}}</td>
             </tr>
             <tr>
-              <td>Content</td>
-              <td style="word-wrap:break-word;">{{notecard.notecardContent}}</td>
+	      <td>Content</td>
+	      <td style="word-wrap:break-word;">{{notecard.notecardContent}}</td>
             </tr>
 	    <tr ng-show='notecard.attachedFileUrl != null'>
-              <td>Attached File</td>
-              <td><a href="{{notecard.attachedFileUrl}}" target="_blank">File</a></td>
+	      <td>Attached File</td>
+	      <td><a href="{{notecard.attachedFileUrl}}" target="_blank">File</a></td>
 	    </tr>
             <tr>
-              <td>Permission</td>
-              <td style="word-wrap:break-word;">{{notecard.permission}}</td>
+	      <td>Creation Time</td>
+	      <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
             </tr>
-            <tr>
-              <td>Creation Time</td>
-              <td style="word-wrap:break-word;">{{notecard.creationTime}}</td>
-            </tr>
+	    <tr>
+	      <td>Owner</td>	      
+	      <td style="word-wrap:break-word;">{{notecard.owner}}</td>
+	    </tr>
+	    <tr>
+	      <td>Shared</td>
+	      <td style="word-wrap:break-word;">{{notecard.sharedList}}</td>
+	    </tr>
           </tbody>
         </table>
+        <div>
+          Share Notecard: <input type="text" ng-model="newNotecard.newShares"> 
+	  <button class="btn btn-success" ng-click="shareNotecard(notecard._id,newNotecard.newShares)">Share</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane profile-tab-pane active" id="shared-notecards" ng-controller="NotecardController">
+      <div class="profile-tab-panel-header">
+	Shared Notecards
       </div>
     </div>
     
-    <div class="tab-pane profile-tab-pane inactive" id="newsfeed" ng-controller="NotecardController">
-      <div class="profile-tab-panel-header">
-	Public Notecards
-      </div>
-      <div class="profile-panel-divider"></div>
-      <div class="newsfeed-container"></div>
-      <form>
-	<table>
-	  <tr>
-	    <td>
-	      Notecard ID: <input type="text" ng-model="theNotecard.notecardId" id="notecardId"/>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td>
-	      Notecard Username: <input type="text" ng-model="theNotecard.username" id="notecardUsername"/>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td>
-	      <button type="submit" class="btn btn-success" ng-click="getTheNotecard()">Get Notecard</button>
-	    </td>
-	  </tr>
-	  </table>
-      </form>
-      
-      <div class="panel-body">
-        <table class="table table-striped table-bordered table-condensed table-responsive">
-          <tbody>
-            <tr>
-              <td>Title</td>
-              <td>{{theNotecard.notecardTitle}}</td>
-            </tr>
-            <tr>
-              <td>Content</td>
-              <td>{{theNotecard.notecardContent}}</td>
-            </tr>
-	    <tr ng-show='notecard.attachedFileUrl != null'>
-              <td>Attached File</td>
-              <td><a href="{{theNotecard.attachedFileUrl}}" target="_blank">File</a></td>
-	    </tr>
-            <tr>
-              <td>Permission</td>
-              <td>{{theNotecard.permission}}</td>
-            </tr>
-            <tr>
-              <td>Creation Time</td>
-              <td>{{theNotecard.creationTime}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="user-info" ng-show='isAuthenticated()'>
-      {{username}}
-      <form name='logoutForm' 
-            ng-submit='logoutGeo()' 
-            ng-show='isAuthenticated()'>
-	<div class="auth-btn-container">
-	  <button type="submit" class="profile-tab-button">
-	    <span class="glyphicon glyphicon-log-out"> Logout</span>
-	  </button>
+    <div class="tab-pane profile-tab-pane inactive" id="settings" ng-controller="NotecardController">
+      <div class="profile-tab-panel-header">    	  
+	  <div style="text-align:left; font-size:12px">{{username}}<div>
+	  <form style="float:left" name='logoutForm' 
+		ng-submit='logoutGeo()' 
+		ng-show='isAuthenticated()'>
+	    <div class="auth-btn-container">
+	      <button type="submit" class="profile-tab-button">
+		<span class="glyphicon glyphicon-log-out"> Logout</span>
+	      </button>
+	    </div>
+	  </form>
 	</div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
-  
-  
+

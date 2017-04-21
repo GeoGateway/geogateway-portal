@@ -20,7 +20,7 @@ CollectionUtils.prototype.getCollection = function(collectionName, callback) {
 	 });
 };
 
-//find all objects for a collection
+//Find all objects for a collection
 CollectionUtils.prototype.findAll = function(collectionName, callback) {
     this.getCollection(collectionName, function(error, the_collection) { 
         if( error ) callback(error)
@@ -32,6 +32,20 @@ CollectionUtils.prototype.findAll = function(collectionName, callback) {
     });
 };
 
+//Return a collection matching general search criteria
+/**
+CollectionUtils.prototype.searchFor = function(collectionName, keyName, searchString, callback) {
+    this.getCollection(collectionName, function(error, the_collection) {
+	var searchArg="{"+keyName+":"+searchString+"}";
+        if( error ) callback(error)
+        else {
+	    the_collection.find(searchString).toArray(function(error, results) { 
+		callback(error, results)
+	    });
+	}
+    });
+};
+*/
 
 //Find a specific object
 CollectionUtils.prototype.getById = function(collectionName, id, callback) { 
