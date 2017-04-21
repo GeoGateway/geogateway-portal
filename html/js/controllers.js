@@ -776,6 +776,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	notecard.notecardContent=$scope.newNotecard.notecardContent;
 	notecard.permission="Private";
 	notecard.sharedList=$scope.newNotecard.sharedList;
+	notecard.owner=$rootScope.globals.currentUser.username;
 	console.log("Notecard:",notecard.notecardTitle,notecard.notecardContent);
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
 	    //We created the notecard successfully.
