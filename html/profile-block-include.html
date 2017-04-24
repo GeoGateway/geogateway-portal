@@ -96,7 +96,6 @@ $(document).ready(function() {
     //TODO: need to replace this with Angular methods.
     $(document).ready(function() {
     $('.tab-button').click(function() {
-    console.log("Ta clicked");
             if($(this).hasClass('profile-tab-button'))
     {
 		$(this).parent().parent().children().removeClass('active');
@@ -111,8 +110,8 @@ function updateProfileTabPanel() {
     var active_tab = $('.profile-tabs').children('.active').children().val();
     $('.profile-panel').children().children('.active').removeClass('active').addClass('inactive');
     $('.profile-panel').children().children('#' + active_tab).removeClass('inactive').addClass('active');
-    console.log("Active tab:"+active_tab);
-    console.log($('.profile-tabs').children('.inactive').children().val());
+    //console.log("Active tab:"+active_tab);
+    //console.log($('.profile-tabs').children('.inactive').children().val());
     };
     
 </script>
@@ -242,9 +241,69 @@ function updateProfileTabPanel() {
       </div>
     </div>
 
+    <!-- Shared Notecards -->
     <div class="tab-pane profile-tab-pane active" id="shared-notecards" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">
 	Shared Notecards
+      </div>
+      <div class="profile-panel-divider"></div>
+      <div class="notecard-container"></div>
+      <div id="theBigSharedNotecardList" ng-show='viewSharedNotecardList==true'>
+	<button class="btn btn-info" ng-click="getSharedNotecards()">Refresh</button>
+	<table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive"> 
+          <thead>
+            <tr>
+	      <th>Notecard Title</th>
+	      <th>Creation Time</th>
+	      <th>View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="sharedNotecard in sharedNotecards | filter:query|orderBy:orderProp">
+	      <td style="word-wrap:break-word;">{{sharedNotecard.notecardTitle}}</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard.creationTime}}</td>
+	      <td>
+		<button class="btn btn-info" ng-click="viewSharedNotecard(sharedNotecard._id)">View</button>
+	      </td>
+            </tr>
+          </tbody>
+	</table>
+      </div>
+      <div id="viewSelectedNotecard" ng-show='viewSharedNotecardList==false'>
+        <button class="btn btn-success" ng-click="getSharedNotecards()">View List </button>
+	
+        <table style="table-layout:fixed; width:100%" class="table table-striped table-bordered table-condensed table-responsive">
+          <tbody>
+	    <tr>
+	      <td>Id</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard._id}}</td>
+            </tr>
+            <tr>
+	      <td>Title</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard.notecardTitle}}</td>
+            </tr>
+            <tr>
+	      <td>Content</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard.notecardContent}}</td>
+            </tr>
+	    <tr ng-show='notecard.attachedFileUrl != null'>
+	      <td>Attached File</td>
+	      <td><a href="{{notecard.attachedFileUrl}}" target="_blank">File</a></td>
+	    </tr>
+            <tr>
+	      <td>Creation Time</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard.creationTime}}</td>
+            </tr>
+	    <tr>
+	      <td>Owner</td>	      
+	      <td style="word-wrap:break-word;">{{sharedNotecard.owner}}</td>
+	    </tr>
+	    <tr>
+	      <td>Shared</td>
+	      <td style="word-wrap:break-word;">{{sharedNotecard.sharedList}}</td>
+	    </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     

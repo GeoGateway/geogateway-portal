@@ -219,6 +219,23 @@ app.get('/notecards/:collection/:document', function(req,res){
 		  }
 	 });
 });
+
+//Gets all matching documents
+app.get('/notecards/:collection/:keyName/:searchString', function(req,res){
+    console.log("Query values",req.params.collection,req.params.keyName,req.params.searchString);
+    collectionUtils.searchFor(req.params.collection, req.params.keyName, req.params.searchString, function(error,obj){
+	//		  handleResponse(error, obj, res);
+	if(error) {
+	    console.error(error.stack);
+	    res.set('Content-Type','application/json');
+	    res.status(400).send(error);
+	}
+	else {
+	    res.set('Content-Type','application/json');
+	    res.status(200).send(obj);
+	}
+    });
+});
 //--------------------------------------------------
 
 

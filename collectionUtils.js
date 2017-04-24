@@ -33,19 +33,20 @@ CollectionUtils.prototype.findAll = function(collectionName, callback) {
 };
 
 //Return a collection matching general search criteria
-/**
 CollectionUtils.prototype.searchFor = function(collectionName, keyName, searchString, callback) {
     this.getCollection(collectionName, function(error, the_collection) {
-	var searchArg="{"+keyName+":"+searchString+"}";
+	var searchObj=new Object;
+	searchObj[keyName]=searchString;
+	console.log("Search Object",searchObj,keyName,searchString);
         if( error ) callback(error)
         else {
-	    the_collection.find(searchString).toArray(function(error, results) { 
+	    the_collection.find(searchObj).toArray(function(error, results) { 
 		callback(error, results)
 	    });
 	}
     });
 };
-*/
+
 
 //Find a specific object
 CollectionUtils.prototype.getById = function(collectionName, id, callback) { 

@@ -100,26 +100,7 @@ UserProjectApp.controller('LoginController',function(auth,store,$scope,$rootScop
             console.log("There was an error logging in", error);
         });
     } 
-  
-    //Old code, worked with pre-main.html versions of the user interface.
-    /**
-    $scope.login=function(){
-        AuthenticationServices.clearCredentials2();
-        $scope.dataLoading=true;
-        AuthenticationServices.doLogin2($scope.username, $scope.password, function(response){
-            if(response.success) {
-                AuthenticationServices.setCredentials2($scope.username, $scope.password);
-                $location.path('/projects');
-            } else {
-                console.error("Authentication error");
-                $scope.error = response.message;
-                $scope.dataLoading = false;
-            }
-        });
-        $rootScope.authenticated=$scope.authenticated;
-    }
-    */
-    
+      
     //This is the code that handles login for master.html.
     $scope.loginGeo=function(){
 //        console.log("In loginGeo:"+$scope.username);
@@ -745,6 +726,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
     
     $scope.orderProp="-_id";
     $scope.viewNotecardList=true;
+    $scope.viewSharedNotecardList=true;
 
     $scope.showMyNotecards=true;
     
@@ -760,11 +742,31 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	console.log("Getting all the notecards for "+$rootScope.globals.currentUser.username);
         $scope.username=$rootScope.globals.currentUser.username;
 	$http.get("/notecards/"+$rootScope.globals.currentUser.username).success(function(data){
-//	    console.log(data);
 	    $scope.notecards=data;
-	});	
+	});
+	var keyName="sharedList";
+	var searchString=$rootScope.globals.currentUser.username;	
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username+"/"+keyName+"/"+searchString).
+	    success(function(data) {
+		$scope.sharedNotecards=data;
+	    }).
+	    error(function(data){
+		console.log("No shared notecards");
+	    });
+	
         $scope.authenticated=$rootScope.authenticated;
     });
+    
+    $scope.getSharedNotecards=function() {
+	//Finding cards that have user's ID in the shared list.
+	var keyName="sharedList";
+	var searchString=$rootScope.globals.currentUser.username;
+	$http.get("/notecards/"+$rootScope.globals.currentUser.username+"/"+keyName+"/"+searchString)
+	    .success(function(data){
+		$scope.sharedNotecards=data;
+		$scope.viewSharedNotecardList=true;		
+	    });
+    }
     
     $scope.submitNewNotecard=function(){
 	var file=$scope.newNotecardFile;
@@ -847,8 +849,21 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	$http.get('notecards/'+$rootScope.globals.currentUser.username+"/"+notecardId).
 	    success(function(notecard) {
 		$scope.viewNotecardList=false;
+		$scope.viewSharedNotecardList=false;				
                 console.log("Got the notecard:"+JSON.stringify(notecard));
                 $scope.notecard=notecard;
+            }).
+            error(function(data){
+                console.log("Could not load the notecard");
+            });
+    }
+    $scope.viewSharedNotecard=function(notecardId) {
+	$http.get('notecards/'+$rootScope.globals.currentUser.username+"/"+notecardId).
+	    success(function(notecard) {
+		$scope.viewNotecardList=false;
+		$scope.viewSharedNotecardList=false;				
+                console.log("Got the notecard:"+JSON.stringify(notecard));
+                $scope.sharedNotecard=notecard;
             }).
             error(function(data){
                 console.log("Could not load the notecard");
