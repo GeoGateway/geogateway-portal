@@ -673,22 +673,17 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable+='<tr">'; //Start second embedded table row
         dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
         dynatable+='</tr>'; //Close embedded table's second row
-        // add third row for rating
-        dynatable+='<tr class="uavsar-tr">';
-        dynatable+='<td>';
-        dynatable+=displayRating(datasets[index1]['rating']);
-        dynatable+='</td>';
-        dynatable+="<td>"+"rate it"+"</td>";
-        dynatable+='</tr>' //close embedded table's third row
         dynatable+='</table>'; //Close the embedded table
         dynatable+='</div>'
+        stardiv='<div>'+displayRating(datasets[index1]['rating']);
+        stardiv+="&nbsp;".repeat(3)+"rate it"+"</div>";
         
         $('#uavsar').append('\
 <div class="dataset">\
 <input class="dataset-checkbox" id="sarDisplayOrNot_'+datasets[index1]['uid']+'" type="checkbox" name="dataset" value="' + datasets[index1]['uid']+' " + onClick="sarCheckboxAction('+datasets[index1]['uid']+')" checked/>\
 <!--<a href="#" onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">-->\
 <div onClick="selectDataset(this,' + datasets[index1]['uid'] + ', ' + dataname_str + ','+datasets[index1]['heading']+','+radarDirectionStr+');">' + dynatable + '</div>\
-</div>');
+</div>'+stardiv);
         viewDataset(datasets[index1]['uid'], datasets[index1]['dataname'], true);
     };
     updateVisibleDatasets();
