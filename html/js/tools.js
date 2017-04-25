@@ -670,9 +670,16 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable+='<tr class="uavsar-tr">'; //Create row in embedded table
         dynatable+='<th colspan="2" class="uavsar-th">'+datasets[index1]['dataname']+'</th>'; //Add header to table row
         dynatable+='</tr>'; //Close embedded table's header row
-        dynatable+='<tr class="uavsar-tr">'; //Start second embedded table row
+        dynatable+='<tr">'; //Start second embedded table row
         dynatable+='<td>'+datasets[index1]['time1'] +'</td><td>'+datasets[index1]['time2']+'</td>'; //Display time1 and time2 in embedded table's second row
         dynatable+='</tr>'; //Close embedded table's second row
+        // add third row for rating
+        dynatable+='<tr class="uavsar-tr">';
+        dynatable+='<td>';
+        dynatable+=displayRating(datasets[index1]['rating']);
+        dynatable+='</td>';
+        dynatable+="<td>"+"rate it"+"</td>";
+        dynatable+='</tr>' //close embedded table's third row
         dynatable+='</table>'; //Close the embedded table
         dynatable+='</div>'
         
@@ -1381,4 +1388,15 @@ function hidePlotPanel() {
 // close profile tools
 function closeProfileTool() {
     alert("close profile tool");
+}
+
+// display rating as stars
+function displayRating(rating) {
+    var fullstar='<span class="glyphicon glyphicon-star"></span>';
+    var emptystar='<span class="glyphicon glyphicon-star-empty"></span>';
+    var value = parseInt(rating);
+    var stars;
+    if (value>0) {stars="rating: "} else {stars="no rating "};
+    stars+=fullstar.repeat(value)+emptystar.repeat(5-value);
+    return stars;
 }
