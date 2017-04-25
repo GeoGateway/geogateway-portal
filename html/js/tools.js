@@ -675,7 +675,7 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable+='</tr>'; //Close embedded table's second row
         dynatable+='</table>'; //Close the embedded table
         dynatable+='</div>'
-        stardiv='<div>'+displayRating(datasets[index1]['rating']);
+        stardiv='<div>'+displayRating(datasets[index1]['uid'],datasets[index1]['rating']);
         stardiv+="&nbsp;".repeat(3)+"rate it"+"</div>";
         
         $('#uavsar').append('\
@@ -1386,12 +1386,15 @@ function closeProfileTool() {
 }
 
 // display rating as stars
-function displayRating(rating) {
-    var fullstar='<span class="glyphicon glyphicon-star"></span>';
-    var emptystar='<span class="glyphicon glyphicon-star-empty"></span>';
+function displayRating(uid,rating) {
+    var fullstar='<span class="glyphicon glyphicon-star" style="color:orange"></span>';
+    var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
     var value = parseInt(rating);
     var stars;
     if (value>0) {stars="rating: "} else {stars="no rating "};
+    stars+='<span class="badge">';
     stars+=fullstar.repeat(value)+emptystar.repeat(5-value);
+    stars+='</span>';
     return stars;
 }
+
