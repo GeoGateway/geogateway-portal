@@ -1402,4 +1402,33 @@ function displayRating(uid,rating) {
 //rateUAVSAR
 function rateUAVSAR(uid,dataname) {
     //alert(dataname);
+        html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
+    html += '<div class="modal-dialog">';
+    html += '<div class="modal-content">';
+    html += '<div class="modal-header">';
+    html += '<a class="close" data-dismiss="modal">×</a>';
+    html += '<h4>'+dataname+'</h4>'
+    html += '</div>';
+    html += '<div class="modal-body">';
+    html +='<select id="selectrating" name="selectrating" class="form-control">';
+    html +='<option value="5">5 Stars</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star</option></select>';
+    html +='<br>';
+    html +='<textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
+    html+= '<div class="checkbox"><label><input id="rating_usertype"type="checkbox" value="">rate as anonymous user</label></div>';
+    html += '</div>';
+    html += '<div class="modal-footer">';
+    html+='<input type="submit" class="btn btn-primary" value="Submit">'
+    html += '<span class="btn btn-primary" data-dismiss="modal">Close</span>';
+    html += '</div>';  // content
+    html += '</div>';  // dialog
+    html += '</div>';  // footer
+    html += '</div>';  // modalWindow
+    $('body').append(html);
+    $("#dynamicModal").modal();
+    $("#dynamicModal").modal('show');
+
+    $('#dynamicModal').on('hidden.bs.modal', function (e) {
+        $(this).remove();
+    });
+
 }
