@@ -676,7 +676,7 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable+='</table>'; //Close the embedded table
         dynatable+='</div>'
         stardiv='<div>'+displayRating(datasets[index1]['uid'],datasets[index1]['rating']);
-        stardiv+="&nbsp;".repeat(3)+"rate it"+"</div>";
+        stardiv+="&nbsp;".repeat(3)+"</div>";
         
         $('#uavsar').append('\
 <div class="dataset">\
