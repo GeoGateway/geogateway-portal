@@ -574,11 +574,11 @@ app.get('/uavsar_flight_search/',function(req,res) {
 });
         
 app.get('/uavsar_query/',function(req,res){
-//    console.log("Query: ",req.query);
+    //console.log("Query: ",req.query);
 //    var geoServerUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?geometry=';
     var geoServerUrl=uavsarSearchUrl+'geometry=';
     var queryStr=req.query.querystr;
-//    console.log(JSON.stringify(queryStr));
+    //console.log(JSON.stringify(queryStr));
 
     restClient.get(geoServerUrl+queryStr, function(data, response){
         res.status(200).send(data);
