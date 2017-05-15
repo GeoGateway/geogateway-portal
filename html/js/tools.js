@@ -842,10 +842,10 @@ function uavsarquery(querystr) {
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
 	    datasetsStr;
-//	    console.log("Query:"+querystr);
-	    console.log("Data:"+datasetsStr);
-            uavsarDataSet=jQuery.parseJSON(datasetsStr);
-            displaySelectedImages(uavsarDataSet);
+        //console.log("Query:"+querystr);
+	    //console.log("Data:"+datasetsStr);
+        uavsarDataSet=jQuery.parseJSON(datasetsStr);
+        displaySelectedImages(uavsarDataSet);
 	});
 }
 
@@ -1418,10 +1418,10 @@ function rateUAVSAR(uid,dataname) {
     html +='<option value="5">5 Stars</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star</option></select>';
     html +='<br>';
     html +='<textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
-    html+= '<div class="checkbox"><label><input id="rating_usertype"type="checkbox" value="">rate as anonymous user</label></div>';
+    html+= '<div class="checkbox"><label><input id="rating_usertype" type="checkbox" value="">rate as anonymous user</label></div>';
     html += '</div>';
     html += '<div class="modal-footer">';
-    html+='<input type="submit" class="btn btn-primary" value="Submit">'
+    html+='<input type="submit" class="btn btn-primary" value="Submit" onClick=submitUserRating("'+uid+'",'+'"'+dataname+'")>';
     html += '<span class="btn btn-primary" data-dismiss="modal">Close</span>';
     html += '</div>';  // content
     html += '</div>';  // dialog
@@ -1435,4 +1435,12 @@ function rateUAVSAR(uid,dataname) {
         $(this).remove();
     });
 
+}
+
+function submitUserRating(uid,dataname) {
+    var rating = $('#selectrating').val();
+    var comments = $('#rating_comment').val();
+    var nonameuser = $('#rating_usertype').val();
+    alert(nonameuser);
+    $("#dynamicModal").modal("hide");
 }
