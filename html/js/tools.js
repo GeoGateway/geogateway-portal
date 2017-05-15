@@ -1387,11 +1387,15 @@ function closeProfileTool() {
 
 // display rating as stars
 function displayRating(uid,rating) {
+
+    //MEP: hard-setting rating to "0" until we can implement properly.
+    rating=0;
     var fullstar='<span class="glyphicon glyphicon-star" style="color:orange"></span>';
     var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
     var value = parseInt(rating);
     var stars;
     if (value>0) {stars="rating: "} else {stars="no rating "};
+    
     stars+='<span class="badge">';
     stars+=fullstar.repeat(value)+emptystar.repeat(5-value);
     stars+='</span>';
