@@ -1430,6 +1430,9 @@ function displayRating(uid,rating) {
 
 
 //rateUAVSAR
+//3: GREEN: Good: Excellent product with few or no known flaws
+//2: YELLOW: Caution Good over small local areas, long wavelength error over larger area
+//1: RED: Bad: Severe problems. Recommend not using
 function rateUAVSAR(uid,dataname) {
     //alert(dataname);
         html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
@@ -1439,11 +1442,13 @@ function rateUAVSAR(uid,dataname) {
     html += '<a class="close" data-dismiss="modal">×</a>';
     html += '<h4>'+dataname+'</h4>';
     html += '</div>';
-    html += '<div class="modal-body">';
+    html += '<div class="modal-body"><label for="comment">Rating:</label>';
     html +='<select id="selectrating" name="selectrating" class="form-control">';
-    html +='<option value="5">5 Stars</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star</option></select>';
+    html +='<option value="3">3 Stars: Excellent product with few or no known flaws</option>';
+    html +='<option value="2">2 Stars: Good over small local areas, long wavelength error over larger area</option>';
+    html +='<option value="1">1 Star: Severe problems. Recommend not using</option></select>';
     html +='<br>';
-    html +='<textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
+    html +='<label for="comment">Comment:</label><textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
     html+= '<div class="checkbox"><label><input id="rating_usertype" type="checkbox" value="">rate as anonymous user</label></div>';
     html += '</div>';
     html += '<div class="modal-footer">';
