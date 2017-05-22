@@ -847,17 +847,10 @@ function uavsarquery(querystr) {
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
 	    datasetsStr;
-<<<<<<< HEAD
         //console.log("Query:"+querystr);
 	    //console.log("Data:"+datasetsStr);
         uavsarDataSet=jQuery.parseJSON(datasetsStr);
         displaySelectedImages(uavsarDataSet);
-=======
-//	    console.log("Query:"+querystr);
-//	    console.log("Data:"+datasetsStr);
-            uavsarDataSet=jQuery.parseJSON(datasetsStr);
-            displaySelectedImages(uavsarDataSet);
->>>>>>> bf0a4fb09a247ef44b09c1b92afd824d55631493
 	});
 }
 
