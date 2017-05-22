@@ -1474,14 +1474,13 @@ function rateUAVSAR(uid,dataname) {
 function submitUserRating(uid,dataname) {
     var rating = $('#selectrating').val();
     var comments = $('#rating_comment').val();
-    var nonameuser = $('#rating_usertype').prop('checked');
     // get real user name:
     var username;
     if (document.getElementById("logged-in-user")) {
         username = document.getElementById("logged-in-user").innerHTML;
     } else {username = "anonymous";};
     if ($('#rating_usertype').prop('checked')) {
-        alert('anonymous');}
-        else {alert(username);};
+        username = 'anonymous';};
+    alert(username);
     $("#dynamicModal").modal("hide");
 }
