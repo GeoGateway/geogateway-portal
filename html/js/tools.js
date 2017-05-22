@@ -43,9 +43,8 @@ function filterUavsarImagesByDate(selectedDate) {
 
 // deletes all geometry markings made for UAVSAR
 function deleteAllShape() {
-//    console.log("Calling deleteAllShape");
-    for (var i=0; i < all_overlays.length; i++)
-    {
+    //    console.log("Calling deleteAllShape");
+    for (var i=0; i < all_overlays.length; i++) {
         all_overlays[i].overlay.setMap(null);
     }
     all_overlays = [];
@@ -58,16 +57,17 @@ function deleteAllKml() {
             //console.log(wmsgf9_samples[uid]);
             wmsgf9_samples[uid][0].setMap(null);
         }
-//        wmsgf9_samples.length = 0;
+	//        wmsgf9_samples.length = 0;
         wmsgf9_samples={};
     }
     // remove direction kml if loaded
     if (typeof wmsgf9_select_direction_kml !== 'undefined') {
-        wmsgf9_select_direction_kml.setMap(null); }
+        wmsgf9_select_direction_kml.setMap(null);
+    }
     // remove legend kml if loaded
     if (typeof wmsgf9_select_legend_kml !== 'undefined') {
-        wmsgf9_select_legend_kml.setMap(null); }
-
+        wmsgf9_select_legend_kml.setMap(null);
+    }
 }
 
 //START UAVSAR
@@ -96,14 +96,14 @@ function setup_UAVSAR() {
     UAVSARDrawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
         drawingControlOptions:{
-
-        position: google.maps.ControlPosition.TOP_CENTER,
-
-        drawingModes: [
-            google.maps.drawing.OverlayType.MARKER,
-            google.maps.drawing.OverlayType.POLYLINE,
-            google.maps.drawing.OverlayType.POLYGON,
-            google.maps.drawing.OverlayType.RECTANGLE]
+	    
+            position: google.maps.ControlPosition.TOP_CENTER,
+	    
+            drawingModes: [
+		google.maps.drawing.OverlayType.MARKER,
+		google.maps.drawing.OverlayType.POLYLINE,
+		google.maps.drawing.OverlayType.POLYGON,
+		google.maps.drawing.OverlayType.RECTANGLE]
         },
         markerOptions: {
             draggable: false
@@ -121,19 +121,23 @@ function setup_UAVSAR() {
     });
 
     drawing_listener = google.maps.event.addListener(UAVSARDrawingManager, 'overlaycomplete', function(e) {
-//        console.log("Calling Drawing Listener");
+	//        console.log("Calling Drawing Listener");
         deleteAllShape();
         all_overlays.push(e);
         UAVSARDrawingManager.setDrawingMode(null);
         var x = document.getElementById('UAVSAR-geometry');
-        if (e.type == "marker")
-        {x.innerHTML = "Point: " + e.overlay.getPosition();};
-        if (e.type == "polyline")
-            {x.innerHTML = "Line: " + e.overlay.getPath().getArray();};
-        if (e.type == "polygon")
-            {x.innerHTML = "Polygon: " + e.overlay.getPath().getArray();};
-        if (e.type == "rectangle")
-            {x.innerHTML = "Rectangle:" + e.overlay.getBounds();};
+        if (e.type == "marker") {
+	    x.innerHTML = "Point: " + e.overlay.getPosition();
+	};
+        if (e.type == "polyline") { 
+            x.innerHTML = "Line: " + e.overlay.getPath().getArray();
+	};
+        if (e.type == "polygon") {
+            x.innerHTML = "Polygon: " + e.overlay.getPath().getArray();
+	};
+        if (e.type == "rectangle") {
+            x.innerHTML = "Rectangle:" + e.overlay.getBounds();
+	};
     
         // call uavsar query
         //console.log(x.innerHTML);
@@ -592,69 +596,69 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
 		  google.maps.event.trigger(LOS_markers[1],"dragend");
 	 }	 
 
-	 //--------------------------------------------------
-	 // This function calculates the distance between the starting 
-	 // and ending (lat,lon) points.  
-	 //--------------------------------------------------
-	 function setDistance() {
-		  var latStart=LOS_markers[0].getPosition().lat().toFixed(5);
-		  var lonStart=LOS_markers[0].getPosition().lng().toFixed(5);
-		  var latEnd=LOS_markers[1].getPosition().lat().toFixed(5);
-		  var lonEnd=LOS_markers[1].getPosition().lng().toFixed(5);
+//--------------------------------------------------
+// This function calculates the distance between the starting 
+// and ending (lat,lon) points.  
+//--------------------------------------------------
+function setDistance() {
+    var latStart=LOS_markers[0].getPosition().lat().toFixed(5);
+    var lonStart=LOS_markers[0].getPosition().lng().toFixed(5);
+    var latEnd=LOS_markers[1].getPosition().lat().toFixed(5);
+    var lonEnd=LOS_markers[1].getPosition().lng().toFixed(5);
+    
+    var d2r = Math.PI / 180.0;
+    var flatten=1.0/298.247;
+    var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+    
+    var xdiff=(lonEnd-lonStart)*theFactor;
+    var ydiff=(latEnd-latStart)*111.32;
+    
+    losLength=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
+    losLength=losLength.toFixed(3);		  
+    
+    $("#losLength-value").val(losLength);
+}
 
-		  var d2r = Math.PI / 180.0;
-		  var flatten=1.0/298.247;
-		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+//--------------------------------------------------
+//Show results from calling the search REST service.
+//--------------------------------------------------
+function showSearchResults(tableDivName) {
+    deleteAllShape();
+    deleteAllKml();
+    //See which data sets area available at the selected point
+    var theSearchString=$("#search-string-value").val();
+    var searchUrl="/uavsar_flight_search/?searchstring="+theSearchString;
+    makeQueryAndDisplay(mapA,searchUrl,tableDivName);
+}
 
-		  var xdiff=(lonEnd-lonStart)*theFactor;
-		  var ydiff=(latEnd-latStart)*111.32;
-		  
-		  losLength=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
-		  losLength=losLength.toFixed(3);		  
-		  
-		  $("#losLength-value").val(losLength);
-	 }
-
-	 //--------------------------------------------------
- 	 //Show results from calling the search REST service.
-	 //--------------------------------------------------
-	 function showSearchResults(tableDivName) {
-        deleteAllShape();
-        deleteAllKml();
-		  //See which data sets area available at the selected point
-		  var theSearchString=$("#search-string-value").val();
-		  var searchUrl="/uavsar_flight_search/?searchstring="+theSearchString;
-		  makeQueryAndDisplay(mapA,searchUrl,tableDivName);
-	 }
-
-	 //--------------------------------------------------
-	 //This is an internal function that calls the provided REST URL, parses the resulting
-	 //JSON, displays the resulting SAR images on the map, and creates the table of results
-	 //on the right side of the display.
-	 //--------------------------------------------------
-	 function makeQueryAndDisplay(masterMap,restUrl,tableDivName){
-		  var stuffTest=masterMap.overlayMapTypes.clear();
-		  var results=$.ajax({url:restUrl,async:false}).responseText;
-	     console.log(results);
-		  availableDataSets=jQuery.parseJSON(results);
-		  
-		  //Turn on the layers in the selected region
-	     displaySelectedImages(availableDataSets,masterMap);
-		  
-	 }
+//--------------------------------------------------
+//This is an internal function that calls the provided REST URL, parses the resulting
+//JSON, displays the resulting SAR images on the map, and creates the table of results
+//on the right side of the display.
+//--------------------------------------------------
+function makeQueryAndDisplay(masterMap,restUrl,tableDivName){
+    var stuffTest=masterMap.overlayMapTypes.clear();
+    var results=$.ajax({url:restUrl,async:false}).responseText;
+    console.log(results);
+    availableDataSets=jQuery.parseJSON(results);
+    
+    //Turn on the layers in the selected region
+    displaySelectedImages(availableDataSets,masterMap);
+    
+}
 
 function displaySelectedImages(datasets,masterMap) {
     console.log("Display selected iamges");
-    if($('.panel-close-button').hasClass('inactive') && $('#uavsar').hasClass('inactive'))
-    {
+    if($('.panel-close-button').hasClass('inactive') && $('#uavsar').hasClass('inactive')) {
         $('.panel-close-button').removeClass('inactive').addClass('active');
         $('#uavsar').removeClass('inactive').addClass('active');
         $('#FadeDisplay').show();
         $('#Color-mapping').show();
     }
     // else clear #uavsar
-    else
+    else {
         $('#uavsar').empty();
+    }
     // clear wmsgf9_samples
     wmsgf9_samples = {};
     // clear uavsar dataset overlays
@@ -830,7 +834,8 @@ function viewDataset(uid, dataname, show) {
 function uavsarquery(querystr) {
     //console.log("uavsarquery() called with querystr "+querystr);
     $(".panel-close-button").click(function() {
-        closeDataPanel();
+	//        closeDataPanel();
+	resetToBaseUAVSARDisplay();
         deleteAllShape();
     });
     var eventDateString = $.trim($("#event_date").val());
@@ -842,10 +847,17 @@ function uavsarquery(querystr) {
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
 	    datasetsStr;
+<<<<<<< HEAD
         //console.log("Query:"+querystr);
 	    //console.log("Data:"+datasetsStr);
         uavsarDataSet=jQuery.parseJSON(datasetsStr);
         displaySelectedImages(uavsarDataSet);
+=======
+//	    console.log("Query:"+querystr);
+//	    console.log("Data:"+datasetsStr);
+            uavsarDataSet=jQuery.parseJSON(datasetsStr);
+            displaySelectedImages(uavsarDataSet);
+>>>>>>> bf0a4fb09a247ef44b09c1b92afd824d55631493
 	});
 }
 
@@ -880,7 +892,7 @@ function sarCheckboxAction(uid) {
 }
 
 
-// script for closing the data panel
+// script for closing the entire UAVSAR data panel
 // when the data panel is closed, all content in the data panel is removed
 function closeDataPanel() {
     $('.panel-close-button').removeClass('active').addClass('inactive');
@@ -899,6 +911,27 @@ function closeDataPanel() {
     $('#search-string-value').val("");
     deleteAllKml();
     clear_UAVSAR();
+}
+
+//Resets the map to the base display of all UAVSAR images so user can start over.
+function resetToBaseUAVSARDisplay() {
+    $('.panel-close-button').removeClass('active').addClass('inactive');
+    $('#uavsar').empty();
+    $('#uavsar').removeClass('active').addClass('inactive');    
+    $('#UAVSAR-geometry').empty();
+    $('#UAVSAR-heading').empty();
+    $('#UAVSAR-markers').empty();
+    $('#UAVSAR-formFields').hide();
+    $('#FadeDisplay').hide();
+    $('#Color-mapping').hide();
+//    $('#UAVSAR-active-tool').prop("checked",false);
+    $('#color-mapping-checkbox').prop("checked",false);    
+//    $('#uavsar-instructions').hide();
+    $('#QuakeTables-Link').hide();
+    $('#search-string-value').val("");
+    clear_UAVSAR();
+    deleteAllKml();
+    draw_UAVSAR();
 }
 
 // script for displaying UAVSAR layer
