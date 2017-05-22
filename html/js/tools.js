@@ -1411,19 +1411,22 @@ function closeProfileTool() {
     alert("close profile tool");
 }
 
-// display rating as stars
-function displayRating(uid,rating) {
 
-    //MEP: hard-setting rating to "0" until we can implement properly.
-    rating=0;
-    var fullstar='<span class="glyphicon glyphicon-star" style="color:orange"></span>';
-    var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
+function displayRating(uid,rating) {
+    //3 Green
+    //2 Yellow
+    //1 Red
+    //0 empty
+
     var value = parseInt(rating);
+    var fullstar='<span class="glyphicon glyphicon-star" style="color:white"></span>';
+    var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
     var stars;
     if (value>0) {stars="rating: "} else {stars="no rating "};
-    
-    stars+='<span class="badge">';
-    stars+=fullstar.repeat(value)+emptystar.repeat(5-value);
+    if (value>3) {value=3;};
+    //var fullstar=fullstar_t.replace("rightcolor",["red","yellow","green"][value-1]);
+    stars+='<span class="label label-'+["default","danger","warning","success"][value]+'">';
+    stars+=fullstar.repeat(value)+emptystar.repeat(3-value);
     stars+='</span>';
     return stars;
 }
