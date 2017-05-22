@@ -309,7 +309,7 @@ function updateProfileTabPanel() {
     
     <div class="tab-pane profile-tab-pane inactive" id="settings" ng-controller="NotecardController">
       <div class="profile-tab-panel-header">    	  
-	  <div style="text-align:left; font-size:12px">{{username}}<div>
+	  <div style="text-align:left; font-size:12px"><span id="logged-in-user">{{username}}</span><div>
 	  <form style="float:left" name='logoutForm' 
 		ng-submit='logoutGeo()' 
 		ng-show='isAuthenticated()'>
