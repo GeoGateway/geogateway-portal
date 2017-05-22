@@ -1411,7 +1411,7 @@ function rateUAVSAR(uid,dataname) {
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
     html += '<a class="close" data-dismiss="modal">×</a>';
-    html += '<h4>'+dataname+'</h4>'
+    html += '<h4>'+dataname+'</h4>';
     html += '</div>';
     html += '<div class="modal-body">';
     html +='<select id="selectrating" name="selectrating" class="form-control">';
@@ -1440,7 +1440,9 @@ function rateUAVSAR(uid,dataname) {
 function submitUserRating(uid,dataname) {
     var rating = $('#selectrating').val();
     var comments = $('#rating_comment').val();
-    var nonameuser = $('#rating_usertype').val();
-    alert(nonameuser);
+    var nonameuser = $('#rating_usertype').prop('checked');
+    if ($('#rating_usertype').prop('checked')) {
+        alert('user nonameuser');}
+        else {alert('user realuser');};
     $("#dynamicModal").modal("hide");
 }
