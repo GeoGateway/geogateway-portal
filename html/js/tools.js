@@ -936,7 +936,8 @@ function draw_UAVSAR() {
 //    };
     $('#UAVSAR-geometry').empty();
     UAVSARDrawingManager.setMap(mapA);
-    loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
+    //loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
+    loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
     //mapA.overlayMapTypes.setAt(0, wmsgf9);
 }
 
