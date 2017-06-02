@@ -1483,6 +1483,13 @@ function submitUserRating(uid,dataname) {
     } else {username = "anonymous";};
     if ($('#rating_usertype').prop('checked')) {
         username = 'anonymous';};
-    alert(username);
+    //alert(username+rating);
+    $.ajax({
+        url:'uavsarrating',
+        data:{'service':'setrating','image':dataname,'uid':uid,
+        'rating':rating,'user':username,'comments':comments}
+    }).done(function(result) 
+    {alert(result);}
+    );
     $("#dynamicModal").modal("hide");
 }
