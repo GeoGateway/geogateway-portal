@@ -1444,7 +1444,7 @@ function rateUAVSAR(uid,dataname) {
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
     html += '<a class="close" data-dismiss="modal">×</a>';
-    html += '<span style="color:red">Debugging mode: rating is not saved!</span>';
+    html += '<span style="color:red">Debugging mode: rating will be removed later!</span>';
     html += '<h4>'+dataname+'</h4>';
     html += '</div>';
     html += '<div class="modal-body"><label for="comment">Rating:</label>';
