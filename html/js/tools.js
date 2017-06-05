@@ -1486,10 +1486,10 @@ function submitUserRating(uid,dataname) {
     //alert(username+rating);
     $.ajax({
         url:'uavsarrating',
-        data:{'service':'setrating','image':dataname,'uid':uid,
+        data:{'service':'setrating','dataname':dataname,'uid':uid,
         'rating':rating,'user':username,'comments':comments}
     }).done(function(result) 
-    {alert(result);}
+    {alert("Thanks for the review, your rating will be published soon.");}
     );
     $("#dynamicModal").modal("hide");
 }
