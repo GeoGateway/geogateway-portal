@@ -1489,7 +1489,7 @@ function submitUserRating(uid,dataname) {
         data:{'service':'setrating','dataname':dataname,'uid':uid,
         'rating':rating,'user':username,'comments':comments}
     }).done(function(result) 
-    {alert("Thanks for the review, your rating will be published soon.");}
+    {alert("Your rating will be published soon, thanks!");}
     );
     $("#dynamicModal").modal("hide");
 }
