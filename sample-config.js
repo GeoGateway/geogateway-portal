@@ -8,5 +8,8 @@ config.uavsarSearchUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?';
 config.wmsUrl='http://gw72.iu.xsede.org/geoserver/InSAR/wms?';
 config.losQueryUrl='http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
 config.wmscolorUrl = 'http://gw88.iu.xsede.org/geoserver/InSAR/wms?';
+config.sldserviceUrl = "http://gw88.iu.xsede.org/insar";
+config.uavsarratingUrl = "http://gf2.ucs.indiana.edu/quaketables/uavsar/rating?";
+
 
 module.exports=config;
