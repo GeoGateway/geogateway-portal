@@ -680,7 +680,7 @@ function displaySelectedImages(datasets,masterMap) {
         dynatable+='</table>'; //Close the embedded table
         dynatable+='</div>'
         stardiv='<div>'+displayRating(datasets[index1]['uid'],datasets[index1]['rating']);
-        stardiv+="&nbsp;".repeat(3)+"</div>";
+        stardiv+="&nbsp;".repeat(3)+'<button type="button" class="btn btn-default btn-xs"'+'onclick=rateUAVSAR('+datasets[index1]['uid']+',"'+datasets[index1]['dataname']+'")>Rate it</button>'+"</div>";
         
         $('#uavsar').append('\
 <div class="dataset">\
@@ -847,10 +847,10 @@ function uavsarquery(querystr) {
     $.get("/uavsar_query/", {'querystr': querystr})
         .done(function(datasetsStr) {
 	    datasetsStr;
-//	    console.log("Query:"+querystr);
-//	    console.log("Data:"+datasetsStr);
-            uavsarDataSet=jQuery.parseJSON(datasetsStr);
-            displaySelectedImages(uavsarDataSet);
+        //console.log("Query:"+querystr);
+	    //console.log("Data:"+datasetsStr);
+        uavsarDataSet=jQuery.parseJSON(datasetsStr);
+        displaySelectedImages(uavsarDataSet);
 	});
 }
 
@@ -936,7 +936,8 @@ function draw_UAVSAR() {
 //    };
     $('#UAVSAR-geometry').empty();
     UAVSARDrawingManager.setMap(mapA);
-    loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
+    //loadWMS(mapA, "http://gf9.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
+    loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:thumbnailmosaic");
     //mapA.overlayMapTypes.setAt(0, wmsgf9);
 }
 
@@ -1411,20 +1412,84 @@ function closeProfileTool() {
     alert("close profile tool");
 }
 
-// display rating as stars
-function displayRating(uid,rating) {
 
-    //MEP: hard-setting rating to "0" until we can implement properly.
-    rating=0;
-    var fullstar='<span class="glyphicon glyphicon-star" style="color:orange"></span>';
-    var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
+function displayRating(uid,rating) {
+    //3 Green
+    //2 Yellow
+    //1 Red
+    //0 empty
+
     var value = parseInt(rating);
+    var fullstar='<span class="glyphicon glyphicon-star" style="color:white"></span>';
+    var emptystar='<span class="glyphicon glyphicon-star-empty" style="color:white"></span>';
     var stars;
     if (value>0) {stars="rating: "} else {stars="no rating "};
-    
-    stars+='<span class="badge">';
-    stars+=fullstar.repeat(value)+emptystar.repeat(5-value);
+    if (value>3) {value=3;};
+    //var fullstar=fullstar_t.replace("rightcolor",["red","yellow","green"][value-1]);
+    stars+='<span class="label label-'+["default","danger","warning","success"][value]+'">';
+    stars+=fullstar.repeat(value)+emptystar.repeat(3-value);
     stars+='</span>';
     return stars;
 }
 
+
+//rateUAVSAR
+//3: GREEN: Good: Excellent product with few or no known flaws
+//2: YELLOW: Caution Good over small local areas, long wavelength error over larger area
+//1: RED: Bad: Severe problems. Recommend not using
+function rateUAVSAR(uid,dataname) {
+    //alert(dataname);
+        html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
+    html += '<div class="modal-dialog">';
+    html += '<div class="modal-content">';
+    html += '<div class="modal-header">';
+    html += '<a class="close" data-dismiss="modal">×</a>';
+    html += '<span style="color:red">Debugging mode: rating will be removed later!</span>';
+    html += '<h4>'+dataname+'</h4>';
+    html += '</div>';
+    html += '<div class="modal-body"><label for="comment">Rating:</label>';
+    html +='<select id="selectrating" name="selectrating" class="form-control">';
+    html +='<option value="3">3 Stars: Excellent product with few or no known flaws</option>';
+    html +='<option value="2">2 Stars: Good over small local areas, long wavelength error over larger area</option>';
+    html +='<option value="1">1 Star: Severe problems. Recommend not using</option></select>';
+    html +='<br>';
+    html +='<label for="comment">Comment:</label><textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
+    html+= '<div class="checkbox"><label><input id="rating_usertype" type="checkbox" value="">rate as anonymous user</label></div>';
+    html += '</div>';
+    html += '<div class="modal-footer">';
+    html+='<input type="submit" class="btn btn-primary" value="Submit" onClick=submitUserRating("'+uid+'",'+'"'+dataname+'")>';
+    html += '<span class="btn btn-primary" data-dismiss="modal">Close</span>';
+    html += '</div>';  // content
+    html += '</div>';  // dialog
+    html += '</div>';  // footer
+    html += '</div>';  // modalWindow
+    $('body').append(html);
+    $("#dynamicModal").modal();
+    $("#dynamicModal").modal('show');
+
+    $('#dynamicModal').on('hidden.bs.modal', function (e) {
+        $(this).remove();
+    });
+
+}
+
+function submitUserRating(uid,dataname) {
+    var rating = $('#selectrating').val();
+    var comments = $('#rating_comment').val();
+    // get real user name:
+    var username;
+    if (document.getElementById("logged-in-user")) {
+        username = document.getElementById("logged-in-user").innerHTML;
+    } else {username = "anonymous";};
+    if ($('#rating_usertype').prop('checked')) {
+        username = 'anonymous';};
+    //alert(username+rating);
+    $.ajax({
+        url:'uavsarrating',
+        data:{'service':'setrating','dataname':dataname,'uid':uid,
+        'rating':rating,'user':username,'comments':comments}
+    }).done(function(result) 
+    {alert("Your rating will be published soon, thanks!");}
+    );
+    $("#dynamicModal").modal("hide");
+}

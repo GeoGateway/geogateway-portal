@@ -39,6 +39,7 @@ var wmsUrl=config.wmsUrl;
 var wmscolorUrl = config.wmscolorUrl;
 var losQueryUrl=config.losQueryUrl;
 var sldserviceUrl = config.sldserviceUrl;
+var uavsarratingUrl = config.uavsarratingUrl;
 
 //Call or prepare constructors
 var app=express();
@@ -588,7 +589,6 @@ app.get('/uavsar_query/',function(req,res){
 
 // has_wms query, this is the temporary solution, shall be removed later
 app.get('/has_wms/', function(req,res) {
-//    var geoServerUrl = "http://gf8.ucs.indiana.edu:8080/geoserver/InSAR/wms?";
     var geoServerUrl;
     if (req.query.server == 'coloring') {geoServerUrl = wmscolorUrl;} 
     else { geoServerUrl = wmsUrl;}
@@ -622,6 +622,27 @@ app.get('/sldservice/', function(req,res) {
         queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max + "&theme="+req.query.theme;
     }
     console.log(queryUrl);     
+
+    restClient.get(queryUrl, function(data, response){
+        res.status(200).send(data);
+    });
+
+});
+
+// UAVSAR rating service
+app.get('/uavsarrating/', function(req,res) {
+
+    var queryUrl = uavsarratingUrl;
+    //setrating
+    if (req.query.service == "setrating") {
+
+        queryUrl += "action=setrating";
+        queryUrl += "&uid=" + req.query.uid +"&dataname="+req.query.dataname;
+        queryUrl += "&user=" + req.query.user + "&rating=" + req.query.rating;
+        queryUrl += "&comments=" + req.query.comments;
+    }
+
+    //console.log(queryUrl);
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
