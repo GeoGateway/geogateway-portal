@@ -637,6 +637,9 @@ function showSearchbylatlon(latlon) {
     var x = document.getElementById('UAVSAR-geometry');
     x.innerHTML = latlonstr;
     uavsarquery(latlonstr);
+    // move map to the latlon center
+    latlon_v = latlon.split(",");
+    mapA.panTo(new google.maps.LatLng(parseFloat(latlon_v[0]),parseFloat(latlon_v[1])));
 }
 
 //--------------------------------------------------
@@ -931,6 +934,7 @@ function resetToBaseUAVSARDisplay() {
 //    $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
     $('#search-string-value').val("");
+    $('#search-latlon-value').val("");
     clear_UAVSAR();
     deleteAllKml();
     draw_UAVSAR();
