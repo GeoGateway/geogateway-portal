@@ -633,13 +633,15 @@ function showSearchResults(tableDivName) {
 
 function showSearchbylatlon(latlon) {
     //alert(latlon);
+    deleteAllShape();
+    deleteAllKml();
     var latlonstr = 'Point: (' + latlon + ')' ;
     var x = document.getElementById('UAVSAR-geometry');
     x.innerHTML = latlonstr;
-    uavsarquery(latlonstr);
     // move map to the latlon center
-    latlon_v = latlon.split(",");
+    var latlon_v = latlon.split(",");
     mapA.panTo(new google.maps.LatLng(parseFloat(latlon_v[0]),parseFloat(latlon_v[1])));
+    uavsarquery(latlonstr);
 }
 
 //--------------------------------------------------
