@@ -910,6 +910,7 @@ function closeDataPanel() {
     $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
     $('#search-string-value').val("");
+    $('#search-latlon-value').val("");
     deleteAllKml();
     clear_UAVSAR();
 }
