@@ -631,6 +631,14 @@ function showSearchResults(tableDivName) {
     makeQueryAndDisplay(mapA,searchUrl,tableDivName);
 }
 
+function showSearchbylatlon(latlon) {
+    //alert(latlon);
+    var latlonstr = 'Point: (' + latlon + ')' ;
+    var x = document.getElementById('UAVSAR-geometry');
+    x.innerHTML = latlonstr;
+    uavsarquery(latlonstr);
+}
+
 //--------------------------------------------------
 //This is an internal function that calls the provided REST URL, parses the resulting
 //JSON, displays the resulting SAR images on the map, and creates the table of results
