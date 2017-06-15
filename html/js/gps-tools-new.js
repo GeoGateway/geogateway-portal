@@ -10,7 +10,7 @@ var dateSlider;
 // var gpsDataBaseUrl="http://54.204.111.105:5000/gps?lat_min="
 //var gpsDataBaseUrl="http://54.88.85.90:5000/GPS_";
 //var gpsDataBaseUrl="http://gf3.ucs.indiana.edu:5000/GPS_";
-var gpsDataBaseUrl=http://gf9.ucs.indiana.edu//daily_rdahmmexec/daily/";
+var gpsDataBaseUrl="http://149.165.168.78:5000/GPS_";
 // var gpsDataBaseUrl="http://localhost:5000/GPS_";
 
 var selectedDatabase="";
@@ -41,12 +41,6 @@ function updateNetwork(newGpsNetwork) {
     var year=date.getFullYear();
     var month=date.getMonth();
     var day=date.getDate();
-
-    // if (year > lastYearInDb){
-    //     year = lastYearInDb;
-    //     month = lastMonthInDb;
-    //     day = 28;
-    // }
 
     var endDate = new Date(year, month-1, day);
 
@@ -109,63 +103,10 @@ function updateNetwork(newGpsNetwork) {
                         max: endDate.getTime(),
                         value:endDate.getTime()
                     });
-
-                    // $("#result_count").html(result.station_count);
-                    // console.log(result);
-                    // var txt='';
-                    // for (x in result.status){
-                    //         txt += result.status[x].station_id+" :: "+result.status[x].status+"<br />";
-                    // }
-                    // $("#result").html(txt);
-                    // console.log(txt)
-
                 }
             });
         }
     });
-
-    
-    
-    // $.getJSON(gpsNetworkUrl, function(){
-    //     console.log("Loading stations");
-    // })
-    //     .done(function(data) {
-    //         console.log("Done loading stations");
-    //         gpsNetwork=data;
-    //         gpsStations=gpsNetwork.stations;
-
-    //         var endDate=new Date(gpsNetwork.end_date);
-    //         var beginDate=new Date(gpsNetwork.begin_date);
-    //         //            $('#networkStateDisplayDateNew').val(gpsNetwork.end_date);
-    //         $('#networkStateDisplayDateNew').val(endDate.getMonth()+1+"/"+endDate.getDate()+"/"+endDate.getFullYear());
-    //         console.log("Creating markers");
-    //         createMarkers(gpsNetwork.end_date);
-
-	   //  //Set and display the download link
-	   //  $('#gpsDownloadLinkDivNew').show();
-	   //  gpsDataUrl=gpsDataBaseUrl+gpsNetwork.data_source+"_"+gpsNetwork.end_date+".zip";
-	   //  $('#gpsDownloadLinkNew').attr("href",gpsDataUrl);
-
-	   //  //Enable date slider
-    //         $("#waitScreen").hide();
-    //         $("#networkStateDisplayDateNew").datepicker();
-    //         $("#networkStateDisplayDateNew").prop("disabled",false);
-    //         dateSlider=$("#dateSliderNew").slider({
-    //             slide:sliderSlideEventHandler,
-    //             stop: sliderDateEventHandler,
-    //             min:beginDate.getTime(),
-    //             max:endDate.getTime(),
-    //             value:endDate.getTime()
-    //         });
-            
-           
-    //     })
-    //     .fail(function(data){
-    //         console.log("Failed:");
-    //         console.log(data);
-    //     })
-    //     .always(function(){
-    //     });
 }
 
 function mySliderSlideEventHandler(event,ui) {
