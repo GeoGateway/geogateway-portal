@@ -92,7 +92,8 @@
       <div id="uavsar-instructions" style="display:none">
         Use drawing tool on the map to select the region of interests.  
         <br/>You can also search by flight name or flight path:
-        <input type="text" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')"> 
+        <input type="text" placeholder="flight name/path" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')">
+        <br/><input type="text" placeholder="latitude, longitude" name="searchlatlon" id="search-latlon-value" size=20, value="" onchange="showSearchbylatlon(this.value)">
         <br/>(Optional) Event date (YYYY-MM-DD):
         <input type="text" name="eventDate", id="event_date", size=10, value="">
       </div>

@@ -631,6 +631,19 @@ function showSearchResults(tableDivName) {
     makeQueryAndDisplay(mapA,searchUrl,tableDivName);
 }
 
+function showSearchbylatlon(latlon) {
+    //alert(latlon);
+    deleteAllShape();
+    deleteAllKml();
+    var latlonstr = 'Point: (' + latlon + ')' ;
+    var x = document.getElementById('UAVSAR-geometry');
+    x.innerHTML = latlonstr;
+    // move map to the latlon center
+    var latlon_v = latlon.split(",");
+    mapA.panTo(new google.maps.LatLng(parseFloat(latlon_v[0]),parseFloat(latlon_v[1])));
+    uavsarquery(latlonstr);
+}
+
 //--------------------------------------------------
 //This is an internal function that calls the provided REST URL, parses the resulting
 //JSON, displays the resulting SAR images on the map, and creates the table of results
@@ -902,6 +915,7 @@ function closeDataPanel() {
     $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
     $('#search-string-value').val("");
+    $('#search-latlon-value').val("");
     deleteAllKml();
     clear_UAVSAR();
 }
@@ -922,6 +936,7 @@ function resetToBaseUAVSARDisplay() {
 //    $('#uavsar-instructions').hide();
     $('#QuakeTables-Link').hide();
     $('#search-string-value').val("");
+    $('#search-latlon-value').val("");
     clear_UAVSAR();
     deleteAllKml();
     draw_UAVSAR();
