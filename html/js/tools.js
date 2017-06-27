@@ -1495,6 +1495,8 @@ function submitUserRating(uid,dataname) {
     var username;
     if (document.getElementById("logged-in-user")) {
         username = document.getElementById("logged-in-user").innerHTML;
+        // in case username is empty
+        if (username == null || username === '') {username = "geogatewayUser";};
     } else {username = "anonymous";};
     if ($('#rating_usertype').prop('checked')) {
         username = 'anonymous';};
