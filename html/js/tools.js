@@ -1453,8 +1453,16 @@ function displayRating(uid,rating) {
 //2: YELLOW: Caution Good over small local areas, long wavelength error over larger area
 //1: RED: Bad: Severe problems. Recommend not using
 function rateUAVSAR(uid,dataname) {
+
+    //alert(angular.element('#LoginController').scope().authenticated);
+    
+    if (! angular.element('#LoginController').scope().authenticated)
+        {alert('Please log in to rate UAVSAR data.');
+        return;};
+    
+
     //alert(dataname);
-        html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
+    html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
     html += '<div class="modal-dialog">';
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
