@@ -640,9 +640,15 @@ app.get('/uavsarrating/', function(req,res) {
         queryUrl += "&uid=" + req.query.uid +"&dataname="+req.query.dataname;
         queryUrl += "&user=" + req.query.user + "&rating=" + req.query.rating;
         queryUrl += "&comments=" + req.query.comments;
-    }
+    };
 
-    console.log(queryUrl);
+    //getcomments
+    if (req.query.service == "getcomments") {
+        queryUrl += "action=getcomments";
+        queryUrl += "&uid=" + req.query.uid;
+    };
+
+    //console.log(queryUrl);
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);

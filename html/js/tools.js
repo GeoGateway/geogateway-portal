@@ -1441,12 +1441,53 @@ function displayRating(uid,rating) {
     if (value>0) {stars="rating: "} else {stars="no rating "};
     if (value>3) {value=3;};
     //var fullstar=fullstar_t.replace("rightcolor",["red","yellow","green"][value-1]);
-    stars+='<span class="label label-'+["default","danger","warning","success"][value]+'">';
+    stars+='<span class="label label-'+["default","danger","warning","success"][value]+'"'+'onclick=displayComments('+uid+')>';
     stars+=fullstar.repeat(value)+emptystar.repeat(3-value);
     stars+='</span>';
     return stars;
 }
 
+function displayComments(uid) {
+    $.ajax({
+        url:'uavsarrating',
+        data:{'service':'getcomments','uid':uid,}
+    }).done(function(result) 
+    {if (result=='{}'){alert('no comments found');} else {
+        //reformat comments
+        var comments_str = "<ul>";
+        var history = jQuery.parseJSON(result);
+        for (var key in history) {
+            if (history.hasOwnProperty(key)) {
+                comments_str += "<li><b>rating " + history[key].rating + " </b>:" +history[key].comments+"</li>";
+                };
+        }; 
+        comments_str += "</ul>";       
+    //alert(dataname);
+    html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
+    html += '<div class="modal-dialog">';
+    html += '<div class="modal-content">';
+    html += '<div class="modal-header">';
+    html += '<a class="close" data-dismiss="modal">×</a>';
+    html += '<h4>'+'Comments'+'</h4>';
+    html += '</div>';
+    html += '<div class="modal-body">';
+    html += comments_str;
+    html += '<span class="btn btn-primary" data-dismiss="modal">Close</span>';
+    html += '</div>';  // content
+    html += '</div>';  // dialog
+    html += '</div>';  // footer
+    html += '</div>';  // modalWindow
+    $('body').append(html);
+    $("#dynamicModal").modal();
+    $("#dynamicModal").modal('show');
+    $('#dynamicModal').on('hidden.bs.modal', function (e) {
+        $(this).remove();
+    });
+
+    };}
+    );
+
+}
 
 //rateUAVSAR
 //3: GREEN: Good: Excellent product with few or no known flaws
@@ -1459,7 +1500,6 @@ function rateUAVSAR(uid,dataname) {
     if (! angular.element('#LoginController').scope().authenticated)
         {alert('Please log in to rate UAVSAR data.');
         return;};
-    
 
     //alert(dataname);
     html =  '<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">';
@@ -1467,7 +1507,6 @@ function rateUAVSAR(uid,dataname) {
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
     html += '<a class="close" data-dismiss="modal">×</a>';
-    //html += '<span style="color:red">Debugging mode: rating will be removed later!</span>';
     html += '<h4>'+dataname+'</h4>';
     html += '</div>';
     html += '<div class="modal-body"><label for="comment">Rating:</label>';
