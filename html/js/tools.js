@@ -1467,7 +1467,7 @@ function rateUAVSAR(uid,dataname) {
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
     html += '<a class="close" data-dismiss="modal">×</a>';
-    html += '<span style="color:red">Debugging mode: rating will be removed later!</span>';
+    //html += '<span style="color:red">Debugging mode: rating will be removed later!</span>';
     html += '<h4>'+dataname+'</h4>';
     html += '</div>';
     html += '<div class="modal-body"><label for="comment">Rating:</label>';
@@ -1477,7 +1477,7 @@ function rateUAVSAR(uid,dataname) {
     html +='<option value="1">1 Star: Severe problems. Recommend not using</option></select>';
     html +='<br>';
     html +='<label for="comment">Comment:</label><textarea class="form-control" id="rating_comment" name="rating_comment"></textarea>';
-    html+= '<div class="checkbox"><label><input id="rating_usertype" type="checkbox" value="">rate as anonymous user</label></div>';
+    html += '<div class="checkbox"><label><input id="rating_usertype" type="checkbox" value="">rate as anonymous user</label></div>';
     html += '</div>';
     html += '<div class="modal-footer">';
     html+='<input type="submit" class="btn btn-primary" value="Submit" onClick=submitUserRating("'+uid+'",'+'"'+dataname+'")>';
