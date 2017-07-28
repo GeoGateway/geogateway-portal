@@ -422,9 +422,17 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
             var has_coloring;
             has_coloring = checkwmslayer(uid,"coloring");
             if (has_coloring) {
-                highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+                if (wmsgf9_samples[uid][4] == 0 ) {
+                highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw"); 
                 // load legend
-                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/uid"+uid+"_unw_default.kmz";
+                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/uid"+uid+"_unw_default.kmz"; }
+                else {
+                //load user defined 
+                    var imagename = wmsgf9_samples[uid][4] ['image'];
+                    var stylesld = wmsgf9_samples[uid][4] ['style'];
+                    highresoverlay=loadWMSwithstyle(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+imagename,stylesld);
+
+                    var legend_kml = wmsgf9_samples[uid][4] ['kmz']+"?dummy="+(new Date()).getTime();};                  
                     wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
                     url: legend_kml,
                     preserveViewport:true,
@@ -724,7 +732,11 @@ function reset_color_api(){
         screenOverlays:true
         });
     wmsgf9_select_legend_kml.setMap(mapA);
-
+        // get uid from datajson['image'] = uid254_unw
+    //record datajson
+    var res = imagename.split("_");
+    var uid =res[0].replace('uid','');
+    wmsgf9_samples[uid][4]=0;
 };
 
 function new_color_api(){
@@ -755,6 +767,11 @@ function new_color_api(){
     //reload wms
     highresoverlay=loadWMSwithstyle(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+datajson['image'],datajson['style']);
 
+    // get uid from datajson['image'] = uid254_unw
+    //record datajson
+    var res = datajson['image'].split("_");
+    var uid =res[0].replace('uid','');
+    wmsgf9_samples[uid][4]=datajson;
 };
 
 // color_stretch fAunction
@@ -812,6 +829,7 @@ function color_stretch(event) {
     // be changed
     // currentState will automatically update when the visible layers are updated
     // add onemore state: wmslayer, -1 no wms layer, 0 not checked, 1 has wms layer
+    // onemore state: has_user_colored_theme, 0 "default", 1 "has userenabled"
 function viewDataset(uid, dataname, show) {
 
     if(show) {
@@ -830,7 +848,7 @@ function viewDataset(uid, dataname, show) {
                 clickable: false
             });
             // wms layer is not checked 
-            wmsgf9_samples[uid] = [wmsgf9_temp, true, false, 0];
+            wmsgf9_samples[uid] = [wmsgf9_temp, true, false, 0, 0];
         }
     }
     // it is assumed that type = hide is only called for wmsgf9s already visible
