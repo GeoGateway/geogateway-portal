@@ -1424,7 +1424,23 @@ function hidePlotPanel() {
 
 // close profile tools
 function closeProfileTool() {
-    alert("close profile tool");
+    // hide plotpanel first
+    if($('.extra-tools-panel').hasClass('active')) {
+        $('.extra-tools-panel').removeClass('active').addClass('inactive');};
+    //close plot info div
+    $('#UAVSAR-formFields').hide();
+    $('#UAVSAR-markers').empty();
+    //remove markers and lines
+    if(LOS_markers.length != 0)
+    {
+        LOS_markers[0].setMap(null);
+        LOS_markers[1].setMap(null);
+        LOS_markers.length = 0;
+        LOS_line.setMap(null);
+        LOS_line = null;
+    }
+    // remove listener event
+    google.maps.event.clearListeners(mapA, 'click');
 }
 
 
