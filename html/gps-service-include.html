@@ -1,0 +1,92 @@
+
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<div>
+ <div class="container-fluid">
+   <div class="tool-title">GPS Plots<br/> </div>
+  <div class="divider"></div>
+
+  <div class="row">
+   <div class="col-sm-6 col-sm-6 col-xs-12">
+    <form id="gpsservice" method="post">
+     <div class="form-group ">
+      <label class="control-label requiredField">
+       Select GPS data
+      </label>
+      <div class=" ">
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="kmltype" type="checkbox" id="getvelocities" value="Velocities"/>
+         Velocities
+        </label>
+       </div>
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="kmltype" type="checkbox" id="getdisplacement" value="Displacement"/>
+         Displacement
+        </label>
+       </div>
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="kmltype" type="checkbox" id="getcoseimic" value="Coseismic"/>
+         Coseismic
+        </label>
+       </div>
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="kmltype" type="checkbox" id="getpostseismic" value="Postseismic"/>
+         Postseismic
+        </label>
+       </div>
+      </div>
+     </div>
+     <div class="form-group ">
+      <div class="input-group">
+       <div class="input-group-addon">
+        Latitude
+       </div>
+       <input class="form-control input-sm" id="gs_latitude" name="latitude" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Longitude
+       </div>
+       <input class="form-control input-sm" id="gs_longitude" name="longitude" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+       Width
+       </div>
+       <input class="form-control input-sm" id="gs_width" name="width" placeholder="in degree" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Height
+       </div>
+       <input class="form-control input-sm" id="gs_height" name="height" placeholder="in degree" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Epoch 1
+       </div>
+       <input class="form-control input-sm" id="gs_epoch1" name="epoch1" placeholder="YYYY-MM-DD" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Epoch 2
+       </div>
+       <input class="form-control input-sm" id="gs_epoch2" name="epoch2" placeholder="YYYY-MM-DD" type="text"/>
+      </div>
+      </div>
+           <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit" onclick="rungpsservice()">
+        Run
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
+</div>
+
