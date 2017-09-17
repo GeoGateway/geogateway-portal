@@ -1,12 +1,19 @@
 var anssgadget=anssgadget || (function() {
     var bboxDiv=document.getElementById("acgBBoxDiv");
-    
+
+	//Get Minimum and Maximum magnituted entered in the UI
     var minmag=document.getElementById("acgMinMagnitude");
     var maxmag=document.getElementById("acgMaxMagnitude");
+	
+	//Get Minimum and Maximum Date range entered in the UI
     var mindate=document.getElementById("acgMinDate");
-    var mintime=document.getElementById("acgMinTime");
     var maxdate=document.getElementById("acgMaxDate");
+
+	//Get Minimum and Maximum Time range entered in the UI
+    var mintime=document.getElementById("acgMinTime");
     var maxtime=document.getElementById("acgMaxTime");
+
+	//Get the Lattitude and Longituted range from the UI
     var minlat=document.getElementById("minlatbbox");
     var minlon=document.getElementById("minlonbbox");
     var maxlat=document.getElementById("maxlatbbox");
@@ -45,17 +52,28 @@ var anssgadget=anssgadget || (function() {
 	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
 	var amp="&";
 	var format="format=geojson";
-	var minmag="minmagnitude=5.0"
-	var finalUrl=urlBase+format+amp+minmag;
+	var minMagParam="minmagnitude="+minmag.value;
+
+	console.log(minMagParam);
+	var finalUrl=urlBase+format+amp+minMagParam;
 	
-//	console.log(finalUrl);
+	console.log(finalUrl);
 
 	$.getJSON(finalUrl)
 	    .done(function(data){
 		//		console.log(data);
+
+		clearMapData();
+
 		mapA.data.addGeoJson(data);		
 	    });
     }
+
+	function clearMapData(){
+		mapA.data.forEach(function(feature) {
+			mapA.data.remove(feature);
+		});
+	}
 
     function submitMapRequestKml(){
 	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
@@ -120,6 +138,7 @@ var anssgadget=anssgadget || (function() {
     return {
 	submitMapRequestOldAnss:submitMapRequestOldAnss,
 	submitMapRequestKml:submitMapRequestKml,
-	submitMapRequestGeoJson:submitMapRequestGeoJson
+	submitMapRequestGeoJson:submitMapRequestGeoJson,
+	clearMapData:clearMapData
     }
 })();
