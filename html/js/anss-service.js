@@ -49,24 +49,35 @@ var anssgadget=anssgadget || (function() {
     var DEFAULT_MAX_WALLTIME="00:00:00";
 
     function submitMapRequestGeoJson() {
-	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
-	var amp="&";
-	var format="format=geojson";
-	var minMagParam="minmagnitude="+minmag.value;
+		var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
+		var amp="&";
+		var format="format=geojson";
 
-	console.log(minMagParam);
-	var finalUrl=urlBase+format+amp+minMagParam;
-	
-	console.log(finalUrl);
+		var finalUrl=urlBase+format;
 
-	$.getJSON(finalUrl)
-	    .done(function(data){
-		//		console.log(data);
+		if(minmag.value)
+			finalUrl += amp + "minmagnitude=" + minmag.value;
+		if(maxmag.value)
+			finalUrl += amp + "maxmagnitude=" + maxmag.value;
 
-		clearMapData();
+		if(minlat.value)
+			finalUrl += amp + "minlatitude=" + minlat.value;
+		if(maxlat.value)
+			finalUrl += amp + "maxlatitude=" + maxlat.value;
+		if(minlon.value)
+			finalUrl += amp + "minlongitude=" + minlon.value;
+		if(maxlon.value)
+			finalUrl += amp + "maxlongitude=" + maxlon.value;
 
-		mapA.data.addGeoJson(data);		
-	    });
+		
+		console.log(finalUrl);
+
+		$.getJSON(finalUrl)
+		    .done(function(data){
+
+				clearMapData();
+				mapA.data.addGeoJson(data);		
+		    });
     }
 
 	function clearMapData(){
