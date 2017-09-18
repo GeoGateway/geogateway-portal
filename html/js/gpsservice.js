@@ -23,4 +23,8 @@ function rungpsservice(){
 			"epoch2":$('#gs_epoch2').val()
 		};
 	//alert(jQuery.param(data));
+	 $.ajax({
+        url:'gps_service',
+        data:{'data':jQuery.param(data)}
+    }).done(function(result) {alert(result);});
 }
