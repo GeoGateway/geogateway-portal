@@ -1,6 +1,8 @@
 // js.code for GPS service
 
 function rungpsservice(){
+
+	//testing formating
 	var action = [];
 	var actionlist = ["getvelocities","getdisplacement","getcoseimic","getpostseismic"];
 	for (i = 0; i < actionlist.length; i++) {
@@ -26,5 +28,28 @@ function rungpsservice(){
 	 $.ajax({
         url:'gps_service',
         data:{'data':jQuery.param(data)}
-    }).done(function(result) {alert(result);});
+    }).done(function(result) {
+	var obj = JSON.parse(result);
+	var tablestr = '<table class="uavsar-table"><tbody>';
+	var filename;
+	var linkurl;
+	var newkmllayer;
+	for (i = 0; i< obj.urls.length; i++) {
+		linkurl = obj.urls[i];
+		filename = linkurl.substring(linkurl.lastIndexOf('/')+1);
+		if (filename.includes("kml")) {    newkmlLayer = new google.maps.KmlLayer({
+        url: linkurl,
+         suppressInfoWindows: false,
+        map: mapA
+    	});
+	};
+		tablestr+='<tr class="uavsar-tr"><td>';
+		tablestr+="<a href="+linkurl+">"+filename+"</a>";
+		tablestr+="</td></tr>";
+
+	};
+	tablestr += "</tbody></table>";
+	document.getElementById("gpsservice_results").innerHTML = tablestr;
+
+    });
 }
