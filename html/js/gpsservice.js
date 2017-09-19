@@ -4,7 +4,7 @@ function rungpsservice(){
 
 	//testing formating
 	var action = [];
-	var actionlist = ["getvelocities","getdisplacement","getcoseimic","getpostseismic"];
+	var actionlist = ["getvelocities","getdisplacement","getcoseismic","getpostseismic"];
 	for (i = 0; i < actionlist.length; i++) {
 		if ($("#"+actionlist[i]).is(':checked')){
 			action.push(actionlist[i]);}
@@ -27,6 +27,7 @@ function rungpsservice(){
 	//alert(jQuery.param(data));
 	 $.ajax({
         url:'gps_service',
+        async:false,
         data:{'data':jQuery.param(data)}
     }).done(function(result) {
 	var obj = JSON.parse(result);
