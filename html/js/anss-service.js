@@ -47,6 +47,7 @@ var anssgadget=anssgadget || (function() {
     var MAXLAT="maxlat=";
     var DEFAULT_MIN_WALLTIME="00:00:00";
     var DEFAULT_MAX_WALLTIME="00:00:00";
+    var kmlLayer; 
 
     function submitMapRequestGeoJson() {
 		var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
@@ -55,7 +56,50 @@ var anssgadget=anssgadget || (function() {
 
 		var finalUrl=urlBase+format;
 
-		if(minmag.value)
+		finalUrl = appendParameters(finalUrl);
+		
+		console.log(finalUrl);
+
+		$.getJSON(finalUrl)
+		    .done(function(data){
+
+				clearMapData();
+				mapA.data.addGeoJson(data);		
+		    });
+    }
+
+	function clearMapData(){
+	
+		mapA.data.forEach(function(feature) {
+			mapA.data.remove(feature);
+		});
+	
+		if(kmlLayer != null)
+			kmlLayer.setMap(null);
+	}
+
+    function submitMapRequestKml(){
+		var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
+		var amp="&";
+		var format="format=kml";
+		var finalUrl=urlBase+format;
+
+		finalUrl = appendParameters(finalUrl);
+
+		console.log(finalUrl);
+		clearMapData();
+		
+		kmlLayer = new google.maps.KmlLayer({
+	            url: finalUrl,
+	            suppressInfoWindows: false,
+	            map: mapA
+	        });
+    }
+
+    
+    function appendParameters(finalUrl) {
+
+    	if(minmag.value)
 			finalUrl += amp + "minmagnitude=" + minmag.value;
 		if(maxmag.value)
 			finalUrl += amp + "maxmagnitude=" + maxmag.value;
@@ -69,39 +113,17 @@ var anssgadget=anssgadget || (function() {
 		if(maxlon.value)
 			finalUrl += amp + "maxlongitude=" + maxlon.value;
 
-		
-		console.log(finalUrl);
 
-		$.getJSON(finalUrl)
-		    .done(function(data){
+		if(mindate.value)
+			finalUrl += amp + "starttime=" + mindate.value + "T" + mintime.value;
 
-				clearMapData();
-				mapA.data.addGeoJson(data);		
-		    });
+		if(maxdate.value)
+			finalUrl += amp + "endtime=" + maxdate.value + "T" + maxtime.value;
+
+		return finalUrl;
+
     }
 
-	function clearMapData(){
-		mapA.data.forEach(function(feature) {
-			mapA.data.remove(feature);
-		});
-	}
-
-    function submitMapRequestKml(){
-	var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
-	var amp="&";
-	var format="format=kml";
-	var minmag="minmagnitude=5.0"
-	var finalUrl=urlBase+format+amp+minmag;
-
-	var kmlLayer = new google.maps.KmlLayer({
-            url: finalUrl,
-            suppressInfoWindows: true,
-            map: mapA
-        });
-	
-    }
-
-    
     function submitMapRequestOldAnss(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon) {	
 	
 	//Note this assumes the AnssCatalogService is co-located.
