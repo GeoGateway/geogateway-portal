@@ -1,4 +1,14 @@
 // js.code for GPS service
+var gpsplot_layers=[];
+
+function check_gpsplot(element) {
+	var layer = gpsplot_layers[element.value];
+    if (element.checked) {
+        layer.setMap(mapA);
+    } else {
+        layer.setMap(null);
+    }
+};
 
 function rungpsservice(){
 
@@ -30,24 +40,30 @@ function rungpsservice(){
         async:false,
         data:{'data':jQuery.param(data)}
     }).done(function(result) {
+    gpsplot_layers=[];
 	var obj = JSON.parse(result);
 	var tablestr = '<table class="uavsar-table"><tbody>';
 	var filename;
 	var linkurl;
 	var newkmllayer;
+	if (obj.urls.length == 0) {
+		alert("No return, please change the parameters and try again!");
+		return;
+	};
 	for (i = 0; i< obj.urls.length; i++) {
 		linkurl = obj.urls[i];
 		filename = linkurl.substring(linkurl.lastIndexOf('/')+1);
-		if (filename.includes("kml")) {    newkmlLayer = new google.maps.KmlLayer({
+		tablestr+='<tr class="uavsar-tr"><td>';
+		if (filename.includes("kml")) { newkmlLayer = new google.maps.KmlLayer({
         url: linkurl,
          suppressInfoWindows: false,
         map: mapA
     	});
-	};
-		tablestr+='<tr class="uavsar-tr"><td>';
+		gpsplot_layers.push(newkmlLayer);
+		tablestr+= '<input  type="checkbox" id="gpsplot_checkbox" checked=checked value='+ i +' onclick="check_gpsplot(this)">';
+		};
 		tablestr+="<a href="+linkurl+">"+filename+"</a>";
 		tablestr+="</td></tr>";
-
 	};
 	tablestr += "</tbody></table>";
 	document.getElementById("gpsservice_results").innerHTML = tablestr;

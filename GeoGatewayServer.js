@@ -715,7 +715,7 @@ app.get('/gps_service/', function(req,res){
     var base_url = gpsserviceUrl;
     var queryUrl = base_url +  req.query.data;
 
-    console.log(queryUrl);
+    //console.log(queryUrl);
     restClient.get(queryUrl, function(data, response){
         console.log(res.statusCode);
         res.status(200).send(data);
