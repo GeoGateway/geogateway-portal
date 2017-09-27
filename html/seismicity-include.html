@@ -1,9 +1,27 @@
 <html>
   <head>
+	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="js/anss-service.js"></script>
     <script>
       
     </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $( function() {
+	$( "#acgMinDate" ).datepicker({
+		dateFormat: "yy-mm-dd"
+	});
+	$( "#acgMinDate" ).datepicker( "setDate", "-2d" );
+
+	$( "#acgMaxDate" ).datepicker({
+                dateFormat: "yy-mm-dd"
+        });
+
+    	$( "#acgMaxDate" ).datepicker( "setDate", "0d" );
+
+  } );
+</script>
   </head>
   <body>
     
@@ -33,7 +51,7 @@
       </tr>
       <tr>
 	<td>	  
-	  Starting Date: <input type="text" id="acgMinDate" value="2017-09-17">
+	  Starting Date: <input type="text" id="acgMinDate">
 	</td>
       </tr>
       <tr>
@@ -43,7 +61,7 @@
       </tr>
       <tr>
 	<td>
-	  Ending Date: <input type="text" id="acgMaxDate" value="2017-09-21">
+	  Ending Date: <input type="text" id="acgMaxDate">
 	</td>
       </tr>
       <tr>
