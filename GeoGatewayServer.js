@@ -40,6 +40,7 @@ var wmscolorUrl = config.wmscolorUrl;
 var losQueryUrl=config.losQueryUrl;
 var sldserviceUrl = config.sldserviceUrl;
 var uavsarratingUrl = config.uavsarratingUrl;
+var gpsserviceUrl = config.gpsserviceUrl;
 
 //Call or prepare constructors
 var app=express();
@@ -621,7 +622,7 @@ app.get('/sldservice/', function(req,res) {
         queryUrl +=  "/sldgenerator?";
         queryUrl += "image=" + req.query.image + "&min=" + req.query.min + "&max=" + req.query.max + "&theme="+req.query.theme;
     }
-    console.log(queryUrl);     
+    //console.log(queryUrl);     
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
@@ -704,6 +705,19 @@ app.get('/los_query/',function(req,res) {
             +"Lat, Lon, Distance (km), Displacement, Elevation Angle\n"
             +data;
 //        console.log(data);
+        res.status(200).send(data);
+    });
+
+});
+
+app.get('/gps_service/', function(req,res){
+
+    var base_url = gpsserviceUrl;
+    var queryUrl = base_url +  req.query.data;
+
+    //console.log(queryUrl);
+    restClient.get(queryUrl, function(data, response){
+        console.log(res.statusCode);
         res.status(200).send(data);
     });
 
