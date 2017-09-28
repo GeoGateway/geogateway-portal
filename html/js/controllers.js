@@ -783,7 +783,7 @@ UserProjectApp.controller("NotecardController", ['$scope','$rootScope','$http','
 	$http.post("/notecards/"+$rootScope.globals.currentUser.username,notecard).
 	    //We created the notecard successfully.
             success(function(theNotecard){
-//		console.log(theNotecard);
+		//		console.log(theNotecard);
 		$scope.newNotecard={};		
 		//If we need to upload a file, do so now.
 		if(file!=null) {

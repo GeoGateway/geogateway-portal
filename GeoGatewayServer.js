@@ -572,6 +572,8 @@ app.get('/uavsar_flight_search/',function(req,res) {
     var geoServerUrl=uavsarSearchUrl+'searchstring=';
     restClient.get(geoServerUrl+queryStr, function(data, response){
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);
     });
 });
         
@@ -584,6 +586,8 @@ app.get('/uavsar_query/',function(req,res){
 
     restClient.get(geoServerUrl+queryStr, function(data, response){
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);
     });
 
 });
@@ -605,6 +609,8 @@ app.get('/has_wms/', function(req,res) {
     
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 });
 
@@ -626,6 +632,8 @@ app.get('/sldservice/', function(req,res) {
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 
 });
@@ -653,6 +661,8 @@ app.get('/uavsarrating/', function(req,res) {
 
     restClient.get(queryUrl, function(data, response){
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 
 });
@@ -706,6 +716,8 @@ app.get('/los_query/',function(req,res) {
             +data;
 //        console.log(data);
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 
 });
@@ -719,6 +731,8 @@ app.get('/gps_service/', function(req,res){
     restClient.get(queryUrl, function(data, response){
         console.log(res.statusCode);
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 
 });
@@ -751,6 +765,8 @@ app.get('/hgt_query/',function(req,res) {
     restClient.get(query_url, function(data, response){
 //        console.log(data);
         res.status(200).send(data);
+    }).on('error', function (err) {
+	console.log('something went wrong on the request', err.request.options);	
     });
 
 });
