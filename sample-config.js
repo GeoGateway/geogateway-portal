@@ -7,6 +7,7 @@ config.baseDestDir="html/userUploads/";
 config.uavsarSearchUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?';
 config.wmsUrl='http://gw72.iu.xsede.org/geoserver/InSAR/wms?';
 config.losQueryUrl='http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
+config.altlosQueryUrl='http://156.56.177.220:5000/los/profile?image=uid';
 config.wmscolorUrl = 'http://gw88.iu.xsede.org/geoserver/InSAR/wms?';
 config.sldserviceUrl = "http://gw88.iu.xsede.org/insar";
 config.uavsarratingUrl = "http://gf2.ucs.indiana.edu/quaketables/uavsar/rating?";
