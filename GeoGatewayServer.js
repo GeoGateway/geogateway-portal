@@ -671,10 +671,12 @@ app.get('/uavsarrating/', function(req,res) {
 app.get('/los_query/',function(req,res) {
 //	 var base_url = 'http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
 	var base_url = losQueryUrl;
-    var altpool=['10','26','258','1382','1434','1442'];
+    //var altpool=['10','26','258','1382','1434','1442'];
     image_uid=req.query.image_uid;
     // switch to new tools
-    if (altpool.indexOf(image_uid) > -1) {base_url = altlosQueryUrl;};
+    //if (altpool.indexOf(image_uid) > -1) {base_url = altlosQueryUrl;};
+    //console.log(req.query.altlosflag);
+    if (req.query.altlosflag > 0) {base_url = altlosQueryUrl;};
     image_name = req.query.image_name;
     lat1=req.query.lat1;
     lat2=req.query.lat2;
