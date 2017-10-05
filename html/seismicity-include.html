@@ -2,7 +2,19 @@
   <head>
     <script src="js/anss-service.js"></script>
     <script>
-      
+    $( function() {
+	$( "#acgMinDate" ).datepicker({
+		dateFormat: "yy-mm-dd"
+	});
+	$( "#acgMinDate" ).datepicker( "setDate", "-2d" );
+
+	$( "#acgMaxDate" ).datepicker({
+                dateFormat: "yy-mm-dd"
+        });
+
+    	$( "#acgMaxDate" ).datepicker( "setDate", "0d" );
+
+    } );
     </script>
   </head>
   <body>
@@ -13,27 +25,27 @@
     <table>
       <tr>
 	<td>
-	  Min Lat: <input type="text" id="minlatbbox" value="31.0">
+	  Min Lat: <input type="text" id="minlatbbox" value="20.0">
 	</td>
       </tr>
       <tr>
 	<td>      
-	  Min Lon: <input type="text" id="minlonbbox" value="-120.0">
+	  Min Lon: <input type="text" id="minlonbbox" value="-130.0">
 	</td>
       </tr>
       <tr>
 	<td>	  
-	  Max Lat: <input type="text" id="maxlatbbox" value="35.0">
+	  Max Lat: <input type="text" id="maxlatbbox" value="50.0">
 	</td>
       </tr>
       <tr>
 	<td>	  
-	  Max Lon: <input type="text" id="maxlonbbox" value="-116.0">
+	  Max Lon: <input type="text" id="maxlonbbox" value="-60.0">
 	</td>
       </tr>
       <tr>
 	<td>	  
-	  Starting Date: <input type="text" id="acgMinDate" value="2002/01/01">
+	  Starting Date: <input type="text" id="acgMinDate">
 	</td>
       </tr>
       <tr>
@@ -43,7 +55,7 @@
       </tr>
       <tr>
 	<td>
-	  Ending Date: <input type="text" id="acgMaxDate" value="2011/06/01">
+	  Ending Date: <input type="text" id="acgMaxDate">
 	</td>
       </tr>
       <tr>
@@ -63,7 +75,7 @@
       </tr>
     </table>
     
-    <button id="RunAnssAction" onclick='anssgadget.submitMapRequestGeoJson()'>Fetch Seismic Catalog</button>
-
+    <button id="RunAnssAction" onclick='anssgadget.submitMapRequestKml()'>Fetch Seismic Catalog</button>
+    <button id="ClearMapData" onclick='anssgadget.clearMapData()'>Clear Seismic data</button>
   </body>
 </html>
