@@ -444,6 +444,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
                 $("#get-area-minmax-button").show();
                 $("#get-area-minmax-button").removeAttr('disabled');
                 $("#get-area-minmax-button").on( "click", {uid: uid}, color_stretch);
+                // if currentimage already shown
+                if ($('#reset-color-button').is(':visible')) {$('#currentimage').val("uid" + uid + "_unw");};
             }  
             else {
                 // disbale color stretch function
@@ -782,7 +784,7 @@ function color_stretch(event) {
     var results=$.ajax({url:'sldservice',data:{'service':'getminmax','image':imagename,'extent': mapextent},async:false}).responseText;
     //alert(results);
     var datajson=jQuery.parseJSON(results);
-    //alert(datajson);
+    //alert(datajson;)
 
     $('#Strech-color-div').html('');
 
