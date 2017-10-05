@@ -598,7 +598,7 @@ a:visited {
 /* EXTRA TOOLS PANEL TABS */
 .extra-tools-panel {
     position: fixed;
-    bottom: 5%;
+    top: 15%;
     left: 450px;
     width: calc(100% - 450px);
     height: 0;
