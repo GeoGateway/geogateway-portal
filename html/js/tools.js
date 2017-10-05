@@ -1111,6 +1111,8 @@ function updateDygraphYValueRange(){
     var minY=$("#groundRangeChangeYMin").val();
     var maxY=$("#groundRangeChangeYMax").val();
     dygraph1.updateOptions({valueRange:[minY,maxY]});
+    //Note we don't want to set the values from dygraph1.yAxisRange() as with X above.
+    //This disrupts the plot resetting feature that you get when you double click.
 }
 
 
