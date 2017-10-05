@@ -1039,7 +1039,7 @@ function drawDygraphAjax(image_uid) {
     var downloadUrl="/los_query?image_uid="+image_uid+"&image_name="+LOS_dataname+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average+"&azimuth="+azimuth+"&losLength="+losLength;
     $("#LOS-Data-Download").html("<a href='"+downloadUrl+"' target='_blank'><b>Download LOS Data</b></a>");
     
-    var altpool=['10','26','258','693','1382','1434','1442'];
+    var altpool=['10','26','43','258','693','1382','1434','1442'];
     var altlosflag = 0;
     if (altpool.indexOf(image_uid.toString()) > -1) {altlosflag = 1;};
 
