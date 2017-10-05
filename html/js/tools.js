@@ -1091,8 +1091,22 @@ function drawDygraphAjax(image_uid) {
     
 }
 
+function updateDygraphXValueRange(){
+    //dygraph1.updateOptions({valueRange:[-10,10]"});
+    var minX=$("#groundRangeChangeXMin").val();
+    var maxX=$("#groundRangeChangeXMax").val();
+    console.log(dygraph1.xAxisRange());
+    if(minX == "") {
+	minX=dygraph1.xAxisRange()[0];
+    }
+    if(maxX == "") {
+	maxX=dygraph1.xAxisRange()[1];
+    }
+    console.log(minX+" "+maxX);
+    dygraph1.updateOptions({dateWindow:[minX,maxX]});
+}
+
 function updateDygraphYValueRange(){
-    console.log("Update dygraph y value range",$("#groundRangeChangeYValues").val());
     //dygraph1.updateOptions({valueRange:[-10,10]"});
     var minY=$("#groundRangeChangeYMin").val();
     var maxY=$("#groundRangeChangeYMax").val();
