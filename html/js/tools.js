@@ -1095,14 +1095,12 @@ function updateDygraphXValueRange(){
     //dygraph1.updateOptions({valueRange:[-10,10]"});
     var minX=$("#groundRangeChangeXMin").val();
     var maxX=$("#groundRangeChangeXMax").val();
-    console.log(dygraph1.xAxisRange());
     if(minX == "") {
-	minX=dygraph1.xAxisRange()[0];
+	minX=dygraph1.xAxisExtremes()[0];
     }
     if(maxX == "") {
-	maxX=dygraph1.xAxisRange()[1];
+	maxX=dygraph1.xAxisExtremes()[1];
     }
-    console.log(minX+" "+maxX);
     dygraph1.updateOptions({dateWindow:[minX,maxX]});
 }
 
@@ -1111,8 +1109,12 @@ function updateDygraphYValueRange(){
     var minY=$("#groundRangeChangeYMin").val();
     var maxY=$("#groundRangeChangeYMax").val();
     dygraph1.updateOptions({valueRange:[minY,maxY]});
-    //Note we don't want to set the values from dygraph1.yAxisRange() as with X above.
-    //This disrupts the plot resetting feature that you get when you double click.
+    if(minY == "") {
+	minY=dygraph1.YAxisExtremes()[0];
+    }
+    if(maxY == "") {
+	maxY=dygraph1.YAxisExtremes()[1];
+    }    
 }
 
 
