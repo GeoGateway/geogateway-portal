@@ -1091,12 +1091,30 @@ function drawDygraphAjax(image_uid) {
     
 }
 
+function updateDygraphXValueRange(){
+    //dygraph1.updateOptions({valueRange:[-10,10]"});
+    var minX=$("#groundRangeChangeXMin").val();
+    var maxX=$("#groundRangeChangeXMax").val();
+    if(minX == "") {
+	minX=dygraph1.xAxisExtremes()[0];
+    }
+    if(maxX == "") {
+	maxX=dygraph1.xAxisExtremes()[1];
+    }
+    dygraph1.updateOptions({dateWindow:[minX,maxX]});
+}
+
 function updateDygraphYValueRange(){
-    console.log("Update dygraph y value range",$("#groundRangeChangeYValues").val());
     //dygraph1.updateOptions({valueRange:[-10,10]"});
     var minY=$("#groundRangeChangeYMin").val();
     var maxY=$("#groundRangeChangeYMax").val();
     dygraph1.updateOptions({valueRange:[minY,maxY]});
+    if(minY == "") {
+	minY=dygraph1.YAxisExtremes()[0];
+    }
+    if(maxY == "") {
+	maxY=dygraph1.YAxisExtremes()[1];
+    }    
 }
 
 
@@ -1118,84 +1136,9 @@ function upV3(event, g, context) {
     if (context.isZooming) {
 	Dygraph.endZoom(event, g, context);
     }
-     Dygraph.cancelEvent(event);
+    Dygraph.cancelEvent(event);
 }
 
-//TODO: Deprecate this in favor of the jQuery().ajax() method above.
-function drawDygraph(image_uid) {
-//    console.log("drawDygraph called: "+image_uid);
-    if($('.extra-tools-panel').hasClass('inactive'))
-    {
-        $('.extra-tools-panel').removeClass('inactive').addClass('active');
-        $('.extra-tools-panel').animate({height: "160px"}, 50);
-    }
-    var lat1 = LOS_markers[0].getPosition().lat();
-    var lng1 = LOS_markers[0].getPosition().lng();
-    var lat2 = LOS_markers[1].getPosition().lat();
-    var lng2 = LOS_markers[1].getPosition().lng();
-    var format = 'csv';
-    var resolution = '100';
-    var method = 'average';
-    var average = '10';
-    $.get("/los_query/",
-        {
-            'image_uid': image_uid,
-            'lat1': lat1,
-            'lng1': lng1,
-            'lat2': lat2,
-            'lng2': lng2,
-            'format': format,
-            'resolution': resolution,
-            'method': method,
-            'average': average
-        })
-        .done(function(csv) {
-            var csv2=csv.split("\n");
-            var csv_final="";
-            for(var i=0;i<csv2.length;i++) {
-                csv3=csv2[i].split(",");
-//                console.log(csv2[i],csv3)
-                if(csv3[2] && csv3[3]) {
-                    csv_final+=csv3[2]+","+csv3[3]+"\n";
-                }
-//                console.log(csv_final);
-            }
-
-            var g2 = new Dygraph(
-                document.getElementById("dygraph-LOS"),
-                csv_final,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Ground Range Change',
-                      titleHeight:20, 
-                    xLabelHeight:16,
-                      yLabelWidth:16,
-                      xlabel:'Distance (km)',
-                      ylabel:'Ground Range Change (cm)'}
-        );
-        });
-
- //   $.get("/hgt_query/",
- //       {
- //           'image_uid': image_uid,
- //           'lat1': lat1,
- //           'lng1': lng1,
- //           'lat2': lat2,
- //           'lng2': lng2,
- //           'format': format,
- //           'resolution': resolution,
- //           'method': method,
- //           'average': average
- //       })
- //       .done(function(csv) {
- //           var g2 = new Dygraph(
- //               document.getElementById("dygraph-HGT"),
- //               csv,{drawPoints:true,pointSize:2,strokeWidth:0.0,title:'Topographic Height',
- //                     titleHeight:20, 
- //                   xLabelHeight:16,
- //                     yLabelWidth:16,
- //                     xlabel:'Distance (km)',
- //                     ylabel:'Topographic Height (m)'}
- //       );
- //       });
-}
 
 ////////////////////////////////// FAULT LAYER ////////////////////////////////
 
