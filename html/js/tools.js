@@ -1223,10 +1223,11 @@ function initialize() {
 
     // load geogateway logo
     var logokml =  new google.maps.KmlLayer({
-                    url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
-                    preserveViewport:true,
-                    screenOverlays:true
-                    });
+        //url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
+	url: "https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/geogateway.kmz",
+        preserveViewport:true,
+        screenOverlays:true
+    });
     logokml.setMap(mapA);    
 
     setup_UAVSAR();
