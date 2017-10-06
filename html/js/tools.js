@@ -1376,7 +1376,7 @@ function showStateBoundaries() {
             stateKml=new google.maps.KmlLayer({
                 //url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_500k.kml",
 //                url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_5m.kml",
-                url: "http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_20m.kml",
+                url: "http://gf2.ucs.indiana.edu/stage/gz_2010_us_040_00_20m.kml",
                 preserveViewport:true,
                 map:mapA
             });
