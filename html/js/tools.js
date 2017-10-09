@@ -1148,7 +1148,8 @@ function upV3(event, g, context) {
 // simple call for the kml data
 function setup_FAULT_LAYER() {
     ctaLayer = new google.maps.KmlLayer({
-        url: 'http://gf2.ucs.indiana.edu/ucerf3_black.kml',
+        //url: 'http://gf2.ucs.indiana.edu/ucerf3_black.kml',
+	url: 'https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/ucerf3_black.kml',
         preserveViewport:true
     });
 }
@@ -1225,10 +1226,11 @@ function initialize() {
 
     // load geogateway logo
     var logokml =  new google.maps.KmlLayer({
-                    url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
-                    preserveViewport:true,
-                    screenOverlays:true
-                    });
+        //url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
+	url: "https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/geogateway.kmz",
+        preserveViewport:true,
+        screenOverlays:true
+    });
     logokml.setMap(mapA);    
 
     setup_UAVSAR();
@@ -1321,7 +1323,8 @@ function showStateBoundaries() {
             stateKml=new google.maps.KmlLayer({
                 //url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_500k.kml",
 //                url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_5m.kml",
-                url: "http://gf2.ucs.indiana.edu/stage/gz_2010_us_040_00_20m.kml",
+                //url: "http://gf2.ucs.indiana.edu/stage/gz_2010_us_040_00_20m.kml",
+		url: "https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/gz_2010_us_040_00_20m.kml",
                 preserveViewport:true,
                 map:mapA
             });
@@ -1334,7 +1337,8 @@ function showStateBoundaries() {
 function showCoastlines() {
     if(document.getElementById("maptools.coastlines").checked==true) {
         coastlineKml=new google.maps.KmlLayer({
-            url:"http://gf2.ucs.indiana.edu/stage/ne_50m_coastline.kml",
+	    url:"https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/ne_50m_coastline.kml",
+            //url:"http://gf2.ucs.indiana.edu/stage/ne_50m_coastline.kml",
 //            url:"http://eric.clst.org/wupl/Stuff/gz_2010_us_outline_20m.kml",
             preserveViewport:true,
             map: mapA
