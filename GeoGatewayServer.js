@@ -54,7 +54,7 @@ var regex=new RegExp(tofind,'g');
 
 
 //Set up MongoClient
-var url="mongodb://127.0.0.1:27017/geogatewaydb";  //This should not be hard coded?
+var url="mongodb://mongo:27017/geogatewaydb";  //This should not be hard coded?
 MongoClient.connect(url, function(err, db) {
 	 test.equal(null, err);
 	 collectionUtils=new CollectionUtils(db);
