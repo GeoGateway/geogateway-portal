@@ -48,4 +48,18 @@ To keep libraries up to date, periodically run the following:
 
 
   
+# To Install using Docker(Experimental)
 
+* git clone https://github.com/GeoGateway/geogateway-portal.git
+
+* cd geogateway-portal
+
+* docker build --no-cache -t geogateway/portal:v1 .
+
+* docker run --name some-mongo -d mongo
+   - If mongo-container is already running, skip this
+
+* docker run -it -p 3000:3000 --link <MONGO_CONTAINER_NAME>:mongo -d geogateway/portal:v1
+
+* docker exec <CONTAINER_ID> node GeoGatewayServer.js &
+   - This is temperory command for starting the server in the container. This will be integrated into the Dockerfile so that the server starts up whenever the container is run.
