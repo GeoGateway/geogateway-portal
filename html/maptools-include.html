@@ -40,6 +40,17 @@
 	    }
 	});
     });
+    function updateGamma(slidervalue) {
+	    var mapStyles = [{
+	        "stylers": [{
+	            "gamma": slidervalue
+	        }]
+	    }];
+
+	    mapA.setOptions({
+	        styles: mapStyles
+	    });
+	}
 </script>
 
 <div class="tool">
@@ -63,6 +74,8 @@
             </div> 
           </div>
           <div ng-hide='uploadedKmlFiles == null'>
+          	Fade baselayer: <div id="gammaslider">
+  			<input type="range" min="1" max="10" value="1" class="slider" id="gammavalue" onchange="updateGamma(this.value)"></div>
             <p>
               <table id="userKmlTable" class="table table-bordered table-responsive">
                 <caption>Click the checkbox to turn the display on/off</caption>
