@@ -1037,7 +1037,7 @@ function drawDygraphAjax(image_uid) {
     var azimuth = $("#azimuth-value").val();
     var losLength=$("#losLength-value").val();
     
-    var altpool=['10','26','43','258','693','953','954','1382','1434','1442','1446','1447','1448','1449','1450'];
+    var altpool=['10','26','43','258','693','953','954','1382','1434','1442','1446','1447','1448','1449','1450','1452'];
     var altlosflag = 0;
     if (altpool.indexOf(image_uid.toString()) > -1) {altlosflag = 1;};
     
