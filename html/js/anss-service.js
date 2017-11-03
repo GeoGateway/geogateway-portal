@@ -93,7 +93,8 @@ var anssgadget=anssgadget || (function() {
 	            url: finalUrl,
 	            suppressInfoWindows: false,
 	            map: mapA,
-		    preserveViewport: true
+		    preserveViewport: true,
+		    screenOverlays: false
 	        });
     }
 
