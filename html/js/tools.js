@@ -423,14 +423,14 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
             has_coloring = checkwmslayer(uid,"coloring");
             if (has_coloring) {
                 if (wmsgf9_samples[uid][4] == 0 ) {
-                highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw"); 
+                highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw"); 
                 // load legend
-                var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/uid"+uid+"_unw_default.kmz"; }
+                var legend_kml = "http://149.165.157.180/uavsarlegend1/uid"+uid+"_unw_default.kmz"; }
                 else {
                 //load user defined 
                     var imagename = wmsgf9_samples[uid][4] ['image'];
                     var stylesld = wmsgf9_samples[uid][4] ['style'];
-                    highresoverlay=loadWMSwithstyle(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+imagename,stylesld);
+                    highresoverlay=loadWMSwithstyle(mapA, "http://149.165.157.180/geoserver/InSAR/wms?","InSAR:"+imagename,stylesld);
 
                     var legend_kml = wmsgf9_samples[uid][4] ['kmz']+"?dummy="+(new Date()).getTime();};                  
                     wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
@@ -454,8 +454,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
 
                 highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
                     // load high-res legend
-            var legend_kml = "http://gw88.iu.xsede.org/highreslegend/2pi.kmz";
-            if (parseInt(uid)<=369) {legend_kml = "http://gw88.iu.xsede.org/highreslegend/pi.kmz";};
+            var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
+            if (parseInt(uid)<=369) {legend_kml = "http://149.165.157.180/highreslegend/pi.kmz";};
             wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
             url: legend_kml,
             preserveViewport:true,
@@ -468,8 +468,8 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
         else {
         highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
         // load high-res legend
-        var legend_kml = "http://gw88.iu.xsede.org/highreslegend/2pi.kmz";
-        if (parseInt(uid)<=369) {legend_kml = "http://gw88.iu.xsede.org/highreslegend/pi.kmz";};
+        var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
+        if (parseInt(uid)<=369) {legend_kml = "http://149.165.157.180/highreslegend/pi.kmz";};
         wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
         url: legend_kml,
         preserveViewport:true,
@@ -725,9 +725,9 @@ function reset_color_api(){
     wmsgf9_select_legend_kml.setMap(null);
     mapA.overlayMapTypes.setAt(0, null);
     //reload
-     highresoverlay = loadWMS(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+imagename);
+     highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/InSAR/wms?","InSAR:"+imagename);
     // load legend
-    var legend_kml = "http://gw88.iu.xsede.org/uavsarlegend1/"+imagename+"_default.kmz";
+    var legend_kml = "http://149.165.157.180/uavsarlegend1/"+imagename+"_default.kmz";
         wmsgf9_select_legend_kml =  new google.maps.KmlLayer({
         url: legend_kml,
         preserveViewport:true,
@@ -767,7 +767,7 @@ function new_color_api(){
     //remove current wms
     mapA.overlayMapTypes.setAt(0, null);
     //reload wms
-    highresoverlay=loadWMSwithstyle(mapA, "http://gw88.iu.xsede.org/geoserver/InSAR/wms?","InSAR:"+datajson['image'],datajson['style']);
+    highresoverlay=loadWMSwithstyle(mapA, "http://149.165.157.180/geoserver/InSAR/wms?","InSAR:"+datajson['image'],datajson['style']);
 
     // get uid from datajson['image'] = uid254_unw
     //record datajson
