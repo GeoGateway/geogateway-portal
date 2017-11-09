@@ -783,7 +783,13 @@ function color_stretch(event) {
     var mapextent = mapA.getBounds().toString();
     var results=$.ajax({url:'sldservice',data:{'service':'getminmax','image':imagename,'extent': mapextent},async:false}).responseText;
     //alert(results);
-    var datajson=jQuery.parseJSON(results);
+    var datajson;
+    try {
+       datajson=jQuery.parseJSON(results); 
+    } catch(ex) {
+      return null;
+    };
+
     //alert(datajson;)
 
     $('#Strech-color-div').html('');
