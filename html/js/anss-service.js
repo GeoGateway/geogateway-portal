@@ -92,7 +92,9 @@ var anssgadget=anssgadget || (function() {
 		kmlLayer = new google.maps.KmlLayer({
 	            url: finalUrl,
 	            suppressInfoWindows: false,
-	            map: mapA
+	            map: mapA,
+		    preserveViewport: true,
+		    screenOverlays: false
 	        });
     }
 
