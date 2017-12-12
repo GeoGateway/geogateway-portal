@@ -101,6 +101,11 @@ var anssgadget=anssgadget || (function() {
     
     function appendParameters(finalUrl) {
 
+		if(mindate.value)
+			finalUrl += amp + "starttime=" + mindate.value + "T" + mintime.value;
+		if(maxdate.value)
+			finalUrl += amp + "endtime=" + maxdate.value + "T" + maxtime.value;
+		
     	if(minmag.value)
 			finalUrl += amp + "minmagnitude=" + minmag.value;
 		if(maxmag.value)
@@ -110,17 +115,11 @@ var anssgadget=anssgadget || (function() {
 			finalUrl += amp + "minlatitude=" + minlat.value;
 		if(maxlat.value)
 			finalUrl += amp + "maxlatitude=" + maxlat.value;
+
 		if(minlon.value)
 			finalUrl += amp + "minlongitude=" + minlon.value;
 		if(maxlon.value)
 			finalUrl += amp + "maxlongitude=" + maxlon.value;
-
-
-		if(mindate.value)
-			finalUrl += amp + "starttime=" + mindate.value + "T" + mintime.value;
-
-		if(maxdate.value)
-			finalUrl += amp + "endtime=" + maxdate.value + "T" + maxtime.value;
 
 		return finalUrl;
 
