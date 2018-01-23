@@ -452,7 +452,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
 
                 $("#get-area-minmax-button").attr('disabled');
 
-                highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+                highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/highres/wms?","highres:uid"+uid+"_unw");
                     // load high-res legend
             var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
             if (parseInt(uid)<=369) {legend_kml = "http://149.165.157.180/highreslegend/pi.kmz";};
@@ -466,7 +466,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
             }
         }   
         else {
-        highresoverlay = loadWMS(mapA, "http://gw72.iu.xsede.org/geoserver/InSAR/wms?","InSAR:uid"+uid+"_unw");
+        highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/highres/wms?","highres:uid"+uid+"_unw");
         // load high-res legend
         var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
         if (parseInt(uid)<=369) {legend_kml = "http://149.165.157.180/highreslegend/pi.kmz";};

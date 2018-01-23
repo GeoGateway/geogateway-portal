@@ -5,7 +5,7 @@ config.bin=config.home+"/bin/";
 config.baseDestDir="html/userUploads/";
 
 config.uavsarSearchUrl='http://gf2.ucs.indiana.edu/quaketables/uavsar/search?';
-config.wmsUrl='http://gw72.iu.xsede.org/geoserver/InSAR/wms?';
+config.wmsUrl='http://149.165.157.180/geoserver/highres/wms?';
 config.losQueryUrl='http://gf1.ucs.indiana.edu/insartool/profile?image=InSAR:uid';
 config.altlosQueryUrl='http://156.56.177.220:5000/los/profile?image=uid';
 config.wmscolorUrl = 'http://149.165.157.180/geoserver/InSAR/wms?';
