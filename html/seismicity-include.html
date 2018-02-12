@@ -18,7 +18,7 @@
     </script>
   </head>
   <body>
-    
+  <div>  
     Select your bounding box and time interval and then click "Fetch Catalog". <br/> This service
     harvests data from the <a target="blank" href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS FDSN API</a>
 	
@@ -77,5 +77,38 @@
     
     <button id="RunAnssAction" onclick='anssgadget.submitMapRequestKml()'>Fetch Seismic Catalog</button>
     <button id="ClearMapData" onclick='anssgadget.clearMapData()'>Clear Seismic data</button>
+  </div>
+  <br>
+  <div class="container-fluid">
+  <div class="tool-title">Seismicity Plots<br/> </div>
+  <div class="divider"></div>
+    <div class="row">
+   <div class="col-sm-6 col-sm-6 col-xs-12">
+      <form id="seismicityplots" method="post">
+     <div class="form-group ">
+      <div class="input-group">
+       <div class="input-group-addon">
+        Place Name
+       </div>
+       <input class="form-control input-sm" id="sp_placename" name="placename" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Latitude
+       </div>
+       <input class="form-control input-sm" id="sp_latitude" name="latitude" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Longitude
+       </div>
+       <input class="form-control input-sm" id="sp_longitude" name="longitude" type="text"/>
+      </div>
+      <br>
+      <button class="btn btn-primary " name="submit" type="submit" onclick="runseismicityplots()">
+        Plot
+       </button></div>
+</form></div></div>
+  </div>
   </body>
 </html>

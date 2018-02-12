@@ -176,3 +176,17 @@ var anssgadget=anssgadget || (function() {
 	clearMapData:clearMapData
     }
 })();
+
+// function to call seismicity plot 
+function runseismicityplots() {
+	var latitude = $('#sp_latitude').val();
+	var longitude = $('#sp_longitude').val();
+	var placename = $('#sp_placename').val();
+	var location = latitude + "," + longitude;
+	// parameters: name, country, location
+	var data = {
+		"name":placename.replace(/\s+/g, ''),
+		"country": "notset",
+		"location": location.replace(/\s+/g, '')
+	};
+}
