@@ -190,6 +190,7 @@ function runseismicityplots() {
 		"location": location.replace(/\s+/g, '')
 	};
 
+	$('#sp_submit').text('Caculating');
 	$.ajax({
         url:'seismicity_plot',
         async:false,
@@ -229,6 +230,7 @@ function runseismicityplots() {
         });
 
         mapA.setCenter(myLatLng);
+		$('#sp_submit').text('Plot');
 
     });
 }
