@@ -208,12 +208,12 @@ function runseismicityplots() {
 			imagelinks += imagestring.replace(/imageurl/g, linkurl);
 		};
 
-		alert(imagelinks);
+		//alert(imagelinks);
 		var contentString = '<div id="content">'+
       			'<h2>'+obj.name +'</h2>' +
             '<div id="bodyContent">'+ imagelinks +
             '</div></div>';
-        alert(contentString);
+        //alert(contentString);
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
