@@ -42,6 +42,7 @@ var altlosQueryUrl=config.altlosQueryUrl;
 var sldserviceUrl = config.sldserviceUrl;
 var uavsarratingUrl = config.uavsarratingUrl;
 var gpsserviceUrl = config.gpsserviceUrl;
+var seismicityplotUrl = config.seismicityplotUrl;
 
 //Call or prepare constructors
 var app=express();
@@ -735,10 +736,25 @@ app.get('/gps_service/', function(req,res){
 
     //console.log(queryUrl);
     restClient.get(queryUrl, function(data, response){
-        console.log(res.statusCode);
+        //console.log(res.statusCode);
         res.status(200).send(data);
     }).on('error', function (err) {
 	console.log('something went wrong on the request', err.request.options);	
+    });
+
+});
+
+app.get('/seismicity_plot/', function(req,res){
+
+    var base_url = seismicityplotUrl;
+    var queryUrl = base_url +  req.query.data;
+
+    //console.log(queryUrl);
+    restClient.get(queryUrl, function(data, response){
+        //console.log(res.statusCode);
+        res.status(200).send(data);
+    }).on('error', function (err) {
+    console.log('something went wrong on the request', err.request.options);    
     });
 
 });

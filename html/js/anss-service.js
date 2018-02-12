@@ -189,4 +189,46 @@ function runseismicityplots() {
 		"country": "notset",
 		"location": location.replace(/\s+/g, '')
 	};
+
+	$.ajax({
+        url:'seismicity_plot',
+        async:false,
+        data:{'data':jQuery.param(data)}
+    }).done(function(result) {
+    	var obj = JSON.parse(result);
+    	// add marker
+    	var latlon = obj.location.split(","); 
+    	var myLatLng = {lat: parseFloat(latlon[0]), lng: parseFloat(latlon[1])};
+		var linkurl;
+		var imagelinks = '';
+		var imagestring = '<a href="imageurl" target="_blank"><img src="imageurl" style="width:200px;height:150px;"></a>';
+
+		for (i = 0; i< obj.urls.length; i++) {
+			linkurl = obj.urls[i];
+			imagelinks += imagestring.replace(/imageurl/g, linkurl);
+		};
+
+		alert(imagelinks);
+		var contentString = '<div id="content">'+
+      			'<h2>'+obj.name +'</h2>' +
+            '<div id="bodyContent">'+ imagelinks +
+            '</div></div>';
+        alert(contentString);
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+    	var plotmarker = new google.maps.Marker({
+          position: myLatLng,
+          map: mapA,
+          title: obj.name
+        });
+
+        plotmarker.addListener('click', function() {
+          infowindow.open(mapA, plotmarker);
+        });
+
+        mapA.setCenter(myLatLng);
+
+    });
 }
