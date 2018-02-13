@@ -193,7 +193,8 @@ function runseismicityplots() {
 	$('#sp_submit').text('Caculating');
 	$.ajax({
         url:'seismicity_plot',
-        async:false,
+        async:true,
+        timeout: 120000,
         data:{'data':jQuery.param(data)}
     }).done(function(result) {
     	var obj = JSON.parse(result);
