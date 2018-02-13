@@ -35,6 +35,7 @@ function rungpsservice(){
 			"epoch2":$('#gs_epoch2').val()
 		};
 	//alert(jQuery.param(data));
+	$('#gs_submit').text('Caculating');
 	 $.ajax({
         url:'gps_service',
         async:false,
@@ -67,6 +68,7 @@ function rungpsservice(){
 	};
 	tablestr += "</tbody></table>";
 	document.getElementById("gpsservice_results").innerHTML = tablestr;
+	$('#gs_submit').text('Run');
 
     });
 }
