@@ -41,7 +41,6 @@ function rungpsservice(){
         async:false,
         data:{'data':jQuery.param(data)}
     }).done(function(result) {
-    gpsplot_layers=[];
 	var obj = JSON.parse(result);
 	var tablestr = '<table class="uavsar-table"><tbody>';
 	var filename;
@@ -51,6 +50,14 @@ function rungpsservice(){
 		alert("No return, please change the parameters and try again!");
 		return;
 	};
+	// unload previous layers
+	alert(gpsplot_layers.length);
+	if (gpsplot_layers.length >= 1) {
+		for (i=0; i<gpsplot_layers.length; i++ ){
+			gpsplot_layers[i].setMap(null);
+		};
+	};
+    gpsplot_layers=[];
 	for (i = 0; i< obj.urls.length; i++) {
 		linkurl = obj.urls[i];
 		filename = linkurl.substring(linkurl.lastIndexOf('/')+1);
