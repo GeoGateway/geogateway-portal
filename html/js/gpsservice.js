@@ -52,7 +52,7 @@ function rungpsservice(){
 			"lon":$('#gs_longitude').val(),
 			"width":$('#gs_width').val(),
 			"height":$('#gs_height').val(),
-			"epoch":$('#gs_epoch1').val(),
+			"epoch":$('#gs_epoch').val(),
 			"epoch1":$('#gs_epoch1').val(),
 			"epoch2":$('#gs_epoch2').val()
 		};
