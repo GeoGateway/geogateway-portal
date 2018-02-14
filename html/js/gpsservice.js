@@ -10,6 +10,27 @@ function check_gpsplot(element) {
     }
 };
 
+//show paras for each functions
+function showgpsparas() {
+	var actiontype = $("#kmltype_sel").val();
+	if (actiontype == "getcoseismic" || actiontype == "getpostseismic") {
+		document.getElementById( 'epoch_show' ).style.display = 'inline-table';
+		document.getElementById( 'epoch1_show' ).style.display = 'none';
+		document.getElementById( 'epoch2_show' ).style.display = 'none';
+	};
+	if (actiontype == 'getdisplacement'){
+		document.getElementById( 'epoch_show' ).style.display = 'none';
+		document.getElementById( 'epoch1_show' ).style.display = 'inline-table';
+		document.getElementById( 'epoch2_show' ).style.display = 'inline-table';
+	};
+	if (actiontype == "getvelocities") {
+		document.getElementById( 'epoch_show' ).style.display = 'none';
+		document.getElementById( 'epoch1_show' ).style.display = 'none';
+		document.getElementById( 'epoch2_show' ).style.display = 'none';
+	};
+
+};
+
 function rungpsservice(){
 
 	//testing formating

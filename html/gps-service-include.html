@@ -15,7 +15,7 @@
       <div class=" ">
         <div class="form-group">
   <!-- <label for="sel1">Select list:</label> -->
-      <select class="form-control" id="kmltype_sel">
+      <select class="form-control" id="kmltype_sel" onchange="showgpsparas()">
         <option value='getvelocities'>Velocities</option>
         <option value='getcoseismic'>Coseismic</option>
         <option value='getpostseismic'>Postseismic</option>
@@ -27,37 +27,43 @@
      <div class="form-group ">
       <div class="input-group">
        <div class="input-group-addon">
-        Latitude
+        <strong>Latitude</strong>
        </div>
        <input class="form-control input-sm" id="gs_latitude" name="latitude" type="text"/>
       </div>
       <div class="input-group">
        <div class="input-group-addon">
-        Longitude
+        <strong>Longitude</strong>
        </div>
        <input class="form-control input-sm" id="gs_longitude" name="longitude" type="text"/>
       </div>
       <div class="input-group">
        <div class="input-group-addon">
-       Width
+       <strong>Width</strong>
        </div>
        <input class="form-control input-sm" id="gs_width" name="width" placeholder="in degree" type="text"/>
       </div>
       <div class="input-group">
        <div class="input-group-addon">
-        Height
+        <strong>Height</strong>
        </div>
        <input class="form-control input-sm" id="gs_height" name="height" placeholder="in degree" type="text"/>
       </div>
-      <div class="input-group">
+      <div class="input-group" id="epoch_show" style="display: none;">
        <div class="input-group-addon">
-        Epoch 1
+        <strong>Epoch</strong>
+       </div>
+       <input class="form-control input-sm" id="gs_epoch" name="epoch" placeholder="YYYY-MM-DD" type="text"/>
+      </div>
+      <div class="input-group" id="epoch1_show" style="display: none;">
+       <div class="input-group-addon">
+        <strong>Epoch 1</strong>
        </div>
        <input class="form-control input-sm" id="gs_epoch1" name="epoch1" placeholder="YYYY-MM-DD" type="text"/>
       </div>
-      <div class="input-group">
+      <div class="input-group" id="epoch2_show" style="display: none;">
        <div class="input-group-addon">
-        Epoch 2
+        <strong>Epoch 2</strong>
        </div>
        <input class="form-control input-sm" id="gs_epoch2" name="epoch2" placeholder="YYYY-MM-DD" type="text"/>
       </div>
