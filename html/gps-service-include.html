@@ -13,30 +13,15 @@
        Select GPS data
       </label>
       <div class=" ">
-       <div class="checkbox">
-        <label class="checkbox">
-         <input name="kmltype" type="checkbox" id="getvelocities" value="Velocities"/>
-         Velocities
-        </label>
-       </div>
-       <div class="checkbox">
-        <label class="checkbox">
-         <input name="kmltype" type="checkbox" id="getdisplacement" value="Displacement"/>
-         Displacement
-        </label>
-       </div>
-       <div class="checkbox">
-        <label class="checkbox">
-         <input name="kmltype" type="checkbox" id="getcoseismic" value="Coseismic"/>
-         Coseismic
-        </label>
-       </div>
-       <div class="checkbox">
-        <label class="checkbox">
-         <input name="kmltype" type="checkbox" id="getpostseismic" value="Postseismic"/>
-         Postseismic
-        </label>
-       </div>
+        <div class="form-group">
+  <!-- <label for="sel1">Select list:</label> -->
+      <select class="form-control" id="kmltype_sel">
+        <option value='getvelocities'>Velocities</option>
+        <option value='getcoseismic'>Coseismic</option>
+        <option value='getpostseismic'>Postseismic</option>
+        <option value='getdisplacement'>Displacement</option>
+      </select>
+      </div>       
       </div>
      </div>
      <div class="form-group ">

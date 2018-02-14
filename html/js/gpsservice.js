@@ -14,11 +14,12 @@ function rungpsservice(){
 
 	//testing formating
 	var action = [];
-	var actionlist = ["getvelocities","getdisplacement","getcoseismic","getpostseismic"];
-	for (i = 0; i < actionlist.length; i++) {
-		if ($("#"+actionlist[i]).is(':checked')){
-			action.push(actionlist[i]);}
-		}
+	//var actionlist = ["getvelocities","getdisplacement","getcoseismic","getpostseismic"];
+	action.push($("#kmltype_sel").val());
+	// for (i = 0; i < actionlist.length; i++) {
+	// 	if ($("#"+actionlist[i]).is(':checked')){
+	// 		action.push(actionlist[i]);}
+	// 	}
 	if (action.length <1) {
 		alert("Please select as least one plot!");
 		return;
@@ -51,7 +52,7 @@ function rungpsservice(){
 		return;
 	};
 	// unload previous layers
-	alert(gpsplot_layers.length);
+	//alert(gpsplot_layers.length);
 	if (gpsplot_layers.length >= 1) {
 		for (i=0; i<gpsplot_layers.length; i++ ){
 			gpsplot_layers[i].setMap(null);
