@@ -46,7 +46,6 @@ function rungpsservice(){
 		return;
 	}		
 	var actionstr = action.join(",");
-
 	var data = {"function":actionstr,
 			"lat":$('#gs_latitude').val(),
 			"lon":$('#gs_longitude').val(),
@@ -54,7 +53,8 @@ function rungpsservice(){
 			"height":$('#gs_height').val(),
 			"epoch":$('#gs_epoch').val(),
 			"epoch1":$('#gs_epoch1').val(),
-			"epoch2":$('#gs_epoch2').val()
+			"epoch2":$('#gs_epoch2').val(),
+			"mon": document.getElementById("gs_mon").checked
 		};
 	//alert(jQuery.param(data));
 	$('#gs_submit').text('Caculating');
