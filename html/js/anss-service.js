@@ -190,7 +190,7 @@ function runseismicityplots() {
 		"location": location.replace(/\s+/g, '')
 	};
 
-	$('#sp_submit').text('Caculating');
+	$('#sp_submit').text('Calculating');
 	$.ajax({
         url:'seismicity_plot',
         async:true,

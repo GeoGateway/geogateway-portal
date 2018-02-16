@@ -57,7 +57,7 @@ function rungpsservice(){
 			"mon": document.getElementById("gs_mon").checked
 		};
 	//alert(jQuery.param(data));
-	$('#gs_submit').text('Caculating');
+	$('#gs_submit').text('Calculating');
 	 $.ajax({
         url:'gps_service',
         async:false,
