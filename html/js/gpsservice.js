@@ -54,6 +54,7 @@ function rungpsservice(){
 			"epoch":$('#gs_epoch').val(),
 			"epoch1":$('#gs_epoch1').val(),
 			"epoch2":$('#gs_epoch2').val(),
+			"scale":$('#gs_scale').val(),
 			"mon": document.getElementById("gs_mon").checked
 		};
 	//alert(jQuery.param(data));
