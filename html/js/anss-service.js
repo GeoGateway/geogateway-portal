@@ -235,3 +235,19 @@ function runseismicityplots() {
 
     });
 }
+
+function splocationpicker() {
+	alert("clicked");
+	  // Maps mousemove listener
+	 google.maps.event.addListener(mapA, 'mousedown', function (event)   {
+   displayCoordinates(event.latLng);});
+}
+
+function displayCoordinates(pnt) {
+	var lat = pnt.lat();
+  	lat = lat.toFixed(4);
+  	var lng = pnt.lng();
+  	lng = lng.toFixed(4);
+  	$('#sp_latitude').val(lat);
+  	$('#sp_longitude').val(lng);
+}
