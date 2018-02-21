@@ -189,7 +189,7 @@ function runseismicityplots() {
 		"country": "notset",
 		"location": location.replace(/\s+/g, '')
 	};
-
+	google.maps.event.clearListeners(mapA, 'mousedown');
 	$('#sp_submit').text('Calculating');
 	$.ajax({
         url:'seismicity_plot',
@@ -237,7 +237,6 @@ function runseismicityplots() {
 }
 
 function splocationpicker() {
-	alert("clicked");
 	  // Maps mousemove listener
 	 google.maps.event.addListener(mapA, 'mousedown', function (event)   {
    displayCoordinates(event.latLng);});
