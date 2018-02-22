@@ -1,7 +1,7 @@
 <html>
 <head>
 	<script type="text/javascript">
-		var wildfire_linkurls=['http://gf2.ucs.indiana.edu/stage/ModifiedCorrelation.kml','http://gf2.ucs.indiana.edu/stage/ModifiedUAVSAR.kml'];
+		var wildfire_linkurls=['http://gf2.ucs.indiana.edu/stage/ModifiedCorrelation.kml','http://gf2.ucs.indiana.edu/stage/ModifiedUAVSAR.kml',];
 		var wildfirekml=[];
 		function check_wildfire(element) {
 			var layer = wildfirekml[element.value];
@@ -29,7 +29,11 @@
 					}
 				}
 			else
-				$('#wildfireDiv').hide();
+				{$('#wildfireDiv').hide();
+				 for (i = 0; i< wildfirekml.length; i++) {
+				 	wildfirekml[i].setMap(null);
+					 }
+				}
 			});
 		});
 	</script>
