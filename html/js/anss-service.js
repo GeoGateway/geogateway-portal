@@ -182,10 +182,12 @@ function runseismicityplots() {
 	var latitude = $('#sp_latitude').val();
 	var longitude = $('#sp_longitude').val();
 	var placename = $('#sp_placename').val();
+	placename = placename.replace(/\s+/g, '');
+	if (placename == '') {placename = "Point";};
 	var location = latitude + "," + longitude;
 	// parameters: name, country, location
 	var data = {
-		"name":placename.replace(/\s+/g, ''),
+		"name":placename,
 		"country": "notset",
 		"location": location.replace(/\s+/g, '')
 	};
