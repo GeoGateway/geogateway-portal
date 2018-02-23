@@ -213,7 +213,7 @@ function runseismicityplots() {
 
 		//alert(imagelinks);
 		var contentString = '<div id="content">'+
-      			'<h2>'+obj.name +'</h2>' +
+      			'<h2>'+obj.name +" : " + obj.location+'</h2>' +
             '<div id="bodyContent">'+ imagelinks +
             '</div></div>';
         //alert(contentString);
