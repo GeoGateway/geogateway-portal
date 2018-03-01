@@ -207,7 +207,7 @@ function runseismicityplots() {
 		var linkurl;
 		var imagelinks = '';
 		var imagestring = '<a href="imageurl" target="_blank"><img src="imageurl" style="width:200px;height:150px;"></a>';
-
+		obj.urls.sort(); //sort return urls
 		for (i = 0; i< obj.urls.length; i++) {
 			linkurl = obj.urls[i];
 			imagelinks += imagestring.replace(/imageurl/g, linkurl);
@@ -232,7 +232,7 @@ function runseismicityplots() {
         plotmarker.addListener('click', function() {
           infowindow.open(mapA, plotmarker);
         });
-        
+
         google.maps.event.trigger(plotmarker, 'click');
 
         mapA.setCenter(myLatLng);
