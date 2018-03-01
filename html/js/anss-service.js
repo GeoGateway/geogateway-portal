@@ -192,6 +192,8 @@ function runseismicityplots() {
 		"location": location.replace(/\s+/g, '')
 	};
 	google.maps.event.clearListeners(mapA, 'mousedown');
+	mapA.setOptions({draggableCursor:null});
+
 	$('#sp_submit').text('Calculating');
 	$('#sp_locationpicker').button('toggle');
 	$.ajax({
@@ -244,7 +246,7 @@ function runseismicityplots() {
 function splocationpicker() {
 	  // Maps mousemove listener
 	 $('#sp_locationpicker').button('toggle');
-
+	 mapA.setOptions({draggableCursor:'crosshair'});
 	 google.maps.event.addListener(mapA, 'mousedown', function (event)   {
    displayCoordinates(event.latLng);});
 }
