@@ -232,6 +232,8 @@ function runseismicityplots() {
         plotmarker.addListener('click', function() {
           infowindow.open(mapA, plotmarker);
         });
+        
+        google.maps.event.trigger(plotmarker, 'click');
 
         mapA.setCenter(myLatLng);
 		$('#sp_submit').text('Plot');
