@@ -26,7 +26,13 @@ function showgpsparas() {
 		document.getElementById( 'ctwin_show' ).style.display = 'inline-table';
 		document.getElementById( 'ptwin_show' ).style.display = 'inline-table';
 	};
-
+	if (actiontype == 'getmodel') {
+		document.getElementById( 'epoch_show' ).style.display = 'none';
+		document.getElementById( 'epoch1_show' ).style.display = 'inline-table';
+		document.getElementById( 'epoch2_show' ).style.display = 'inline-table';
+		document.getElementById( 'ctwin_show' ).style.display = 'none';
+		document.getElementById( 'ptwin_show' ).style.display = 'none';
+	};
 	if (actiontype == 'getdisplacement'){
 		document.getElementById( 'epoch_show' ).style.display = 'none';
 		document.getElementById( 'epoch1_show' ).style.display = 'inline-table';
