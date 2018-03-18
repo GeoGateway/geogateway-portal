@@ -18,6 +18,11 @@ function showgpsparas() {
 		document.getElementById( 'epoch1_show' ).style.display = 'none';
 		document.getElementById( 'epoch2_show' ).style.display = 'none';
 	};
+	if (actiontype != "getdisplacement") {
+		document.getElementById( 'dwin1_show' ).style.display = 'none';
+		document.getElementById( 'dwin2_show' ).style.display = 'none';
+	};
+
 	if (actiontype == "getcoseismic" || actiontype == "getpostseismic") {
 		document.getElementById( 'ctwin_show' ).style.display = 'inline-table';
 		document.getElementById( 'ptwin_show' ).style.display = 'none';
@@ -39,6 +44,8 @@ function showgpsparas() {
 		document.getElementById( 'epoch2_show' ).style.display = 'inline-table';
 		document.getElementById( 'ctwin_show' ).style.display = 'none';
 		document.getElementById( 'ptwin_show' ).style.display = 'none';
+		document.getElementById( 'dwin1_show' ).style.display = 'inline-table';
+		document.getElementById( 'dwin2_show' ).style.display = 'inline-table';
 	};
 	if (actiontype == "getvelocities") {
 		document.getElementById( 'epoch_show' ).style.display = 'none';
@@ -77,6 +84,8 @@ function rungpsservice(){
 			"ref":$('#gs_refsite').val(),
 			"ct":$('#gs_ctwin').val(),
 			"pt":$('#gs_ptwin').val(),
+			"dwin1":$('#gs_dwin1').val(),
+			"dwin2":$('#gs_dwin2').val(),
 			"mon": document.getElementById("gs_mon").checked,
 			"eon": document.getElementById("gs_eon").checked
 		};
