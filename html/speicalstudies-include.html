@@ -1,7 +1,7 @@
 <html>
 <head>
 	<script type="text/javascript">
-		var wildfire_linkurls=['http://gf2.ucs.indiana.edu/stage/ModifiedCorrelation.kml','http://gf2.ucs.indiana.edu/stage/ModifiedUAVSAR.kml',];
+		var wildfire_linkurls=['http://gf2.ucs.indiana.edu/stage/ModifiedCorrelation.kml','http://gf2.ucs.indiana.edu/stage/ModifiedUAVSAR.kml','http://gf2.ucs.indiana.edu/stage/NIT_result.kml'];
 		var wildfirekml=[];
 		function check_wildfire(element) {
 			var layer = wildfirekml[element.value];
@@ -49,6 +49,7 @@
      		<tr><td>Experimental product JPL/Caltech/GeoGateway</td></tr>
      		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="wildfirekml_checkbox" onclick="check_wildfire(this)" />&nbsp UAVSAR enchanced image pair (Nov-2-2017, Feb-5-2018) Orange - disturbed&nbsp&nbsp<a href="http://gf2.ucs.indiana.edu/stage/ModifiedUAVSAR.kmz" download="ModifiedUAVSAR">download KMZ</a></td></tr>
      		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='0' id="wildfirekml_checkbox" onclick="check_wildfire(this)" />&nbsp UAVSAR enchanced image coherence (Feb-5-2018) Purple - disturbed&nbsp&nbsp<a href="http://gf2.ucs.indiana.edu/stage/ModifiedCorrelation.kmz" download="ModifiedCorrelation">download KMZ</a></td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='2' id="wildfirekml_checkbox" onclick="check_wildfire(this)" />&nbsp Rapid estimation/change detection with optical images (Dec-28-2017, Jan-13-2018) &nbsp&nbsp<a href="http://gf2.ucs.indiana.edu/stage/NIT_result.kmz" download="Change_Detection">download KMZ</a></td></tr>
      	</table>
      </div>	
     </div></div>
