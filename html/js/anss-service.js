@@ -49,6 +49,7 @@ var anssgadget=anssgadget || (function() {
     var DEFAULT_MAX_WALLTIME="00:00:00";
     var kmlLayer; 
 
+
     function submitMapRequestGeoJson() {
 		var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
 		var amp="&";
@@ -64,7 +65,20 @@ var anssgadget=anssgadget || (function() {
 		    .done(function(data){
 
 				clearMapData();
-				mapA.data.addGeoJson(data);		
+				mapA.data.addGeoJson(data);	
+				mapA.data.setStyle(function(feature) {
+          			var mag = Math.floor(parseFloat(feature.getProperty('mag')))*1.3;
+          			return /** @type {google.maps.Data.StyleOptions} */({
+            		icon: {
+              			path: google.maps.SymbolPath.CIRCLE,
+			              scale: mag,
+			              fillColor: '#f00',
+			              fillOpacity: 1,
+			              strokeWeight: 0.5
+		            }
+		          });
+		        });
+	
 		    });
     }
 
