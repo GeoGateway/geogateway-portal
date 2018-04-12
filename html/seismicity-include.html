@@ -18,6 +18,8 @@
     </script>
   </head>
   <body>
+      <div class="container-fluid">
+
   <div>  
     Select your bounding box and time interval and then click "Fetch Catalog". <br/> This service
     harvests data from the <a target="blank" href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS FDSN API</a>
@@ -73,11 +75,16 @@
 	  Maximum Magnitude:  <input type="text" id="acgMaxMagnitude" value="10.0">
 	</td>
       </tr>
+      <tr>
+  <td>    
+    Icon display scale:  <input type="text" id="iconscale" value="1.0">
+  </td>
+      </tr>
     </table>
     
     <button id="RunAnssAction" onclick='anssgadget.submitMapRequestGeoJson()'>Fetch Seismic Catalog</button>
     <button id="ClearMapData" onclick='anssgadget.clearMapData()'>Clear Seismic data</button>
-  </div>
+  </div></div>
   <br>
   <div class="container-fluid">
   <div class="tool-title">Seismicity Plots</div><center><strong>Magnitude-Frequency relations and Nowcast</strong></center>
