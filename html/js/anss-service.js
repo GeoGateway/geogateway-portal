@@ -65,9 +65,10 @@ var anssgadget=anssgadget || (function() {
 		    .done(function(data){
 
 				clearMapData();
+				var iconscale=document.getElementById("ssmiconscale").value;
 				mapA.data.addGeoJson(data);	
 				mapA.data.setStyle(function(feature) {
-          			var mag = Math.floor(parseFloat(feature.getProperty('mag')))*1.3;
+          			var mag = iconscale * Math.floor(parseFloat(feature.getProperty('mag')))*1.3;
           			return /** @type {google.maps.Data.StyleOptions} */({
             		icon: {
               			path: google.maps.SymbolPath.CIRCLE,
