@@ -55,16 +55,25 @@ var anssgadget=anssgadget || (function() {
 		var amp="&";
 		var format="format=geojson";
 
+
 		var finalUrl=urlBase+format;
+		var finalKMLUrl = urlBase + "format=kml";
 
 		finalUrl = appendParameters(finalUrl);
+		finalKMLUrl = appendParameters(finalKMLUrl);
+		//console.log(finalUrl);
+		//console.log(finalKMLUrl);
 		
-		console.log(finalUrl);
-
 		$.getJSON(finalUrl)
 		    .done(function(data){
 
 				clearMapData();
+				var download_content;
+				download_content = "<a href="+finalUrl + ' target="_blank" download="query.GeoJSON">Download GeoJSON</a>';
+				download_content += "&nbsp;&nbsp;&nbsp;";
+				download_content +="<a href="+finalKMLUrl + ' target="_blank" download="query.kml">Download USGS KML</a>';
+				document.getElementById("ssmkmldownloaddiv").innerHTML=download_content; 
+
 				var iconscale=document.getElementById("ssmiconscale").value;
 				mapA.data.addGeoJson(data);	
 				mapA.data.setStyle(function(feature) {
@@ -90,7 +99,9 @@ var anssgadget=anssgadget || (function() {
 		});
 	
 		if(kmlLayer != null)
-			kmlLayer.setMap(null);
+			{kmlLayer.setMap(null);}
+		//clear div
+		document.getElementById("ssmkmldownloaddiv").innerHTML=""; 
 	}
 
     function submitMapRequestKml(){
