@@ -1204,16 +1204,14 @@ function initialize() {
 
     var mapA_setup = {
         zoom: 6,
-        mapTypeIds: [
-            google.maps.MapTypeId.TERRAIN,
-            google.maps.MapTypeId.HYBRID,
-            google.maps.MapTypeId.ROADMAP
-        ],
+        //mapTypeIds: [google.maps.MapTypeId.TERRAIN,google.maps.MapTypeId.HYBRID,google.maps.MapTypeId.ROADMAP],
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         MapTypeControl: true,
         scaleControl:true,
         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DEFAULT, 
-                                position:google.maps.ControlPosition.TOP_RIGHT},
+                                position:google.maps.ControlPosition.TOP_RIGHT,
+                                mapTypeIds: [google.maps.MapTypeId.TERRAIN,google.maps.MapTypeId.HYBRID,google.maps.MapTypeId.ROADMAP]
+                                },
 //        navigationControl: true,
 //        navigationControlOptions: {style: google.maps.NavigationControlStyle.ZOOM_PAN},
         panControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
