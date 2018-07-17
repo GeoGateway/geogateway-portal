@@ -719,7 +719,7 @@ app.get('/los_query/',function(req,res) {
             +"end, "+lat2+", "+lng2+"\n"
             +"azimuth, "+azimuth+"\n"
             +"length, "+losLength+"\n"
-            +"Lat, Lon, Distance (km), Displacement, Elevation Angle\n"
+            +"Lon, Lat, Distance (km), Displacement, Elevation Angle\n"
             +data;
 //        console.log(data);
         res.status(200).send(data);
