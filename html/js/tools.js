@@ -1042,7 +1042,10 @@ function drawDygraphAjax(image_uid) {
     var azimuth = $("#azimuth-value").val();
     var losLength=$("#losLength-value").val();
     
+    //var altpool=['10','26','43','258','693','953','954','1152','1382','1434','1442','1446','1447','1448','1449','1450','1452',
+    //            '1453','1454','1455','1456','1457','1458','1459','1460','1461','1462','1502','1510','1511','1512'];
     var altlosflag = 1;
+    //if (altpool.indexOf(image_uid.toString()) > -1) {altlosflag = 1;};
     
     var downloadUrl="/los_query?image_uid="+image_uid+"&image_name="+LOS_dataname+"&lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&format="+format+"&resolution="+resolution+"&method="+method+"&average="+average+"&azimuth="+azimuth+"&losLength="+losLength;
     downloadUrl += "&altlosflag=" + altlosflag;
@@ -1204,14 +1207,16 @@ function initialize() {
 
     var mapA_setup = {
         zoom: 6,
-        //mapTypeIds: [google.maps.MapTypeId.TERRAIN,google.maps.MapTypeId.HYBRID,google.maps.MapTypeId.ROADMAP],
+        mapTypeIds: [
+            google.maps.MapTypeId.TERRAIN,
+            google.maps.MapTypeId.HYBRID,
+            google.maps.MapTypeId.ROADMAP
+        ],
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         MapTypeControl: true,
         scaleControl:true,
         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DEFAULT, 
-                                position:google.maps.ControlPosition.TOP_RIGHT,
-                                mapTypeIds: [google.maps.MapTypeId.TERRAIN,google.maps.MapTypeId.HYBRID,google.maps.MapTypeId.ROADMAP]
-                                },
+                                position:google.maps.ControlPosition.TOP_RIGHT},
 //        navigationControl: true,
 //        navigationControlOptions: {style: google.maps.NavigationControlStyle.ZOOM_PAN},
         panControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
