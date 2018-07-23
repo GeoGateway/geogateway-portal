@@ -342,7 +342,7 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     $("#QuakeTables-Link").html('<p><a target="_blank" href="http://gf2.ucs.indiana.edu/quaketables/uavsar?uid='+uid+'"><b>Go to download page for selected data set</b></a></p>');
 
     var direction_kml = (heading.toString()).split(".")[0];
-    direction_kml = "http://gf1.ucs.indiana.edu/direction_kml/"+direction_kml+"_left.kmz";
+    direction_kml = "http://gf2.ucs.indiana.edu/direction_kml/"+direction_kml+"_left.kmz";
     //alert(direction_kml);
     //remove the previous one
     if (typeof wmsgf9_select_direction_kml !== 'undefined') {
@@ -847,10 +847,10 @@ function viewDataset(uid, dataname, show) {
         }
         else {
             var querystr = uid + '/' + dataname;
-//            console.log( 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz');
+//            console.log( 'http://gf2.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz');
             var wmsgf9_temp = new google.maps.KmlLayer({
-//                url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz',
-                url: 'http://gf1.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kml',
+//                url: 'http://gf2.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kmz',
+                url: 'http://gf2.ucs.indiana.edu/kmz/uid' + querystr + '.unw.kml',
                 suppressInfoWindows: true,
                 preserveViewport: true,
                 clickable: false
@@ -1232,7 +1232,7 @@ function initialize() {
 
     // load geogateway logo
     var logokml =  new google.maps.KmlLayer({
-        //url: "http://gf1.ucs.indiana.edu/kmz/geogateway.kmz",
+        //url: "http://gf2.ucs.indiana.edu/kmz/geogateway.kmz",
 	url: "https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/geogateway.kmz",
         preserveViewport:true,
         screenOverlays:true
