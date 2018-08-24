@@ -87,7 +87,8 @@ function rungpsservice(){
 			"dwin1":$('#gs_dwin1').val(),
 			"dwin2":$('#gs_dwin2').val(),
 			"mon": document.getElementById("gs_mon").checked,
-			"eon": document.getElementById("gs_eon").checked
+			"eon": document.getElementById("gs_eon").checked,
+			"vabs": document.getElementById("gs_vabs").checked
 		};
 	//alert(jQuery.param(data));
 	$('#gs_submit').text('Calculating');
