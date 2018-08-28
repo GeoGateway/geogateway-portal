@@ -72,11 +72,19 @@ function rungpsservice(){
 		return;
 	}		
 	var actionstr = action.join(",");
+	// default height and width = 2
+	var width_tx = $('#gs_width').val();
+	if (width_tx == "" ||  width_tx == null) {width_tx = 2};
+	var height_tx = $('#gs_height').val();
+	if (height_tx == "" || height_tx == null) {height_tx = 2};
+
 	var data = {"function":actionstr,
 			"lat":$('#gs_latitude').val(),
 			"lon":$('#gs_longitude').val(),
-			"width":$('#gs_width').val(),
-			"height":$('#gs_height').val(),
+			//"width":$('#gs_width').val(),
+			//"height":$('#gs_height').val(),
+			"width": width_tx,
+			"height": height_tx,
 			"epoch":$('#gs_epoch').val(),
 			"epoch1":$('#gs_epoch1').val(),
 			"epoch2":$('#gs_epoch2').val(),
@@ -90,7 +98,7 @@ function rungpsservice(){
 			"eon": document.getElementById("gs_eon").checked,
 			"vabs": document.getElementById("gs_vabs").checked
 		};
-	//alert(jQuery.param(data));
+	alert(jQuery.param(data));
 	$('#gs_submit').text('Calculating');
 	 $.ajax({
         url:'gps_service',
