@@ -4,9 +4,8 @@
         User name: {{username}}. 
         <div class="divider"></div>
         <div class="tool-content">
-          Upload your Disloc input file 
-          &nbsp;&nbsp;
-          <img id="dislocinputInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png"  width="15" height="15"/>
+          Upload your Disloc input file
+          <img id="dislocinputInfoImg" src="https://raw.githubusercontent.com/GeoGateway/GeoGatewayStaticResources/master/icons/question-mark-blue.png"  width="15" height="15" border="1"/>
           <div id="dislocinputformatDialog" title="Disloc Input Format">
   <p>  Use this form to upload one or more faults that are already in Disloc input file format. The following example shows formatting:
     <ul>
@@ -141,8 +140,13 @@ $("#dislocinputformatDialog").dialog({
     modal: true,
     draggable: true,
     autoOpen: false, 
-    width: 400,
+    width: 600,
+    buttons: [{
+    text: "close",
+      click: function() {
+        $( this ).dialog( "close" );}}]
     });
+
 $("#dislocinputInfoImg").on("click", function()
 {
   $("#dislocinputformatDialog").dialog('open');
