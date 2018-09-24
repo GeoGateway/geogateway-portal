@@ -164,12 +164,16 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl, params,colortable=Fals
     """
     xy=[]
     data=[]
+    lat_xy = []
+    lon_xy = []
     for row in datatable:
-        xy.append(row[0:2])
+        lon_xy.append(row[0])
+        lat_xy.append(row[1])
         data.append(row[2])
+    # get the right extent box
+    xy0= [min(lon_xy),min(lat_xy)]
+    xy1= [max(lon_xy),max(lat_xy)]
 
-    xy0=min(xy)
-    xy1=max(xy)
 
 ##    z = np.array(data)
 ##    z = z.reshape(lonlatgrid[1],lonlatgrid[0])
@@ -305,9 +309,9 @@ def lineofsight (ele,azi,radarWL,disO,url):
         losd = (g[0]*ux + g[1]*uy + g[2]*uv)/5.0  # Convert from mm to cm to be consistent with radarWL
         # fringe
         # fringe = abs(math.modf(2*losd / radarWL)[0])
-        #fringe = 2*losd / radarWL - math.floor(2*losd / radarWL)
+        fringe = 2*losd / radarWL - math.floor(2*losd / radarWL)
         # mapping is changed to ~2pi to 2pi to match UAVSAR
-        fringe = losd / radarWL - math.floor(losd / radarWL)
+        #fringe = losd / radarWL - math.floor(losd / radarWL)
         #print fringe
         datatable.append([lonlat[0],lonlat[1],fringe])
 
@@ -334,7 +338,7 @@ if __name__ == "__main__":
         azimuth = 175
         radarFrequency = 1.26*10**9
         radarWaveLength = 299792458.0/radarFrequency * 100.0 # Convert to cm
-        disclocOutput = "F5k_45_175.output.txt"
+        disclocOutput = "4fault.output.csv"
         imageURL = "file://" + os.getcwd()
         imageURL = ""
         print "testing plot function with " + disclocOutput
