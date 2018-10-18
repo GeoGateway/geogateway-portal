@@ -132,7 +132,7 @@ function rungpsservice(){
         map: mapA
     	});
 		gpsplot_layers.push(newkmlLayer);
-		tablestr+= '<input  type="checkbox" id="gpsplot_checkbox" checked=checked value='+ i +' onclick="check_gpsplot(this)">';
+		tablestr+= '<input  type="checkbox" id="gpsplot_checkbox" checked=checked value='+ (gpsplot_layers.length-1) +' onclick="check_gpsplot(this)">';
 		};
 		tablestr+="<a href="+linkurl+">"+filename+"</a>";
 		tablestr+="</td></tr>";
