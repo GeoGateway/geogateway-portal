@@ -94,6 +94,7 @@ function rungpsservice(){
 			"pt":$('#gs_ptwin').val(),
 			"dwin1":$('#gs_dwin1').val(),
 			"dwin2":$('#gs_dwin2').val(),
+			"prefix":$('#gs_outputprefix').val(),
 			"mon": document.getElementById("gs_mon").checked,
 			"eon": document.getElementById("gs_eon").checked,
 			"vabs": document.getElementById("gs_vabs").checked
