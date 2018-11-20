@@ -11,8 +11,52 @@
 		        layer.setMap(null);
 		    }
 		};
+		var southCAfire_linkurls=["http://gf2.ucs.indiana.edu/stage/CA_Fires/CAVNC-090993%20Hill%2011-12-2018%2091400%20PM.kmz","http://gf2.ucs.indiana.edu/stage/CA_Fires/CAVNC-091023%20WOOLSEY%2011-18-2018%2055900%20AM.kmz",
+		"highres:SanAnd_08525_18076-003_18083-003_0036d_s01_L090HH_01.cor",
+		"highres:SanAnd_26526_18080-006_18083-000_0011d_s01_L090HH_01.cor"];
+		var southCAfirekml=[];
+		function check_southCAfire(element) {
+			var layer = southCAfirekml[element.value];
+		    if (element.checked) {
+		        layer.setMap(mapA);
+		    } else {
+		        layer.setMap(null);
+		    }
+		};
 
 		$(document).ready(function(){
+			$('#checkbox_southCAfire').change(function(){
+			if(this.checked) {
+				$('#southCAfireDiv').show();
+				var newkmlLayer;
+				var highresoverlay;
+				var linkurl;
+					for (i = 0; i< southCAfire_linkurls.length; i++) {
+					linkurl = southCAfire_linkurls[i];
+					if (linkurl.includes("highres")) {
+						highresoverlay = loadWMSwithposition(mapA, "http://149.165.157.180/geoserver/highres/wms?",linkurl, i); 
+						southCAfirekml.push(highresoverlay);
+						}; 
+					newkmlLayer = new google.maps.KmlLayer({
+					    url: linkurl,
+         				suppressInfoWindows: false,
+        				map: mapA
+    					});
+					southCAfirekml.push(newkmlLayer);
+					}
+				}
+			else
+				{$('#southCAfireDiv').hide();
+				 for (i = 0; i< southCAfirekml.length; i++) {
+				 	southCAfirekml[i].setMap(null);
+				 	 mapA.overlayMapTypes.setAt(0, null);
+				 	 mapA.overlayMapTypes.setAt(1, null);
+				 	 mapA.overlayMapTypes.setAt(2, null);
+				 	 mapA.overlayMapTypes.setAt(3, null);
+					 }
+				}
+			});
+
 			$('#checkbox_wildfire').change(function(){
 			if(this.checked) {
 				$('#wildfireDiv').show();
@@ -41,6 +85,19 @@
 <body></body><br><p><strong>Listed are the products for demonstration purpose.</strong></p>
     <div class="tool">
     <div class="tool-content">
+      <input type="checkbox" id="checkbox_southCAfire" name="southCAdata" value="southCAfire" />
+      <span class="default-font">Southern California Woolsey Fire</span>
+     <div id="southCAfireDiv" style="display:none">
+     	<p>Southern California's Woolsey Fire on Nov. 15 observed with UAVSAR</p>
+         	<table class="uavsar-table">     		
+     		<tr><td>Experimental product JPL/Caltech/GeoGateway</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="southCAfirekml_checkbox" onclick="check_southCAfire(this)" />&nbsp Woolsey fire perimeter (11-18-2018) &nbsp&nbsp<a href="http://gf2.ucs.indiana.edu/stage/CA_Fires/CAVNC-091023%20WOOLSEY%2011-18-2018%2055900%20AM.kmz" download="Woolseyfire.kmz">download KMZ</a></td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='0' id="southCAfirekml_checkbox" onclick="check_southCAfire(this)" />&nbsp Hill fire perimeter (11-12-2018) &nbsp&nbsp<a href="http://gf2.ucs.indiana.edu/stage/CA_Fires/CAVNC-090993%20Hill%2011-12-2018%2091400%20PM.kmz" download="Hillfire.kmz">download KMZ</a></td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='2' id="southCAfirekml_checkbox" onclick="check_southCAfire(this)" />&nbsp UAVSAR Correlation Image: <br>SanAnd_08525_18076-003_18083-003_0036d_s01_L090_01<br><a href="http://gf2.ucs.indiana.edu/stage/CA_Fires/SanAnd_08525_18076-003_18083-003_0036d_s01_L090HH_01.cor.tiff" download="">download geotiff</a></td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='3' id="southCAfirekml_checkbox" onclick="check_southCAfire(this)" />&nbsp UAVSAR Correlation Image:<br>SanAnd_26526_18080-006_18083-000_0011d_s01_L090_01<br><a href="http://gf2.ucs.indiana.edu/stage/CA_Fires/SanAnd_26526_18080-006_18083-000_0011d_s01_L090HH_01.cor.tiff" download="">download geotiff</a></td></tr>
+     	</table>
+	 </div>
+     <p><br/>
       <input type="checkbox" id="checkbox_wildfire" name="wildfiredata" value="wildfire" />
       <span class="default-font">Wildfire and debris flows</span>  
      <div id="wildfireDiv" style="display:none">

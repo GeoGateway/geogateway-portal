@@ -222,3 +222,71 @@ function loadWMSwithstyle(map, baseURL, layername, styleurl){
 
     return overlayWMS;
 }
+
+function loadWMSwithposition(map, baseURL, layername,position){
+
+    var tileHeight = 256;
+    var tileWidth = 256;
+    var opacityLevel = 0.75;
+    var isPng = true;
+    var minZoomLevel = 2;
+    var maxZoomLevel = 28;
+
+    //var baseURL = "";
+    var wmsParams = [
+    "REQUEST=GetMap",
+    "SERVICE=WMS",
+    "VERSION=1.1.1",
+    "BGCOLOR=0xFFFFFF",
+    "TRANSPARENT=TRUE",
+    "SRS=EPSG:900913", // 3395?
+    "WIDTH="+ tileWidth,
+    "HEIGHT="+ tileHeight,
+    "FORMAT=image/png8",
+    "LAYERS="+layername
+    ];
+
+    //add additional parameters
+    //var wmsParams = wmsParams.concat(customParams);
+
+    var overlayOptions =
+    {
+        getTileUrl: function(coord, zoom)
+        {
+            var lULP = new google.maps.Point(coord.x*256,(coord.y+1)*256);
+            var lLRP = new google.maps.Point((coord.x+1)*256,coord.y*256);
+
+            var projectionMap = new MercatorProjection();
+
+            var lULg = projectionMap.fromDivPixelToSphericalMercator(lULP, zoom);
+            var lLRg  = projectionMap.fromDivPixelToSphericalMercator(lLRP, zoom);
+
+            var lUL_Latitude = lULg.y;
+            var lUL_Longitude = lULg.x;
+            var lLR_Latitude = lLRg.y;
+            var lLR_Longitude = lLRg.x;
+            //GJ: there is a bug when crossing the -180 longitude border (tile does not render) - this check seems to fix it
+            if (lLR_Longitude < lUL_Longitude){
+              lLR_Longitude = Math.abs(lLR_Longitude);
+            }
+            var urlResult = baseURL + wmsParams.join("&") + "&bbox=" + lUL_Longitude + "," + lUL_Latitude + "," + lLR_Longitude + "," + lLR_Latitude;
+
+            return urlResult;
+        },
+
+        tileSize: new google.maps.Size(tileHeight, tileWidth),
+
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel,
+
+        opacity: opacityLevel,
+
+        isPng: isPng
+    };
+
+    overlayWMS = new google.maps.ImageMapType(overlayOptions);
+
+    map.overlayMapTypes.insertAt(position, overlayWMS);
+
+    return overlayWMS;
+}
