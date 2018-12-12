@@ -77,12 +77,6 @@ def kml_folder(name = "",contents=""):
   <Folder>
     <name>%s</name>
     <visibility>1</visibility>
-    <Style id="linestyle">
-      <LineStyle>
-        <color>ff00ffff</color>
-        <width>2</width>
-      </LineStyle>
-    </Style>
     %s
   </Folder>
 """
@@ -100,7 +94,7 @@ def arrow_layer(arrow_num,desc_num,scale = 100):
     <Placemark>
       <name>%s</name>
       <description>%s</description>
-      <styleUrl>#linestyle</styleUrl>
+      <Style><LineStyle><color>FF007800</color><width>2</width></LineStyle></Style>
        %s
     </Placemark>
     """
