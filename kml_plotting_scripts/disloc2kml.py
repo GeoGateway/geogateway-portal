@@ -118,11 +118,16 @@ def kml_generator(dislocoutput,kml):
 
     data_plot = loaddislocouput(dislocoutput)
 
+    totalnumber = len(data_plot)
+    if totalnumber >= 10000:
+        skipcount = 20
+    else:
+        skipcount = 10
     count = 0
     arrow_str = ""
     for entry in data_plot:
         #skip, too many arrows
-        if count % 10:
+        if count % skipcount:
             count += 1
             continue 
         arrow_data = entry[0]
