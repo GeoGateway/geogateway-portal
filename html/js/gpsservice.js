@@ -99,7 +99,7 @@ function rungpsservice(){
 			"eon": document.getElementById("gs_eon").checked,
 			"vabs": document.getElementById("gs_vabs").checked
 		};
-	//alert(jQuery.param(data));
+	alert(jQuery.param(data));
 	$('#gs_submit').text('Calculating');
 	 $.ajax({
         url:'gps_service',
