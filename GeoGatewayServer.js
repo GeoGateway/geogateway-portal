@@ -338,8 +338,8 @@ app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
             }
 		      else {
                 //Write the disloc output and error
-                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
-                fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
+                //fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardOut,stdout);
+                //fs.writeFileSync(baseWorkDirPath+"/"+obj.projectStandardError,stderr);
             
                 //Make the KML
                 theExec=projectBinDir+"disloc2kml"+" -i "+obj.projectOutputFileName+" -o "+obj.projectOutputKMLFileName;             
