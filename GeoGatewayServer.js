@@ -327,7 +327,9 @@ app.get('/execute/:exec/:collection/:documentId', function (req,res) {
 app.get('/execute_disloc2/:exec/:collection/:documentId',function(req,res) {
     collectionUtils.getById(req.params.collection, req.params.documentId,function(error,obj){
 //        console.log(obj);
-        var theExec=projectBinDir+"disloc"+" "+obj.projectInputFileName+" "+obj.projectOutputFileName;
+        // replace space in input file name
+        var newinputFileName = obj.projectInputFileName.replace(/\s/g,"\\ ")
+        var theExec=projectBinDir+"disloc"+" "+newinputFileName+" "+obj.projectOutputFileName;
         var baseWorkDirPath=baseUserProjectPath+obj.projectWorkDir;
         exec(theExec,{"cwd":baseWorkDirPath,"maxBuffer":500*1024},function(error,stdout,stderr) {
             if (error!==null) {
