@@ -12,9 +12,6 @@ var http=require('http');
 var exec=require('child_process').exec;
 var execSync=require('child_process').execSync;
 var spawn=require('child_process').spawn;
-//no need for nodejs 0.12 
-//need install sync-exec module
-//var syncExec = require('sync-exec');
 var path=require('path');
 var fs=require('fs');
 var multiparty=require('multiparty');  //Form multipart form uploads.
