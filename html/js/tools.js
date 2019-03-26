@@ -1378,16 +1378,20 @@ function removeUserPositionMarker() {
     userPositionMarker.setMap(null);
 }
 
-function showUCERF3FaultLayer() {
+function showUCERF3FaultLayer(faultcolor) {
     if(document.getElementById("maptools.UCERF3FaultLayer").checked==true) {
+        document.getElementById("div_ucerf3color").style.display="block"; 
+        ctaLayer.setMap(null);
         ctaLayer = new google.maps.KmlLayer({
-            url: 'http://gf2.ucs.indiana.edu/ucerf3_black.kml',
+            url: 'https://github.com/GeoGateway/GeoGatewayStaticResources/raw/master/kmz/ucerf3_'+faultcolor+'.kml?v='+ (Math.floor(Math.random() * 9999)).toString(),
             preserveViewport:true,
             map:mapA
         });
     }
     else {
         ctaLayer.setMap(null);
+        document.getElementById("div_ucerf3color").style.display="none"; 
+
     }
     
 }

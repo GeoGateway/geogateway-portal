@@ -236,8 +236,16 @@
     
     <!--------------------------------------------------->
     <div>
-      <input class="tools-checkbox" type="checkbox" id="maptools.UCERF3FaultLayer" name="active-tools" value="fault-layer" onclick="showUCERF3FaultLayer()"/>
+      <input class="tools-checkbox" type="checkbox" id="maptools.UCERF3FaultLayer" name="active-tools" value="fault-layer" onclick="showUCERF3FaultLayer('black')"/>
       <span class="default-font">UCERF3 Faults</span>
+      <div id="div_ucerf3color" style="display: none;">
+			<form>
+			<input type="radio" name="ucerf3color" onclick="showUCERF3FaultLayer(this.value)" value="black" checked=True>black
+			<input type="radio" name="ucerf3color" onclick="showUCERF3FaultLayer(this.value)" value="yellow">yellow
+			<input type="radio" name="ucerf3color" onclick="showUCERF3FaultLayer(this.value)" value="red">red
+			<input type="radio" name="ucerf3color" onclick="showUCERF3FaultLayer(this.value)" value="grey">grey
+			</form>
+		</div>
     </div>
     <p/>
     
