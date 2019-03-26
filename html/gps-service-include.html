@@ -6,7 +6,7 @@
   <div class="divider"></div>
 
   <div class="row">
-   <div class="col-sm-6 col-sm-6 col-xs-12">
+   <div class="col-sm-7 col-sm-8 col-xs-12">
     <form id="gpsservice" method="post">
      <div class="form-group ">
       <label class="control-label requiredField">
@@ -72,8 +72,10 @@
        <div class="input-group-addon">
         Ref. Site
        </div>
-       <input class="form-control input-sm" id="gs_refsite" name="refsite" placeholder="4-letter code" type="text"/>
-      </div>
+       <input class="form-control input-sm" id="gs_refsite" name="refsite" placeholder="4-letter code" type="text"/>   
+       <div class="input-group-addon"> <a href="https://sideshow.jpl.nasa.gov/post/tables/table2.html" target="_blank">Stations</a> </div>
+  
+      </div>      
       <div class="input-group">
        <div class="input-group-addon">
         Scale
@@ -131,8 +133,7 @@
       </div>
       <div class="form-group">
       <div>
-       <button class="btn btn-primary " id="gs_submit" name="submit" type="submit" onclick="rungpsservice()">
-        Run
+       <button class="btn btn-primary " id="gs_submit" name="submit" type="submit" onclick="rungpsservice()">        Run
        </button>
       </div>
      </div>
