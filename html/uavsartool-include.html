@@ -1,0 +1,142 @@
+<div class="tool">
+  <div class="tool-title"><b>UAVSAR Tools</b></div>
+  <div class="divider"></div>
+	  <div class="tool-content">
+    <div>
+      <input class="tools-checkbox" type="checkbox" id="UAVSAR-active-tool" name="active-tools" value="uavsar"/>
+      <span class="default-font">UAVSAR</span>
+      <div id="uavsar-instructions" style="display:none">
+        Use drawing tool on the map to select the region of interests.  
+        <br/>You can also search by flight name or flight path:
+        <input type="text" placeholder="flight name/path" name="searchString" id="search-string-value" size="20" value="" onchange="showSearchResults('dynatable')">
+        <br/><input type="text" placeholder="latitude, longitude" name="searchlatlon" id="search-latlon-value" size=20, value="" onchange="showSearchbylatlon(this.value)">
+        <br/>(Optional) Event date (YYYY-MM-DD):
+        <input type="text" name="eventDate", id="event_date", size=10, value="">
+      </div>
+      <p/>
+      <button class="panel-close-button inactive">X</button>
+      <div id="FadeDisplay" style="display:none">
+        <b>Fade/Reset Display: </b>
+        <input type="button" value="Fade" class="faderButton" onclick="fadeInsarImage()"/>
+        <input type="button" value="Reset" class="resetButton" onclick="resetInsarImage()"/>
+      </div>
+      <div id="UAVSAR-geometry"></div>            
+      <div id="UAVSAR-heading"></div>
+      <div id="UAVSAR-markers"></div>
+      <div id="QuakeTables-Link"></div>
+      <div id="Color-mapping" style="display:none">
+	<b>Experimental feature:</b> 
+	<input type="checkbox" id="color-mapping-checkbox", name="color-mapping-checkbox"> &nbsp;enable coloring if available
+	<input type="button" id="get-area-minmax-button" value="Stretch Color" style="display:none;" disabled>
+	<div id="Strech-color-div"></div>
+      </div>
+      <div id="UAVSAR-formFields" style="display:none">
+	<table>
+	  <tr>
+	    <td>
+	      <b>Start Lat:</b>
+	      <input type="text" name="startLat" id="startLat-value" size="8" value="" onchange="updateStartLat()"/>
+	      <b>Start Lon:</b>
+	      <input type="text" name="startLon" id="startLon-value" size="8" value="" onchange="updateStartLon()"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <b>End Lat:</b>
+	      <input type="text" name="endLat" id="endLat-value" size="8" value="" onchange="updateEndLat()"/>
+	      <b>End Lon:</b>
+	      <input type="text" name="endLon" id="endLon-value" size="8" value="" onchange="updateEndLon()"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <b>Azimuth:</b>
+	      <input type="text" name="azimuth-value" id="azimuth-value" size="8" value="" onchange="updateAzimuth()"/>
+	    </td>
+	    <td align="right">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <img id="azimuthInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <b>Length:</b>
+	      <input type="text" name="losLength-value" id="losLength-value" size="8" value="" onchange="updateDistance()"/>
+	    </td>
+	    <td align="right">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <img id="distanceInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <b>Sampling Distance (meters):</b>
+	      <input type="text" name="resolution" id="resolution-value" size="5" value="200" onchange="updateResolution()"/>
+	    </td>
+	    <td align="right">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <img id="samplingInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
+	    </td>
+	  </tr>
+	  <tr>
+	    <!--
+		<td> <input type="checkbox" id="newprofiletool-checkbox", name="newprofiletool-checkbox"> &nbsp;<b>test new profile tool (unstable!)</b>
+		</td>
+		-->
+	  </tr>
+	  <tr>
+            <td>
+              <input type="button" value="Hide/Show Plot" class="hideplotButton" onclick="hidePlotPanel()"/>
+		  <input type="button" value="Close Profile Tool" class="closeprofiletoolButton" onclick="closeProfileTool()"/> 
+            </td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <input type="hidden" name="plotmethod" value="native"> <!-- Remove this later-->
+	    </td>
+	    <!--
+		<td>
+		  <b>Plot Method:</b>
+		  <input type="radio" name="plotmethod" id="native-method" value="native" checked="true" onclick="sarselect.plotNative()"/>native
+		  <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
+                  
+		</td>
+	    <td align="right">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <img id="plotMethodImg" src="images/question_mark.png" width="15" height="15"/>
+	    </td>
+	    -->
+	  </tr>
+	  
+	  <tr>
+	    <td>
+	      <input type="hidden" id="averaging-value" name="averaging" value="10"> <!-- Remove this when averaging works-->
+	    </td>
+	    <!--
+		<td>
+		  <b>Averaging Radius:</b> 
+		  <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
+		</td>
+	    <td align="right">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <img id="averagingInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png"  width="15" height="15"/>
+	    </td>
+	    -->
+	  </tr>
+          <tr>
+            <td>
+              <div id="LOS-Data-Download"/>
+            </td>
+          </tr>
+	</table>              
+      </div>
+      <div id="uavsar" class="inactive">
+        <div class="tool-content" id="data-panel">
+        </div>
+      </div>
+    </div>
+    <p/>
+    
+
+	</div>
+</div>

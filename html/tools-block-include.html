@@ -26,6 +26,11 @@ function updateTabPanel() {
 <div class="tools-panel open" ng-controller="UserProjectController">
   <ul type="none" class="tool-tabs">
     <li class="active">
+      <button class="tab-button tool-tab-button" value="uavsartool">
+        UAVSAR
+      </button>
+    </li>
+    <li>
       <button class="tab-button tool-tab-button" value="maptools">
         Map Tools
       </button>
@@ -103,6 +108,10 @@ function updateTabPanel() {
     </li>
   </ul>
   
+  <div class="tab-pane tool-tab-pane active" id="uavsartool">  
+    <div ng-include="'uavsartool-include.html'"></div>
+  </div>
+
   <div class="tab-pane tool-tab-pane active" id="maptools">  
     <div ng-include="'maptools-include.html'"></div>
   </div>
