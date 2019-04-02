@@ -38,3 +38,38 @@
       </div>
     </div>
   </div>
+
+    <div class="container-fluid">
+  <div class="tool-title">Nowcast Plots</div><center><strong>Magnitude-Frequency relations and Nowcast</strong></center>
+  <div class="divider"></div>
+    <div class="row">
+   <div class="col-sm-6 col-sm-6 col-xs-12">
+      <form id="seismicityplots" method="post">
+     <div class="form-group ">
+      <div class="input-group">
+       <div class="input-group-addon">
+        Place Name
+       </div>
+       <input class="form-control input-sm" id="sp_placename" name="placename" type="text"/>
+      </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Latitude
+       </div>
+       <input class="form-control input-sm" id="sp_latitude" name="latitude" type="text"/>
+    </div>
+      <div class="input-group">
+       <div class="input-group-addon">
+        Longitude
+       </div>
+       <input class="form-control input-sm" id="sp_longitude" name="longitude" type="text"/>
+      </div>      
+      <div><button type="button" id="sp_locationpicker" class="btn btn-default" aria-label="Left Align" onclick='splocationpicker()'>
+      <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> Location Picker</button>
+      </div>
+      <br>
+      <button class="btn btn-primary " id="sp_submit" name="submit" type="submit" onclick="runseismicityplots()">
+        Plot
+       </button></div>
+</form></div></div>
+
