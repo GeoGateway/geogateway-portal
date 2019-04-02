@@ -23,11 +23,14 @@
         <center><strong>Recent Earthquakes from USGS</strong></center>
         Earthquake magnitude shown by circle size. Hotter colors are more recent events. Click on earthquake markers for event data. (USGS).
         <label for="EQDay">M &gt; 1.0, Last Day</label>
-        <input id="EQDay" value = false type="checkbox" onclick="eqDay();"/><br/>
+        <input id="EQDay" value = false type="checkbox" onclick="eqDay();"/><p>
+        Earthquakes are color coded with most recent events in the last day represented by hotter colors, and older events by cooler colors</p>
         <label for="EQWeek">M &gt; 2.5, Last Week</label>
-        <input id="EQWeek" value = false type="checkbox" onclick="eqWeek();"/><br/>
+        <input id="EQWeek" value = false type="checkbox" onclick="eqWeek();"/>
+        <p>Earthquakes are color coded with most recent events in the last week represented by hotter colors, and older events by cooler colors</p>
         <label for="EQMonth">M &gt; 4.5, Last Month</label>
-        <input id="EQMonth" value = false type="checkbox" onclick="eqMonth();"/><br/>
+        <input id="EQMonth" value = false type="checkbox" onclick="eqMonth();"/>
+        <p>Earthquakes are color coded with most recent events in the last month represented by hotter colors, and older events by cooler colors</p>
         <label for="EQToggle">Show or Hide Earthquakes</label>
         <input id="EQToggle" value = false type="checkbox" onclick="eqToggle();"/><br/>
         <!--
@@ -42,7 +45,7 @@
         <label for="Depth30">Depth &le; 30 km</label>
         <input id="Depth30" value = false type="checkbox" onclick="filterDepth30()"/>            
       </div>        
-      
+
 
   <div> <div><center><strong>Search Earthquake Catalog</strong></center></div> 
     Select your bounding box and time interval and then click "Fetch Catalog". <br/> This service
