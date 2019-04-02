@@ -1,3 +1,59 @@
+<script>
+  var event_date;
+  $(function() {
+  //  event_date=$( "#event_date" ).datepicker({ dateFormat: 'yy-mm-dd' , onSelect: function() { filterUavsarImagesByDate(this.value)}});
+    $("#event_date").prop('disabled',false);
+    $( "#event_date" ).datepicker({ dateFormat: 'yy-mm-dd' , onSelect: function () {$(this).prop('disabled',true)}});
+  });
+
+    //TODO: Clean this up. Move to tools at least.
+    $(document).ready(function() {
+	$(".tools-checkbox").click(function() {
+	    var checked = this.checked;
+	    var type = $(this).val();
+	    console.log("Tools checkbox clicked:",type);
+	    switch(type) {
+		// UAVSAR
+	    case 'uavsar':
+		if(checked) {
+		    draw_UAVSAR();
+		    $('#uavsar-instructions').show();
+		}
+                else {
+                    $("#event_date").prop('disabled',false);
+		    closeDataPanel();
+		    wmsgf9_select={};
+		    $('#UAVSAR-geometry').empty();
+		}
+		break;
+		// FAULT LAYER
+	    case 'fault-layer':
+		break;
+	    case 'kml-layer':
+		if(checked) {
+		    $('#KmlMapperDiv').show();
+		}
+		else {
+		    $('#KmlMapperDiv').hide();
+		}
+		break;
+	    }
+	});
+    });
+    function updateGamma(slidervalue) {
+	    var mapStyles = [{
+	        "stylers": [{
+	            "gamma": slidervalue
+	        }]
+	    }];
+
+	    mapA.setOptions({
+	        styles: mapStyles
+	    });
+	}
+
+</script>
+
 <div class="tool">
   <div class="tool-title"><b>UAVSAR Tools</b></div>
   <div class="divider"></div>
