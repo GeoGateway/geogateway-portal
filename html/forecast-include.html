@@ -4,12 +4,12 @@
     <div class="tool-content">
       <div id="panel_forecast" style="margin-top: 10px; margin-bottom:10px;">
         <h5>Global Forecast Heat Map: M &gt; 6.5, 1 Year.   &nbsp; &nbsp; California Forecast Heat Map: M &gt; 5, 1 Year (Open Hazards Group)</h5>
-        Earthquake magnitude shown by circle size. Hotter colors are more recent events. Click on earthquake markers for event data. (USGS).<p/>
         <label for="Global Forecast">Global Forecast</label>
         <input id="Global Forecast" type="checkbox" value="false" onclick="calcwo()"><br/>
         <label for="California Forecast">California Forecast</label>
         <input id="California Forecast" type="checkbox" value="false" onclick="calcca()"><br/>
       </div>
+      <!---
       <div id="panel_quakes" style="margin-top: 10px; margin-bottom:10px;">
         <h5>Recent Earthquakes from USGS</h5>
         <label for="EQDay">M &gt; 1.0, Last Day</label>
@@ -30,15 +30,18 @@
         <label for="Depth30">Depth &le; 30 km</label>
         <input id="Depth30" value = false type="checkbox" onclick="filterDepth30()"/><br/>            
       </div>
+        -->
       <div>
+        <!---
         <h5>Other Hazards</h5>
         <label for"GDACS">Show GDACS Data:</label>
         <input id="GDACS" type="checkbox" onclick="showGDACS()"><br/>
-        <label>Get a Space-Time Earthquake Forecast from the <a href="http://www.openhazards.com/viewer">Open Hazards Site</a></label>            
+        --->
+        Get a Space-Time Earthquake Forecast from the <a href="http://www.openhazards.com/viewer"><strong>Open Hazards</strong></a>            
       </div>
     </div>
   </div>
-
+    </br>
     <div class="container-fluid">
   <div class="tool-title">Nowcast Plots</div><center><strong>Magnitude-Frequency relations and Nowcast</strong></center>
   <div class="divider"></div>

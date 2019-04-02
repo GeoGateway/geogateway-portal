@@ -19,8 +19,31 @@
   </head>
   <body>
       <div class="container-fluid">
+      <div id="panel_quakes" style="margin-top: 10px; margin-bottom:10px;">
+        <center><strong>Recent Earthquakes from USGS</strong></center>
+        Earthquake magnitude shown by circle size. Hotter colors are more recent events. Click on earthquake markers for event data. (USGS).
+        <label for="EQDay">M &gt; 1.0, Last Day</label>
+        <input id="EQDay" value = false type="checkbox" onclick="eqDay();"/><br/>
+        <label for="EQWeek">M &gt; 2.5, Last Week</label>
+        <input id="EQWeek" value = false type="checkbox" onclick="eqWeek();"/><br/>
+        <label for="EQMonth">M &gt; 4.5, Last Month</label>
+        <input id="EQMonth" value = false type="checkbox" onclick="eqMonth();"/><br/>
+        <label for="EQToggle">Show or Hide Earthquakes</label>
+        <input id="EQToggle" value = false type="checkbox" onclick="eqToggle();"/><br/>
+        <!--
+        <label for="Faults">Show California Faults:</label> 
+        <input id="Faults" value = false type="checkbox" onclick="showFaults();"/><br/>
+        -->
+        <strong>Filter Earthquakes</strong>
+        <label for="M5">M &gt; 5</label>
+        <input id="M5" value = false type="checkbox" onclick="filterM5()"/><br/>
+        <label for="M65">M &gt; 6.5</label>
+        <input id="M65" value = false type="checkbox" onclick="filterM65()"/><br/>
+        <label for="Depth30">Depth &le; 30 km</label>
+        <input id="Depth30" value = false type="checkbox" onclick="filterDepth30()"/>            
+      </div>
 
-  <div>  
+  <div> <div><center><strong>Search Earthquake Catalog</strong></center></div> 
     Select your bounding box and time interval and then click "Fetch Catalog". <br/> This service
     harvests data from the <a target="blank" href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS FDSN API</a>
 	
@@ -87,7 +110,7 @@
   </div><div id="ssmkmldownloaddiv"></div>
 </div>
   <br>
-  <!---
+  <!--
   <div class="container-fluid">
   <div class="tool-title">Seismicity Plots</div><center><strong>Magnitude-Frequency relations and Nowcast</strong></center>
   <div class="divider"></div>
@@ -120,8 +143,9 @@
       <button class="btn btn-primary " id="sp_submit" name="submit" type="submit" onclick="runseismicityplots()">
         Plot
        </button></div>
-     --->
+
 </form></div></div>
+-->
   </div>
   </body>
 </html>
