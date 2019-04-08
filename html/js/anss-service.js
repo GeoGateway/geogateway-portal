@@ -91,8 +91,10 @@ var anssgadget=anssgadget || (function() {
 		        var infowindow = new google.maps.InfoWindow();
 		        mapA.data.addListener('click', function(event) {
      				var feat = event.feature;
-     				var html = "<b>"+feat.getProperty('place')+"</b><br>";
+					var eventdate = new Date(feat.getProperty("time"));
+					var html = "<b>"+feat.getProperty('place')+"</b><br>";
      				html+= "<strong>mag: "+feat.getProperty('mag')+"</strong><br>";
+     				html += "<strong>" + eventdate.toUTCString()+"</strong><br>";
      				html += "<br><a class='normal_link' target='_blank' href='"+feat.getProperty('url')+"'>USGS Event</a>";
      				infowindow.setContent(html);
      				infowindow.setPosition(event.latLng);
