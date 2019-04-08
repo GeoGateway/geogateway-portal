@@ -88,6 +88,17 @@ var anssgadget=anssgadget || (function() {
 		            }
 		          });
 		        });
+		        var infowindow = new google.maps.InfoWindow();
+		        mapA.data.addListener('click', function(event) {
+     				var feat = event.feature;
+     				var html = "<b>"+feat.getProperty('place')+"</b><br>";
+     				html+= "<strong>mag: "+feat.getProperty('mag')+"</strong><br>";
+     				html += "<br><a class='normal_link' target='_blank' href='"+feat.getProperty('url')+"'>USGS Event</a>";
+     				infowindow.setContent(html);
+     				infowindow.setPosition(event.latLng);
+     				infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+     				infowindow.open(mapA);
+  				});
 	
 		    });
     }
