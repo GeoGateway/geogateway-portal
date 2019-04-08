@@ -144,3 +144,51 @@ function rungpsservice(){
 
     });
 }
+
+function spwindowpicker() {
+		var drawingManager = new google.maps.drawing.DrawingManager();
+
+		//Setting options for the Drawing Tool. In our case, enabling Polygon shape.
+		drawingManager.setOptions({
+			drawingMode : google.maps.drawing.OverlayType.RECTANGLE,
+			drawingControl : true,
+			drawingControlOptions : {
+				position : google.maps.ControlPosition.TOP_CENTER,
+				drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
+			},
+			rectangleOptions : {
+				strokeColor : '#6c6c6c',
+				strokeWeight : 3.5,
+				fillColor : '#926239',
+				fillOpacity : 0.6,
+                editable: true,
+              draggable: true
+			}	
+		});
+		// Loading the drawing Tool in the Map.
+		drawingManager.setMap(mapA);
+		drawing_listener = google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+        	drawingManager.setDrawingMode(null);
+            //alert("Rectangle:" + e.overlay.getBounds());
+            var ne = e.overlay.getBounds().getNorthEast();
+        	var sw = e.overlay.getBounds().getSouthWest();
+        	// function ne.lat(),ne.lng()
+        	var center_lat = (ne.lat() + sw.lat())/2.0;
+        	var center_lon = (ne.lng() + sw.lng())/2.0;
+        	var win_width = Math.abs((ne.lng() - sw.lng()));
+        	var win_height = Math.abs((ne.lat() - sw.lat()));
+        	//alert(ne.toString()+"/"+sw.toString()+"/"+center_lon.toString()+"/"+center_lat.toString()+"/"+win_width.toString()+"/"+win_height.toString());
+        	//fill in the value
+        	$("#gs_latitude").val(center_lat.toFixed(4));
+        	$("#gs_longitude").val(center_lon.toFixed(4));
+        	$("#gs_width").val(win_width.toFixed(4));
+        	$("#gs_height").val(win_height.toFixed(4));
+            e.overlay.setMap(null);
+            drawingManager.setMap(null);
+
+        });
+
+}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
+
