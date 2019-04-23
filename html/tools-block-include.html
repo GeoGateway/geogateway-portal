@@ -22,6 +22,17 @@ function updateTabPanel() {
 };
 </script>
 
+    <script type="text/javascript" src="https://gateways.atlassian.net/s/72c1e030cd7054035379885106084621-T/en_US-c1z37q/64014/46/1.4.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=a51b3555"></script>
+    <script type="text/javascript">window.ATL_JQ_PAGE_PROPS =  {
+     "triggerFunction": function(showCollectorDialog) {
+    //Requires that jQuery is available! 
+    jQuery("#feedback-button").click(function(e) {
+    e.preventDefault();
+    showCollectorDialog();
+    });
+     }};
+    </script>
+
 <div id="map-canvas"></div>
 <div class="tools-panel open" ng-controller="UserProjectController">
   <ul type="none" class="tool-tabs">
