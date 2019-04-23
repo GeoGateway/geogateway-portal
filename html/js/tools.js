@@ -407,6 +407,14 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
     $("input:checkbox[value="+uid+"]").prop("checked", true);
 
     // this part needs clean up
+    if (typeof wmsgf9_select_legend_kml !== 'undefined') {
+                    wmsgf9_select_legend_kml.setMap(null);
+    }
+
+    if (! $('#color-mapping-checkbox').prop('checked')) {
+        if ($('#get-area-minmax-button').is(':visible')) {$("#get-area-minmax-button").css("display", "none");};
+        $('#Strech-color-div').html('');
+    };
     if (wmsgf9_select[3] == 1 || $('#color-mapping-checkbox').prop('checked')) {
         // remove the previsous high res overlat if loaded
         if (typeof highresoverlay !== 'undefined') {
@@ -451,7 +459,6 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
                 // disbale color stretch function
 
                 $("#get-area-minmax-button").attr('disabled');
-
                 highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/highres/wms?","highres:uid"+uid+"_unw");
                     // load high-res legend
             var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
@@ -466,6 +473,9 @@ function selectDataset(row, uid, dataname, heading, radardirection) {
             }
         }   
         else {
+
+        //if ($('#get-area-minmax-button').is(':visible')) {$("#get-area-minmax-button").css("display", "none");};
+        //$('#Strech-color-div').html('');
         highresoverlay = loadWMS(mapA, "http://149.165.157.180/geoserver/highres/wms?","highres:uid"+uid+"_unw");
         // load high-res legend
         var legend_kml = "http://149.165.157.180/highreslegend/2pi.kmz";
