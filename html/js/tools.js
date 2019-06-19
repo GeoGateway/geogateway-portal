@@ -148,6 +148,8 @@ function setup_UAVSAR() {
 //Put user-supplied  layer on the map
 function addKmlLayer(){
     var theLayer=document.getElementById("kmlMapperUrl").value;
+    //theLayer = theLayer +'?time='+new Date().getTime();
+    //alert(theLayer);
     console.log("Adding layer:"+theLayer);
     kmlLayer = new google.maps.KmlLayer({
         url: theLayer,
@@ -163,7 +165,7 @@ function toggleKmlDisplay(toggleLayer){
     //Note value of checked will have just changed.
     if(kmlLayerObj[toggleLayer.id]==null) {
         kmlLayer = new google.maps.KmlLayer({
-            url: toggleLayer.id,
+            url: toggleLayer.id +'?time='+new Date().getTime(),
             suppressInfoWindows: false,
             preserveViewport: true
         });
