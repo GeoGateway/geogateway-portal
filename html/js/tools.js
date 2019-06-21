@@ -165,7 +165,7 @@ function toggleKmlDisplay(toggleLayer){
     //Note value of checked will have just changed.
     if(kmlLayerObj[toggleLayer.id]==null) {
         kmlLayer = new google.maps.KmlLayer({
-            url: toggleLayer.id +'?time='+(new Date()).getTime(),
+            url: toggleLayer.id +'?dummy='+(new Date()).getTime(),
             suppressInfoWindows: false,
             preserveViewport: true
         });
