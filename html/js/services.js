@@ -45,9 +45,9 @@ GeoGatewayServices.factory('UploadService', ['$http',function($http) {
             transformRequest: angular.identity, 
             headers:{'Content-Type':undefined}
         })
-            .success(function() {
+            .success(function(res) { console.log("success");
             })
-            .error(function() {
+            .error(function(error) { console.log(error);
             } );
     }
     return service;
