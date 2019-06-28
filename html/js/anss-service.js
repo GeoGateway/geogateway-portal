@@ -75,6 +75,11 @@ var anssgadget=anssgadget || (function() {
 				document.getElementById("ssmkmldownloaddiv").innerHTML=download_content; 
 
 				var iconscale=document.getElementById("ssmiconscale").value;
+				var numofpoint = data["features"].length;
+				if (numofpoint == 0) {
+					alert("Zero earthquake found with the serach criteria!");
+					return;
+				}
 				mapA.data.addGeoJson(data);	
 				mapA.data.setStyle(function(feature) {
           			var mag = iconscale * Math.floor(parseFloat(feature.getProperty('mag')))*1.3;
