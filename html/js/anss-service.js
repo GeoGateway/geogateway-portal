@@ -63,7 +63,6 @@ var anssgadget=anssgadget || (function() {
 		finalKMLUrl = appendParameters(finalKMLUrl);
 		//console.log(finalUrl);
 		//console.log(finalKMLUrl);
-		
 		$.getJSON(finalUrl)
 		    .done(function(data){
 
@@ -80,6 +79,9 @@ var anssgadget=anssgadget || (function() {
 					alert("Zero earthquake found with the serach criteria!");
 					return;
 				}
+				if (numofpoint > 5000) {
+					alert(numofpoint.toString() + " earthquake found, it may take a while to finish the plotting!");
+				}
 				mapA.data.addGeoJson(data);	
 				mapA.data.setStyle(function(feature) {
           			var mag = iconscale * Math.floor(parseFloat(feature.getProperty('mag')))*1.3;
@@ -93,21 +95,28 @@ var anssgadget=anssgadget || (function() {
 		            }
 		          });
 		        });
-		        var infowindow = new google.maps.InfoWindow();
-		        mapA.data.addListener('click', function(event) {
-     				var feat = event.feature;
-					var eventdate = new Date(feat.getProperty("time"));
-					var html = "<b>"+feat.getProperty('place')+"</b><br>";
-     				html+= "<strong>mag: "+feat.getProperty('mag')+"</strong><br>";
-     				html += "<strong>" + eventdate.toUTCString()+"</strong><br>";
-     				html += "<br><a class='normal_link' target='_blank' href='"+feat.getProperty('url')+"'>USGS Event</a>";
-     				infowindow.setContent(html);
-     				infowindow.setPosition(event.latLng);
-     				infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-     				infowindow.open(mapA);
-  				});
+		        //skip tooltips
+		        if (document.getElementById("sstooltips").checked) {
+			        var infowindow = new google.maps.InfoWindow();
+			        mapA.data.addListener('click', function(event) {
+	     				var feat = event.feature;
+						var eventdate = new Date(feat.getProperty("time"));
+						var html = "<b>"+feat.getProperty('place')+"</b><br>";
+	     				html+= "<strong>mag: "+feat.getProperty('mag')+"</strong><br>";
+	     				html += "<strong>" + eventdate.toUTCString()+"</strong><br>";
+	     				html += "<br><a class='normal_link' target='_blank' href='"+feat.getProperty('url')+"'>USGS Event</a>";
+	     				infowindow.setContent(html);
+	     				infowindow.setPosition(event.latLng);
+	     				infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+	     				infowindow.open(mapA);
+	  				}); 
+		    	}
 	
 		    });
+    }
+
+    function hideEarthquakeLayer() {
+		mapA.data.setStyle({visible: false});    	
     }
 
 	function clearMapData(){
@@ -121,6 +130,7 @@ var anssgadget=anssgadget || (function() {
 		//clear div
 		document.getElementById("ssmkmldownloaddiv").innerHTML=""; 
 	}
+
 
     function submitMapRequestKml(){
 		var urlBase="https://earthquake.usgs.gov/fdsnws/event/1/query?";
@@ -217,7 +227,8 @@ var anssgadget=anssgadget || (function() {
 	submitMapRequestOldAnss:submitMapRequestOldAnss,
 	submitMapRequestKml:submitMapRequestKml,
 	submitMapRequestGeoJson:submitMapRequestGeoJson,
-	clearMapData:clearMapData
+	clearMapData:clearMapData,
+	hideEarthquakeLayer:hideEarthquakeLayer
     }
 })();
 

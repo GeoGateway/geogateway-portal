@@ -109,10 +109,23 @@
     Icon display scale:  <input type="text" id="ssmiconscale" value="1.0">
   </td>
       </tr>
+      <tr>
+  <td>    
+      <div class="checkbox">
+        <label class="checkbox">
+         <input name="sstooltips" type="checkbox" id="sstooltips" value=""/>
+         Display tooltips
+        </label>
+       </div>
+  </td>
+      </tr>
     </table>
     
     <button id="RunAnssAction" onclick='anssgadget.submitMapRequestGeoJson()'>Fetch Seismic Catalog</button>
-    <button id="ClearMapData" onclick='anssgadget.clearMapData()'>Clear Seismic data</button>
+    <!--
+    <button id="HideShowData" onclick='anssgadget.hideEarthquakeLayer()'>HideShow data</button>  
+     -->
+    <button id="ClearMapData" onclick='anssgadget.clearMapData()'>Clear data</button>
   </div><div id="ssmkmldownloaddiv"></div>
 </div>
   <br>
