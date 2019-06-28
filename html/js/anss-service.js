@@ -298,3 +298,39 @@ function displayCoordinates(pnt) {
   	$('#sp_latitude').val(lat);
   	$('#sp_longitude').val(lng);
 }
+
+function sswindowpicker() {
+		var drawingManager = new google.maps.drawing.DrawingManager();
+
+		//Setting options for the Drawing Tool. In our case, enabling Polygon shape.
+		drawingManager.setOptions({
+			drawingMode : google.maps.drawing.OverlayType.RECTANGLE,
+			drawingControl : true,
+			drawingControlOptions : {
+				position : google.maps.ControlPosition.TOP_CENTER,
+				drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
+			},
+			rectangleOptions : {
+				strokeColor : '#6c6c6c',
+				strokeWeight : 3.5,
+				fillColor : '#926239',
+				fillOpacity : 0.1,
+                editable: false,
+              draggable: false
+			}	
+		});
+		// Loading the drawing Tool in the Map.
+		drawingManager.setMap(mapA);
+		drawing_listener = google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+        	drawingManager.setDrawingMode(null);
+            var ne = e.overlay.getBounds().getNorthEast();
+        	var sw = e.overlay.getBounds().getSouthWest();
+        	$("#minlatbbox").val(sw.lat().toFixed(4));
+        	$("#minlonbbox").val(sw.lng().toFixed(4));
+        	$("#maxlatbbox").val(ne.lat().toFixed(4));
+        	$("#maxlonbbox").val(ne.lng().toFixed(4));
+            e.overlay.setMap(null);
+            drawingManager.setMap(null);
+        });
+}
+
