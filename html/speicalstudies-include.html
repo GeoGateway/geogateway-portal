@@ -24,6 +24,18 @@
 		    }
 		};
 
+		var m64SearlesValley_linkurls=['http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_transparent_mosaic_group1.kml?v=1900','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_dsm_render.kml?v=2000','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RCLL20190709KML.kml'];
+		var m64SearlesValleykml=[];
+		function check_m64SearlesValley(element) {
+			var layer = m64SearlesValleykml[element.value];
+		    if (element.checked) {
+		        layer.setMap(mapA);
+		    } else {
+		        layer.setMap(null);
+		    }
+		};
+
+
 		$(document).ready(function(){
 			$('#checkbox_southCAfire').change(function(){
 			if(this.checked) {
@@ -57,6 +69,30 @@
 				}
 			});
 
+			$('#checkbox_M64SearlesValley').change(function(){
+			if(this.checked) {
+				$('#m64SearlesValleyDiv').show();
+				var newkmlLayer;
+				var linkurl;
+					for (i = 0; i< m64SearlesValley_linkurls.length; i++) {
+					linkurl = m64SearlesValley_linkurls[i];
+					newkmlLayer = new google.maps.KmlLayer({
+					    url: linkurl,
+         				suppressInfoWindows: false,
+        				map: mapA
+    					});
+					m64SearlesValleykml.push(newkmlLayer);
+					}
+				}
+			else
+				{$('#m64SearlesValleyDiv').hide();
+				 for (i = 0; i< m64SearlesValleykml.length; i++) {
+				 	m64SearlesValleykml[i].setMap(null);
+					 }
+
+				}
+			});
+
 			$('#checkbox_wildfire').change(function(){
 			if(this.checked) {
 				$('#wildfireDiv').show();
@@ -85,6 +121,20 @@
 <body></body><br><p><strong>Listed are the products for demonstration purpose.</strong></p>
     <div class="tool">
     <div class="tool-content">
+    <input type="checkbox" id="checkbox_M64SearlesValley" name="SearlesValley" value="M64SearlesValley" />
+      <span class="default-font">M6.4 Searles Valley Earthquake</span>
+     <div id="m64SearlesValleyDiv" style="display:none">
+     	<p>Topographic Imaging Products of the M6.4 Searles Valley Earthquake Ruptures (2019-07-09)</p>
+         	<table class="uavsar-table">     		
+     		<tr><td>Experimental product JPL/Caltech/GeoGateway</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='0' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of orthomosaic image</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of Digital Surface Model</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='2' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Control Points</td></tr>
+
+     	</table>
+	 </div>
+     <p><br/>
+
       <input type="checkbox" id="checkbox_southCAfire" name="southCAdata" value="southCAfire" />
       <span class="default-font">Southern California Woolsey Fire</span>
      <div id="southCAfireDiv" style="display:none">

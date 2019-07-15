@@ -116,7 +116,7 @@ var anssgadget=anssgadget || (function() {
     }
 
     function hideEarthquakeLayer() {
-		mapA.data.setStyle({visible: false});    	
+		mapA.data.setStyle({visible: false}); 
     }
 
 	function clearMapData(){
