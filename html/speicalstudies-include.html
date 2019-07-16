@@ -24,7 +24,7 @@
 		    }
 		};
 
-		var m64SearlesValley_linkurls=['http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_transparent_mosaic_group1.kml?v=1900','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_dsm_render.kml?v=2000','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RCLL20190709KML.kml'];
+		var m64SearlesValley_linkurls=['http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_transparent_mosaic_group1.kml?v=1900','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_dsm_preview.kml?v=2000','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RCLL20190709KML.kml'];
 		var m64SearlesValleykml=[];
 		function check_m64SearlesValley(element) {
 			var layer = m64SearlesValleykml[element.value];
@@ -130,6 +130,12 @@
      		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='0' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of orthomosaic image</td></tr>
      		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of Digital Surface Model</td></tr>
      		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='2' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Control Points</td></tr>
+			<tr class="uavsar-tr"><td>&#9679; Data Source: Collected by Andrea Donnellan and Gregory Lyzenga, Near-Surface Image Lab (N-SAIL)&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/20190709N-SAILTopoSearlesEarthquake.pdf" download="Datasource.pdf" target=_>PDF</a></td></tr>
+			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/RC20190709_report.pdf" download="Dataqualityreport.pdf" target=_>Data Quality Report</a></td></tr>
+			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/Data/RC20190709_dsm_2cm.las" download="dsm_2cm.las" target=_>DSM 2cm Point Cloud (las, 3.8G)</a></td></tr>
+			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/Data/RC20190709_group1_densified_point_cloud.las" download="densified_point_cloud.las" target=_>Densified Point Cloud (las, 3.6G)</a></td></tr>
+
+
 
      	</table>
 	 </div>
