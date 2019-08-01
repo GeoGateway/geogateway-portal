@@ -24,10 +24,11 @@
 		    }
 		};
 
-		var m64SearlesValley_linkurls=['http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_transparent_mosaic_group1.kml?v=1900','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RC20190709_dsm_preview.kml?v=2000','http://gf2.ucs.indiana.edu/stage/M64_20190709/KMLOverview/RCLL20190709KML.kml'];
-		var m64SearlesValleykml=[];
-		function check_m64SearlesValley(element) {
-			var layer = m64SearlesValleykml[element.value];
+		var m64Ridgecrest_linkurls=['http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/RC20190709_orthomosaic_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/RC20190709_dsm_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/SV20190715_orthomosaic_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/SV20190715_dsm_preview.kml'];
+		
+		var m64Ridgecrestkml=[];
+		function check_m64Ridgecrest(element) {
+			var layer = m64Ridgecrestkml[element.value];
 		    if (element.checked) {
 		        layer.setMap(mapA);
 		    } else {
@@ -69,25 +70,25 @@
 				}
 			});
 
-			$('#checkbox_M64SearlesValley').change(function(){
+			$('#checkbox_M64Ridgecrest').change(function(){
 			if(this.checked) {
-				$('#m64SearlesValleyDiv').show();
+				$('#m64RidgecrestDiv').show();
 				var newkmlLayer;
 				var linkurl;
-					for (i = 0; i< m64SearlesValley_linkurls.length; i++) {
-					linkurl = m64SearlesValley_linkurls[i];
+					for (i = 0; i< m64Ridgecrest_linkurls.length; i++) {
+					linkurl = m64Ridgecrest_linkurls[i];
 					newkmlLayer = new google.maps.KmlLayer({
 					    url: linkurl,
          				suppressInfoWindows: false,
         				map: mapA
     					});
-					m64SearlesValleykml.push(newkmlLayer);
+					m64Ridgecrestkml.push(newkmlLayer);
 					}
 				}
 			else
-				{$('#m64SearlesValleyDiv').hide();
-				 for (i = 0; i< m64SearlesValleykml.length; i++) {
-				 	m64SearlesValleykml[i].setMap(null);
+				{$('#m64RidgecrestDiv').hide();
+				 for (i = 0; i< m64Ridgecrestkml.length; i++) {
+				 	m64Ridgecrestkml[i].setMap(null);
 					 }
 
 				}
@@ -121,20 +122,16 @@
 <body></body><br><p><strong>Listed are the products for demonstration purpose.</strong></p>
     <div class="tool">
     <div class="tool-content">
-    <input type="checkbox" id="checkbox_M64SearlesValley" name="SearlesValley" value="M64SearlesValley" />
-      <span class="default-font">M6.4 Searles Valley Earthquake</span>
-     <div id="m64SearlesValleyDiv" style="display:none">
-     	<p>Topographic Imaging Products of the M6.4 Searles Valley Earthquake Ruptures (2019-07-04)</p>
+    <input type="checkbox" id="checkbox_M64Ridgecrest" name="Ridgecrest" value="M64Ridgecrest" />
+      <span class="default-font">Postseismic Products of Ridgecrest Earthquake</span>
+     <div id="m64RidgecrestDiv" style="display:none">
+     	<p>High-Resolution Targeted 3D imaging Postseismic Products of the Ridgecrest M6.4 (July 4, 2019) and M7.1 (July 5, 2019) Earthquake Sequence. Collected by Andrea Donnellan and Gregory Lyzenga, Near-Surface Image Lab (N-SAIL). Experimental product JPL/Caltech/GeoGateway &nbsp<a href="https://disasters.nasa.gov/southern-california-earthquakes-july-2019/nasa-geogateway-team-uses-drones-map-3d-2019-california" target=_>more</a></p>
          	<table class="uavsar-table">     		
-     		<tr><td>Experimental product JPL/Caltech/GeoGateway</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='0' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of orthomosaic image</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Low resolution thumbnail of Digital Surface Model</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='2' id="m64SearlesValleykml_checkbox" onclick="check_m64SearlesValley(this)" />&nbsp Control Points</td></tr>
-			<tr class="uavsar-tr"><td>&#9679; Data Source: Collected by Andrea Donnellan and Gregory Lyzenga, Near-Surface Image Lab (N-SAIL)&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/20190709N-SAILTopoSearlesEarthquake.pdf" download="Datasource.pdf" target=_>PDF</a></td></tr>
-			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/RC20190709_report.pdf" download="Dataqualityreport.pdf" target=_>Data Quality Report</a></td></tr>
-			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/Data/RC20190709_dsm_2cm.las" download="dsm_2cm.las" target=_>DSM 2cm Point Cloud (las, 3.8G)</a></td></tr>
-			<tr class="uavsar-tr"><td>&#9679;&nbsp<a href="http://gf2.ucs.indiana.edu/stage/M64_20190709/Data/RC20190709_group1_densified_point_cloud.las" download="densified_point_cloud.las" target=_>Densified Point Cloud (las, 3.6G)</a></td></tr>
-     	</table>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of Digital Surface Model M6.4</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" value='0' checked=checked id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of orthomosaic image M6.4</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='3' id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of Digital Surface Model M7.1</td></tr>
+     		<tr class="uavsar-tr"><td><input type="checkbox" value='2' checked=checked id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of orthomosaic image M7.1</td></tr>
+     		</table>
 	 </div>
      <p><br/>
 
