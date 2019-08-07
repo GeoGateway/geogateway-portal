@@ -105,6 +105,12 @@ function updateTabPanel() {
     </li>
 -->
     <li>
+      <button class="tab-button tool-tab-button" value="ImagesData">
+        Images
+      </button>
+    </li>
+
+    <li>
       <button class="tab-button tool-tab-button" value="SpeicalStudies">
         Special Studies
       </button>
@@ -176,7 +182,12 @@ function updateTabPanel() {
     <div ng-include="'seismicity-include.html'"></div>
   </div>
 
-  <!--Seismicity Tab -->
+  <!--Images Tab -->
+  <div class="tab-pane tool-tab-pane inactive" id="ImagesData">
+    <div ng-include="'imagesdata-include.html'"></div>
+  </div>
+
+  <!--specialstudies Tab -->
   <div class="tab-pane tool-tab-pane inactive" id="SpeicalStudies">
     <div ng-include="'speicalstudies-include.html'"></div>
   </div>
