@@ -24,18 +24,6 @@
 		    }
 		};
 
-		var m64Ridgecrest_linkurls=['http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/RC20190709_orthomosaic_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/RC20190709_dsm_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/SV20190715_orthomosaic_preview.kml','http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/SV20190715_dsm_preview.kml'];
-		
-		var m64Ridgecrestkml=[];
-		function check_m64Ridgecrest(element) {
-			var layer = m64Ridgecrestkml[element.value];
-		    if (element.checked) {
-		        layer.setMap(mapA);
-		    } else {
-		        layer.setMap(null);
-		    }
-		};
-
 
 		$(document).ready(function(){
 			$('#checkbox_southCAfire').change(function(){
@@ -70,31 +58,6 @@
 				}
 			});
 
-			$('#checkbox_M64Ridgecrest').change(function(){
-			if(this.checked) {
-				$('#m64RidgecrestDiv').show();
-				var newkmlLayer;
-				var linkurl;
-					for (i = 0; i< m64Ridgecrest_linkurls.length; i++) {
-					linkurl = m64Ridgecrest_linkurls[i];
-					newkmlLayer = new google.maps.KmlLayer({
-					    url: linkurl,
-         				suppressInfoWindows: false,
-        				map: null
-    					});
-					m64Ridgecrestkml.push(newkmlLayer);
-					}
-					m64Ridgecrestkml[1].setMap(mapA);
-					m64Ridgecrestkml[3].setMap(mapA);
-				}
-			else
-				{$('#m64RidgecrestDiv').hide();
-				 for (i = 0; i< m64Ridgecrestkml.length; i++) {
-				 	m64Ridgecrestkml[i].setMap(null);
-					 }
-
-				}
-			});
 
 			$('#checkbox_wildfire').change(function(){
 			if(this.checked) {
@@ -121,62 +84,9 @@
 		});
 	</script>
 </head>
-<body></body><br><p><strong>Listed are the products for demonstration purpose.</strong></p>
+<body><br><p><strong>Listed are the products for demonstration purpose.</strong></p>
     <div class="tool">
     <div class="tool-content">
-    <input type="checkbox" id="checkbox_M64Ridgecrest" name="Ridgecrest" value="M64Ridgecrest" />
-      <span class="default-font">Postseismic Products of Ridgecrest Earthquake</span>
-     <div id="m64RidgecrestDiv" style="display:none">
-     	<p>High-Resolution Targeted 3D imaging Postseismic Products of the Ridgecrest M6.4 (July 4, 2019) and M7.1 (July 5, 2019) Earthquake Sequence. Collected by Andrea Donnellan and Gregory Lyzenga, Near-Surface Image Lab (N-SAIL). Experimental product JPL/Caltech/GeoGateway &nbsp<a href="https://disasters.nasa.gov/southern-california-earthquakes-july-2019/nasa-geogateway-team-uses-drones-map-3d-2019-california" target=_>more</a><br><br>
-     	If using these products, please cite: "High-resolution Targeted 3D Imaging Postseismic Products of the Ridgecrest M6.4 and M7.1 Earthquake Sequence,Donnellan, Andrea; Lyzenga, Gregory; Wang, Jun; Pierce, Marlon; Goulet, Christine, DOI: 10.5967/5sq2-rs60". <a target=_ href="http://hdl.handle.net/2022/23341">Full record</a></p>
-         	<table class="uavsar-table">     		
-     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='1' id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of Digital Surface Model M6.4</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" value='0'  id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of orthomosaic image M6.4</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" checked=checked value='3' id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of Digital Surface Model M7.1</td></tr>
-     		<tr class="uavsar-tr"><td><input type="checkbox" value='2'  id="m64Ridgecrestkml_checkbox" onclick="check_m64Ridgecrest(this)" />&nbsp Overview of orthomosaic image M7.1</td></tr>
-     		</table>
-     		<br>
-     		<center><strong>M 6.4 products</strong></center>
-     		<table class="uavsar-table">
-     			<tr class="uavar-tr"><td>20190709</td>
-     				<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190709/RC20190709_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190709/RC20190709_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190709/RC20190709_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190709/RC20190709_dsm.tif">GeoTiff</a></td>
-     				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190709/RC20190709_report.pdf" target=_>Report</a></td></tr>
-
-     			<tr class="uavar-tr"><td>20190711</td>
-     				<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190711/RC20190711_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190711/RC20190711_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190711/RC20190711_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190711/RC20190711_dsm.tif">GeoTiff</a></td>
-
-     				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190711/RC20190711_report.pdf" target=_>Report</a></td></tr>
-      			<tr class="uavar-tr"><td>20190715</td>
-					<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190715/RC20190715_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190715/RC20190715_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190715/RC20190715_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190715/RC20190715_dsm.tif">GeoTiff</a></td>
-
-      				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M64_20190715/RC20190715_report.pdf" target=_>Report</a></td></tr>
-      				<tr class="uavar-tr"><td colspan=3><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/M64_products_overview.kmz">Products overview (kmz)</a></td>
-      				<td colspan=3><a target=_ href="http://156.56.177.220/earthquake/RC20190709.html"><strong>View Point Clouds</strong></a></td>
-					</tr>
-    		</table>
-    		     		<br><center><strong>M 7.1 products</strong></center>
-     		<table class="uavsar-table">
-     			<tr class="uavar-tr"><td>20190709</td>
-     				<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190709/SVRL20190709_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190709/SVRL20190709_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190709/SVRL20190709_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190709/SVRL20190709_dsm.tif">GeoTiff</a></td>
-     				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190709/SVRL20190709_report.pdf" target=_>Report</a></td></tr>
-
-     			<tr class="uavar-tr"><td>20190711</td>
-     				<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190711/SV20190711_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190711/SV20190711_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190711/SV20190711_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190711/SV20190711_dsm.tif">GeoTiff</a></td>
-
-     				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190711/SV20190711_report.pdf" target=_>Report</a></td></tr>
-      			<tr class="uavar-tr"><td>20190715</td>
-					<td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190715/SV20190715_group1_densified_point_cloud.las.zip">Point Cloud</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190715/SV20190715_transparent_mosaic_group1.tif">GeoTiff</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190715/SV20190715_dsm_2cm.las.zip">2cm DSM</a></td><td><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190715/SV20190715_dsm.tif">GeoTiff</a></td>
-
-      				<td><a href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/M71_20190715/SV20190715_report.pdf" target=_>Report</a></td></tr>
-      				<tr class="uavar-tr"><td colspan=3><a target=_ href="http://gf2.ucs.indiana.edu/stage/Ridgecrest_2019/KMLOverview/M71_products_overview.kmz">Products overview (kmz)</a></td>
-      				<td colspan=3><a target=_ href="http://156.56.177.220/earthquake/SV20190711.html"><strong>View Point Clouds</strong></a></td>
-      				</tr>
-
-    		</table>
-
-
-	 </div>
-     <p><br/>
 
       <input type="checkbox" id="checkbox_southCAfire" name="southCAdata" value="southCAfire" />
       <span class="default-font">Southern California Woolsey Fire</span>
@@ -203,5 +113,5 @@
      	</table>
      </div>	
     </div></div>
-</boday>
+</body>
 </html>
