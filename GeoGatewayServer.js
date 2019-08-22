@@ -266,7 +266,7 @@ app.post('/doUpload/:userName/:projectId',function(req,res){
             //    });
             //});
             //Keep going.
-            //part.resume();
+            part.resume();
         }      
     });
     
