@@ -256,15 +256,17 @@ app.post('/doUpload/:userName/:projectId',function(req,res){
         if(part.filename!=null) {
             var fullFileName=destDir+part.filename;
             //part is a readableStream, so we can chunk it.
-            part.on('data', function(chunk) {
+            var out = fs.createWriteStream(fullFileName);
+            part.pipe(out);
+            //part.on('data', function(chunk) {
                 //Use appendFile since it creates the file if it doesn't already
                 //exist and appends since we are chunking.  
-                fs.appendFile(fullFileName, chunk,function(err){
-                    if(err) throw err;
-                });
-            });
+            //    fs.appendFile(fullFileName, chunk,function(err){
+            //        if(err) throw err;
+            //    });
+            //});
             //Keep going.
-            part.resume();
+            //part.resume();
         }      
     });
     
