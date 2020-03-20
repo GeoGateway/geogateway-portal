@@ -1,5 +1,5 @@
-var iconDefImgUrl = "http://maps.google.com/mapfiles/ms/micons/green.png"; 
-var iconBaseUrl=  "http://maps.google.com/mapfiles/ms/micons/";
+var iconDefImgUrl = "https://maps.google.com/mapfiles/ms/micons/green.png";
+var iconBaseUrl=  "https://maps.google.com/mapfiles/ms/micons/";
 var iconSize = new google.maps.Size(18, 18);
 var iconAnchor = new google.maps.Point(1, 10);
 var iconOrigin = new google.maps.Point(0, 0);

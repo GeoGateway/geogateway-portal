@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://earth.google.com/kml/2.2">
+<kml xmlns="https://earth.google.com/kml/2.2">
 	<Folder>
 		<name>E-DECIDER TiltMap Products</name>
 		<description><![CDATA[More infromations on <a href="http://E-DECIDER.org">E-DECIDER products page</a>]]></description>
@@ -11,7 +11,7 @@
 				<IconStyle>
 					<scale>1.0</scale>
 					<Icon>
-						<href>http://maps.google.com/mapfiles/kml/shapes/earthquake.png</href>
+						<href>https://maps.google.com/mapfiles/kml/shapes/earthquake.png</href>
 					</Icon>
 					<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
 				</IconStyle>

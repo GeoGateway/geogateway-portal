@@ -1066,7 +1066,7 @@ function drawDygraphAjax(image_uid) {
      $.ajax({        
         url:"/los_query",
         beforeSend:function() {if(dygraph1 !== null && dygraph1 !== undefined) {dygraph1.destroy(); };
-										 $('#dygraph-LOS').html('<center><img src="http://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
+										 $('#dygraph-LOS').html('<center><img src="https://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
                               },
         data: {
             'image_uid': image_uid,

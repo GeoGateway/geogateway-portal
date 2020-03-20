@@ -57,7 +57,7 @@ def loaddislocouput(dislocoutput):
 def kml_header(name="",description=""):
     """ generate kml header """
     kmlheader = """<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
+<kml xmlns="https://www.opengis.net/kml/2.2">
 <Folder>
         <name>%s</name>
         <description><![CDATA[<strong>%s</strong>]]></description>

@@ -62,7 +62,7 @@ def generateKML(extent, outputname, imageurl, params):
        generate KML
     """
     kml = """<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://earth.google.com/kml/2.2">
+<kml xmlns="https://earth.google.com/kml/2.2">
   <Folder>
     <name>Disloc interferograms</name>
     <description>%s</description>
