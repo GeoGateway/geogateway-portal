@@ -952,6 +952,9 @@ h1.hook {
 /*********** Maintenance Banner  **********/
 
 .alert {
+    position: absolute;
+    left: 26%;
+    width:50%;
     padding: 10px;
     background-color: #e2d73d;
     color: black;
@@ -959,10 +962,11 @@ h1.hook {
     margin-top: 45px;
     margin-left: 5px;
     margin-right: 5px;
+    text-align: center;
 }
 .closebtn {
-    margin-left: 15px;
-    color: white;
+    margin-left: 5px;
+    color: black;
     font-weight: bold;
     float: right;
     font-size: 22px;
@@ -972,5 +976,5 @@ h1.hook {
 }
 
 .closebtn:hover {
-    color: black;
+    color: white;
 }
