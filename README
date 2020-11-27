@@ -46,6 +46,16 @@ To keep libraries up to date, periodically run the following:
 
 * bower update (from $INSTALL_PATH/geogateway/html)
 
+ENABLE HTTPS  
+```
+const https=require('https');
+const certoptions = {
+  key: fs.readFileSync("/cert/privkey.pem"),
+  cert: fs.readFileSync("/cert/fullchain.pem")
+};
 
-  
+https.createServer(certoptions, app).listen(app.get('port'),function() {
+	 console.log('Listening...');
+})
+```
 
