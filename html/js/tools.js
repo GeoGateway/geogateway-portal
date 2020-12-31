@@ -24,6 +24,7 @@ var userPositionMarker;
 var stateKml;
 var coastlineKml;
 var uavsarDataSet;
+var qfaultsLayer;
 
 /////////////////////////////////////// UAVSAR ////////////////////////////////
 
@@ -1406,6 +1407,20 @@ function showUCERF3FaultLayer(faultcolor) {
 
     }
     
+}
+
+function showQuaternaryFaultLayer() {
+    if (document.getElementById("maptools.QuaternaryFault").checked==true) {
+        //load wms layer: gf8: InSAR:Qfaults_US_Database
+        //qfaultsLayer.setMap(null);
+        if (typeof qfaultsLayer !== 'undefined') {
+              mapA.overlayMapTypes.setAt(0, null); }
+        qfaultsLayer = loadWMS(mapA, "http://gf8.ucs.indiana.edu/geoserver/InSAR/wms?","InSAR:Qfaults_US_Database"); 
+        document.getElementById("div_QuaternaryFaults").style.display="block"; 
+    } else {
+         mapA.overlayMapTypes.setAt(0, null);
+         document.getElementById("div_QuaternaryFaults").style.display="none"; 
+    }
 }
 
 // hide and show plot panel
